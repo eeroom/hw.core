@@ -1,4 +1,4 @@
-package azeroth.tbc.yxspring;
+package org.azeroth.springcontext;
 
 import org.springframework.stereotype.Component;
 

@@ -4,12 +4,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>azeroth.tbc</groupId>
-  <artifactId>yxspring</artifactId>
+  <groupId>org.azeroth</groupId>
+  <artifactId>springcontext</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
 
-  <name>yxspring Maven Webapp</name>
+  <name>springcontext</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
@@ -29,13 +29,13 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>4.3.25.RELEASE</version>
+      <version>4.3.26.RELEASE</version>
     </dependency>
 
   </dependencies>
 
   <build>
-    <finalName>yxspring</finalName>
+    <finalName>springcontext</finalName>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <plugin>

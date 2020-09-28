@@ -1,4 +1,4 @@
-package azeroth.tbc.yxspring;
+package org.azeroth.springcontext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
