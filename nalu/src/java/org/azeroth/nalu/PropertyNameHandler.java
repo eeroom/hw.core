@@ -1,4 +1,4 @@
-package org.azeroth;
+package org.azeroth.nalu;
 
 import java.lang.reflect.Method;
 

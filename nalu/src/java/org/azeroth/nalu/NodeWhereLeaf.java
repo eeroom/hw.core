@@ -1,4 +1,4 @@
-package org.azeroth;
+package org.azeroth.nalu;
 
 public class NodeWhereLeaf<T,C> extends NodeWhere {
     Column<T,C> col;

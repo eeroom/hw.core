@@ -1,6 +1,6 @@
-package org.azeroth;
+package org.azeroth.nalu;
 
-import org.azeroth.model.StudentInfo;
+import org.azeroth.nalu.model.StudentInfo;
 
 /**
  * Hello world!

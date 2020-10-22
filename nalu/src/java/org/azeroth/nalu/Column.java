@@ -1,4 +1,4 @@
-package org.azeroth;
+package org.azeroth.nalu;
 
 public class Column<T,C> {
 

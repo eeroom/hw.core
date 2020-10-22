@@ -1,4 +1,4 @@
-package org.azeroth;
+package org.azeroth.nalu;
 
 import java.util.List;
 import java.util.function.Function;

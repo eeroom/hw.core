@@ -1,4 +1,4 @@
-package org.azeroth.model;
+package org.azeroth.nalu.model;
 
 public class StudentInfo {
     String name;
