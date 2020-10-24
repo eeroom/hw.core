@@ -1,0 +1,2 @@
+1\把war文件复制到tomcat的webapps目录，比如springmvc.war
+2、修改conf\server.xml,<Host></Host>节下增加一条，<Context path="/springmvc" docBase="springmvc" reloadable="true"/>
