@@ -1,16 +1,21 @@
 package org.azeroth.springmvc.controller;
 
+import org.azeroth.springmvc.Student;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class HomeController {
 
-    @RequestMapping(value = "/home/getname",method = RequestMethod.GET)
-    @ResponseBody
-    public String getName(){
-        return "hello world";
+//    实现restapi，需要引入jackson序列化json请求参数和json响应结果
+    @RequestMapping(value = "/home/student")
+    public Student student(){
+        Student st=new Student();
+        st.setAge(11);
+        st.setName("张三");
+        return st;
     }
 }
