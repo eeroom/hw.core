@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>springmvc-总结</title>
+    <style style="css">
+        p{
+         font:24px
+         blod
+        }
+    </style>
+</head>
+<body>
+<p>把war文件发布到tomcat运行</p>
+<ol>
+    <li>把war文件复制到tomcat的webapps目录，比如springmvc.war</li>
+    <li>修改conf\server.xml,&lt;Host&gt;&lt;/Host&gt;节下增加一条，&lt;Context path="/springmvc" docBase="springmvc" reloadable="true" /&gt;</li>
+</ol>
+<p>代码目录结构和war包目录结构关系</p>
+<img src="/代码目录结构和war包目录结构关系.png" alt="">
+</body>
+</html>
