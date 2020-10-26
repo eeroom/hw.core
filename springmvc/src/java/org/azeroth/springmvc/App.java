@@ -15,4 +15,6 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
     protected String[] getServletMappings() {
         return new String[]{"/"};
     }
+
+
 }
