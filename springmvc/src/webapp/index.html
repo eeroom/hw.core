@@ -3,20 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>springmvc-总结</title>
-    <style style="css">
-        p{
-         font:24px
-         blod
-        }
-    </style>
 </head>
 <body>
-<p>把war文件发布到tomcat运行</p>
+<h3>把war文件发布到tomcat运行</h3>
 <ol>
     <li>把war文件复制到tomcat的webapps目录，比如springmvc.war</li>
     <li>修改conf\server.xml,&lt;Host&gt;&lt;/Host&gt;节下增加一条，&lt;Context path="/springmvc" docBase="springmvc" reloadable="true" /&gt;</li>
 </ol>
-<p>代码目录结构和war包目录结构关系</p>
+<h3>代码目录结构和war包目录结构关系</h3>
 <img src="/代码目录结构和war包目录结构关系.png" alt="">
+<h3>Asp.Net MVC风格</h3>
+<ol>
+    <li>基于约定：按照controller/action的请求路径监听</li>
+    <li>优点：避免写一些重复和意义不大的RequestMapping("/home/student"),借鉴asp.net mvc的做法</li>
+    <li>前提：控制器添加Controller或者RestController特性，方法没有添加RequestMapping特性，方法为public并且为实例方法</li>
+</ol>
+<h3>Url和请求参数名称忽略大小写</h3>
+<p>默认为大小写敏感，通过配置实现修改</p>
+<h3>thymeleay视图引擎</h3>
+<ol>
+    <li>母版页</li>
+    <li>部分视图</li>
+</ol>
+<h3>请求参数的模型绑定</h3>
+<ol>
+    <li>参数按照application/x-www-form-urlencoded规则,场景：表单提交</li>
+    <li>参数按照application/json规则,场景：表单提交和api提交</li>
+    <li>参数按照multipart/form-data规则,场景：上传文件</li>
+</ol>
 </body>
 </html>
