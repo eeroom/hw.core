@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${#vars['title']}"></title>
+</head>
+<body>
+    <p>这是导航部分</p>
+<p>这是左侧菜单部分</p>
+<div layout:fragment="content"></div>
+<p>这是底部</p>
+</body>
+</html>

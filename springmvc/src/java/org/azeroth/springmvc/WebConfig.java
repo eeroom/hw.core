@@ -38,4 +38,32 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
         antPathMatcher.setCaseSensitive(false);
         configurer.setPathMatcher(antPathMatcher);
     }
+    @Bean
+    public org.thymeleaf.templateresolver.ITemplateResolver templateResolver(){
+        var templateResolver=new org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver();
+        templateResolver.setPrefix("/views/");
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode("HTML5");
+        return templateResolver;
+    }
+
+    @Bean
+    public org.thymeleaf.ITemplateEngine templateEngine(org.thymeleaf.templateresolver.ITemplateResolver templateResolver){
+        var engine=new org.thymeleaf.spring4.SpringTemplateEngine();
+        engine.setTemplateResolver(templateResolver);
+        //支持layout
+        var layout=new nz.net.ultraq.thymeleaf.LayoutDialect();
+        engine.addDialect(layout);
+        return engine;
+    }
+
+    @Bean
+    public org.springframework.web.servlet.ViewResolver viewResolver(org.thymeleaf.ITemplateEngine engine){
+      var resolver=new org.thymeleaf.spring4.view.ThymeleafViewResolver();
+      resolver.setTemplateEngine(engine);
+      resolver.setCharacterEncoding("UTF-8");
+        return  resolver;
+    }
+
+
 }

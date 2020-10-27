@@ -4,4 +4,11 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>thymeleafviews</web-resource-name>
+      <url-pattern>/views/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint/>
+  </security-constraint>
 </web-app>

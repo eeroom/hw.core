@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org" layout:decorator="layout/layout" th:with="title='欢迎使用'">
+<body>
+    <div layout:fragment="content">
+        <p>hello world</p>
+        <p th:text="${#vars['mt']['name']}"></p>
+    </div>
+</body>
+</html>
