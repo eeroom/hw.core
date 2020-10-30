@@ -51,5 +51,12 @@
     <li>spring-security</li>
     <li>最简单的表单认证</li>
 </ol>
+<h3>spring-security</h3>
+<ol>
+    <li>spring-security-web,spring-security-config,spring-security-core,这3个核心依赖</li>
+    <li>启用spring-security方式1，定义一个class继承org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer</li>
+    <li>启用spring-security方式2，在org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer中，重写getServletFilters，返回一个名称为springSecurityFilterChain的DelegatingFilterProxy类型的fileter</li>
+    <li>配置spring-security,</li>
+</ol>
 </body>
 </html>
