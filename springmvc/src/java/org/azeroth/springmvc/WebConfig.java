@@ -2,8 +2,13 @@ package org.azeroth.springmvc;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
+
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletRegistration;
 
 @org.springframework.context.annotation.Configuration
 @org.springframework.web.servlet.config.annotation.EnableWebMvc
@@ -62,8 +67,14 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
       var resolver=new org.thymeleaf.spring4.view.ThymeleafViewResolver();
       resolver.setTemplateEngine(engine);
       resolver.setCharacterEncoding("UTF-8");
+
         return  resolver;
     }
+
+//    @Bean(name = "multipartResolver")
+//    public MultipartResolver getStandardServletMultipartResolver(){
+//        return new StandardServletMultipartResolver();
+//    }
 
 
 }

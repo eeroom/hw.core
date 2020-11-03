@@ -30,11 +30,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implement
                 .passwordParameter("Password")
                 .loginProcessingUrl("/account/login")
                 .successHandler(this)
-                .failureHandler(this).permitAll();
-        http.authorizeRequests().antMatchers("/account/*","/Assets/*").permitAll();
-        http.authorizeRequests().antMatchers("/**").authenticated();
-        http.rememberMe().tokenValiditySeconds(60*60*1000).key("_wch_");
-        http.csrf().disable();
+                .failureHandler(this)
+                .and()
+                .authorizeRequests().antMatchers("/account/**","/Assets/**","/assets/**").permitAll()
+                .and()
+                .authorizeRequests().antMatchers("/**").authenticated()
+                .and()
+                .rememberMe().tokenValiditySeconds(60*60*1000).key("_wch_")
+                .and()
+                .logout().logoutUrl("/account/logout")
+                .and()
+                .csrf().disable();
     }
 
     @Override
@@ -51,18 +57,21 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implement
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         var objectMapper=new com.fasterxml.jackson.databind.ObjectMapper();
-        LoginUserInfo loginUserInfo=new LoginUserInfo();
-        loginUserInfo.setName(authentication.getName());
-        var rt= objectMapper.writeValueAsString(loginUserInfo);
-        httpServletResponse.getWriter().write(rt);
+        var rt=new ApiResult<String>();
+        rt.setCode(200);
+        //应该从请求的url中获取原来的目标地址，而不是全部设为/
+        rt.setData("/");
+        httpServletResponse.getWriter().write(objectMapper.writeValueAsString(rt));
+        httpServletResponse.getWriter().flush();
     }
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         var objectMapper=new com.fasterxml.jackson.databind.ObjectMapper();
-        LoginUserInfo loginUserInfo=new LoginUserInfo();
-        loginUserInfo.setName(e.getLocalizedMessage());
-        var rt= objectMapper.writeValueAsString(loginUserInfo);
-        httpServletResponse.getWriter().write(rt);
+        var rt=new ApiResult<String>();
+        rt.setCode(500);
+        rt.setMsg(e.getLocalizedMessage());
+        httpServletResponse.getWriter().write(objectMapper.writeValueAsString(rt));
+        httpServletResponse.getWriter().flush();
     }
 }
