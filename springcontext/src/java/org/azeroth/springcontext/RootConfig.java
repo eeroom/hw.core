@@ -1,19 +1,19 @@
 package org.azeroth.springcontext;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 
 @Configuration
-//@ComponentScan
+@ComponentScan
+@PropertySource(value = {"classpath:application.properties"})
 public class RootConfig {
 
-    @Bean
-    public ISuanfa suanfa(){
-        return  new ChinaSuanfa();
-    }
-
-    @Bean
-    public Calculation calculation(){
-        return new Calculation(this.suanfa());
-    }
+//    @Bean
+//    public ISuanfa suanfa(){
+//        return  new ChinaSuanfa();
+//    }
+//
+//    @Bean
+//    public Calculation calculation(){
+//        return new Calculation(this.suanfa());
+//    }
 }
