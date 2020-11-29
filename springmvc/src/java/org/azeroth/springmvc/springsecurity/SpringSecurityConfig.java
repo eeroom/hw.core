@@ -1,5 +1,7 @@
-package org.azeroth.springmvc;
+package org.azeroth.springmvc.springsecurity;
 
+import org.azeroth.springmvc.ApiResult;
+import org.azeroth.springmvc.springsecurity.MyFormLoginConfigurer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,8 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Configuration
-@EnableWebSecurity
+//@Configuration
+//@EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implements AuthenticationSuccessHandler, AuthenticationFailureHandler {
 
     @Override

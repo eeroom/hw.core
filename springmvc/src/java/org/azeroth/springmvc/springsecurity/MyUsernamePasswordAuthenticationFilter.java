@@ -1,4 +1,4 @@
-package org.azeroth.springmvc;
+package org.azeroth.springmvc.springsecurity;
 
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
