@@ -1,7 +1,9 @@
 package org.azeroth.springmvc;
 
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
@@ -54,8 +56,23 @@ public class RequestMappingHandlerMappingAspNet extends org.springframework.web.
         var lstSegment= handlerType.getName().split("\\.");
         String controllerNameFull=lstSegment[lstSegment.length-1];
         String controllerName= controllerNameFull.toLowerCase().replace("controller","");
+
+        //设定api默认的http方法
+        var httpGet = AnnotatedElementUtils.findMergedAnnotation(method, HttpGet.class);
+        var httpPost = AnnotatedElementUtils.findMergedAnnotation(method, HttpPost.class);
+        RequestMethod[] lstMethod;
+        if(httpGet==null &&httpPost==null && handlerType.getAnnotation(org.springframework.stereotype.Controller.class)!=null)
+            lstMethod=new RequestMethod[]{RequestMethod.GET};
+        else if(httpGet==null &&httpPost==null && handlerType.getAnnotation(org.springframework.web.bind.annotation.RestController.class)!=null)
+            lstMethod=new RequestMethod[]{RequestMethod.POST};
+        else if(httpGet!=null && httpPost!=null)
+            lstMethod=new RequestMethod[]{RequestMethod.GET,RequestMethod.POST};
+        else if(httpGet!=null)
+            lstMethod=new RequestMethod[]{RequestMethod.GET};
+        else
+            lstMethod=new RequestMethod[]{RequestMethod.POST};
         var rmi= RequestMappingInfo.paths(this.resolveEmbeddedValuesInPatterns(new String[]{"/"+controllerName+"/"+method.getName()}))
-                .methods(new RequestMethod[0])//这里决定api的请求方法，GET,POST,PUT等
+                .methods(lstMethod)//这里决定api的请求方法，GET,POST,PUT等
                 .params(new String[0])
                 .headers(new String[0])
                 .consumes(new String[0])
