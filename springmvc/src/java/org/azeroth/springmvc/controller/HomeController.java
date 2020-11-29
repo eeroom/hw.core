@@ -1,15 +1,19 @@
 package org.azeroth.springmvc.controller;
 
-import org.azeroth.springmvc.Student;
-import org.springframework.stereotype.Controller;
+import org.azeroth.springmvc.model.Student;
+import org.azeroth.springmvc.model.UserInfoWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.WebApplicationContext;
 
 @RestController
+@Scope(value = WebApplicationContext.SCOPE_REQUEST)
 public class HomeController {
 
+    @Autowired
+    UserInfoWrapper userInfoWrapper;
 //    实现restapi，需要引入jackson序列化json请求参数和json响应结果
     @RequestMapping(value = "/home/student")
     public Student student(){
@@ -28,7 +32,7 @@ public class HomeController {
     public Student add(){
         Student st=new Student();
         st.setAge(22);
-        st.setName("add");
+        st.setName(this.userInfoWrapper.getName());
         return st;
     }
 }

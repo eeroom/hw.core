@@ -1,6 +1,6 @@
 package org.azeroth.springmvc.controller;
 
-import org.azeroth.springmvc.Student;
+import org.azeroth.springmvc.model.Student;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 

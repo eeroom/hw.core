@@ -1,4 +1,4 @@
-package org.azeroth.springmvc;
+package org.azeroth.springmvc.model;
 
 public class Student {
 
