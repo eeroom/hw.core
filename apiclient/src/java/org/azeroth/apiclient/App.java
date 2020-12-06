@@ -55,35 +55,6 @@ public class App
         System.out.println(result);
     }
 
-    public void setCertificates(InputStream... certificates) throws Throwable {
-        CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-        KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        keyStore.load(null);
-        int index = 0;
-        for (InputStream certificate : certificates)
-        {
-            String certificateAlias = Integer.toString(index++);
-            keyStore.setCertificateEntry(certificateAlias, certificateFactory.generateCertificate(certificate));
-            if (certificate != null)
-                certificate.close();
-        }
-
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-
-        TrustManagerFactory trustManagerFactory =
-                TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-
-        trustManagerFactory.init(keyStore);
-        sslContext.init
-                (
-                        null,
-                        trustManagerFactory.getTrustManagers(),
-                        new SecureRandom()
-                );
-        //mOkHttpClient.setSslSocketFactory(sslContext.getSocketFactory());
-
-    }
-
     /**
      * 单向认证，客户端认证服务器
      * @param cerPath
