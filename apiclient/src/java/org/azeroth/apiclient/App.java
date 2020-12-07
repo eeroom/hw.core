@@ -36,10 +36,11 @@ public class App
         RT rt= getSocketFactory(certPath, p12Path, "123456");
         //RT rt= getSocketFactory(certPath);
         String url = "https://localhost/WcfTwoWayAuthentication/Home.svc/DoWork";
-
+        ConnectionSpec connectionSpec=new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS).tlsVersions(TlsVersion.TLS_1_2).build();
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
         clientBuilder.sslSocketFactory(rt.socketFactory,rt.x509TrustManager)
-                     .protocols(Collections.singletonList(Protocol.HTTP_1_1))
+                     .connectionSpecs(java.util.Collections.singletonList(connectionSpec))//指定tls版本
+                     .protocols(Collections.singletonList(Protocol.HTTP_1_1))//指定http版本
                      .hostnameVerifier((x,y)->true);//解决报错javax.net.ssl.SSLPeerUnverifiedException: Hostname 127.0.0.1 not verified
         OkHttpClient client = clientBuilder.build();
 
