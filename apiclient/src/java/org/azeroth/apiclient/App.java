@@ -96,27 +96,27 @@ public class App
     public static RT getSocketFactory(String cerPath, String p12Path, String password) throws Exception {
 
         var p12InputStream = new FileInputStream(new File(p12Path));
-        KeyStore keyStore = KeyStore.getInstance("PKCS12");
-        keyStore.load(p12InputStream, password.toCharArray());
+        KeyStore kmks = KeyStore.getInstance("PKCS12");
+        kmks.load(p12InputStream, password.toCharArray());
 
         KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-        keyManagerFactory.init(keyStore, password.toCharArray());
-        KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
+        keyManagerFactory.init(kmks, password.toCharArray());
+        KeyManager[] kms = keyManagerFactory.getKeyManagers();
 
         var cerInputStream = new FileInputStream(new File(cerPath));
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
         Certificate ca = certificateFactory.generateCertificate(cerInputStream);
 
-        KeyStore keyStore2 = KeyStore.getInstance("PKCS12");
-        keyStore2.load(null, null);
-        keyStore2.setCertificateEntry("server", ca);
+        KeyStore kstm = KeyStore.getInstance("PKCS12");
+        kstm.load(null, null);
+        kstm.setCertificateEntry("server", ca);
 
         TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-        trustManagerFactory.init(keyStore2);
-        TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+        trustManagerFactory.init(kstm);
+        TrustManager[] tms = trustManagerFactory.getTrustManagers();
 
         SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(keyManagers, trustManagers, new SecureRandom());
+        sslContext.init(kms, tms, new SecureRandom());
         var socketFactory = sslContext.getSocketFactory();
 
         cerInputStream.close();
@@ -124,7 +124,7 @@ public class App
 
         RT rt=new RT();
         rt.socketFactory=socketFactory;
-        rt.x509TrustManager=(X509TrustManager)trustManagers[0];
+        rt.x509TrustManager=(X509TrustManager)tms[0];
         return rt;
     }
 
