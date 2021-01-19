@@ -1,4 +1,4 @@
-package org.azeroth.httpsclient;
+package org.azeroth.http;
 
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;

@@ -1,4 +1,4 @@
-package org.azeroth.httpsclient;
+package org.azeroth.http;
 
 
 import okhttp3.*;
@@ -20,9 +20,19 @@ import java.util.Collections;
 public class App 
 {
     public static void main( String[] args ) throws Throwable {
-
+        //httpsRequest();
+        httpchanelRequest();
         System.out.println( "Hello World!" );
 
+
+    }
+
+    private static void httpchanelRequest() {
+        var client=new HttpChannel<IHome>(IHome.class,"http://localhost/home.asmx").client();
+        var rt= client.doWork(3);
+    }
+
+    private static void httpsRequest() throws Exception {
         //服务端公钥
         String certPath = "D:\\iiscer.cer";
         //客户端私钥
@@ -33,9 +43,9 @@ public class App
         ConnectionSpec connectionSpec=new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS).tlsVersions(TlsVersion.TLS_1_2).build();
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
         clientBuilder.sslSocketFactory(rt.socketFactory,rt.x509TrustManager)
-                     .connectionSpecs(java.util.Collections.singletonList(connectionSpec))//指定tls版本
-                     .protocols(Collections.singletonList(Protocol.HTTP_1_1))//指定http版本
-                     .hostnameVerifier((x,y)->true);//解决报错javax.net.ssl.SSLPeerUnverifiedException: Hostname 127.0.0.1 not verified
+                .connectionSpecs(java.util.Collections.singletonList(connectionSpec))//指定tls版本
+                .protocols(Collections.singletonList(Protocol.HTTP_1_1))//指定http版本
+                .hostnameVerifier((x,y)->true);//解决报错javax.net.ssl.SSLPeerUnverifiedException: Hostname 127.0.0.1 not verified
         OkHttpClient client = clientBuilder.build();
 
 
