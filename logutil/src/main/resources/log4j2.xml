@@ -1,0 +1,21 @@
+<Configuration status="debug" strict="true" package="org.azeroth.logutil">
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="db"/>
+        </Root>
+    </Loggers>
+    <Appenders>
+        <Appender type="Console" name="STDOUT">
+            <Layout type="PatternLayout" pattern="%n年龄：%sx{Age} %n姓名：%sx{Name}">
+            </Layout>
+        </Appender>
+        <Appender type="Jdbc" name="db" tableName="Log">
+            <ConnectionFactory class="org.azeroth.logutil.ConnectionFactory" method="getConnection" />
+            <Column name="Name" pattern="%sx{Name}" />
+        </Appender>
+    </Appenders>
+
+
+
+</Configuration>
