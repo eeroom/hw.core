@@ -1,4 +1,4 @@
-<Configuration status="debug" strict="true" package="org.azeroth.logutil">
+<Configuration status="info" strict="true" package="org.azeroth.logutil">
     <Loggers>
         <Root level="debug">
             <AppenderRef ref="STDOUT"/>
