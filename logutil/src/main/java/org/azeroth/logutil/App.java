@@ -9,7 +9,7 @@ public class App {
         Logger log= org.apache.logging.log4j.LogManager.getLogger();
         Student st=new Student();
         st.Age=11;
-        st.Name="张三222";
+        st.Name="张三222333";
         log.error(st);
 
     }
