@@ -20,34 +20,38 @@ import java.util.Collections;
 public class App 
 {
     public static void main( String[] args ) throws Throwable {
-        //httpsRequest();
-        httpchanelRequest();
-        NtlmDemo();
+        invokeWithX509();
+        invokeByProxy();
+        invokeWithNTLM();
         System.out.println( "Hello World!" );
 
 
     }
 
-    //服务端启用windows基本认证/window集成认证
-    private static void NtlmDemo() {
+    //NTLM认证的demo,服务端启用windows基本认证/window集成认证
+    private static void invokeWithNTLM() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .authenticator(new NTLMAuthenticator("china\\eeroom", "123456"))
                 // .some other init here if necessary
                 .build();
     }
 
-    private static void httpchanelRequest() {
+    //代理方式调用api,不涉及认证
+    private static void invokeByProxy() {
         var client=new HttpChannel<IHome>(IHome.class,"http://localhost/home.asmx").client();
         var rt= client.doWork(3);
     }
 
-    private static void httpsRequest() throws Exception {
+    //单向认证和双向认证的demo
+    private static void invokeWithX509() throws Exception {
         //服务端公钥
         String certPath = "D:\\iiscer.cer";
         //客户端私钥
         String p12Path ="D:\\wchCert.pfx";
-        SSLSocketFactoryWrapper sSLSocketFactoryWrapper = getSslSocketFactory(certPath, p12Path, "123456");
-        //RT rt= getSocketFactory(certPath);
+        //双向认证
+        SSLSocketFactoryWrapper sSLSocketFactoryWrapper = SSLSocketFactoryWrapper.newInstance(certPath, p12Path, "123456");
+        //单向认证，客户端认证服务器
+        SSLSocketFactoryWrapper sSLSocketFactoryWrapper2 = SSLSocketFactoryWrapper.newInstance(certPath);
         String url = "https://localhost/WcfTwoWayAuthentication/Home.svc/DoWork";
         ConnectionSpec connectionSpec=new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS).tlsVersions(TlsVersion.TLS_1_2).build();
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
@@ -68,77 +72,4 @@ public class App
         String result = response.body().string();
         System.out.println(result);
     }
-
-    /**
-     * 单向认证，客户端认证服务器
-     * @param cerPath
-     * @return
-     * @throws Exception
-     */
-    private static SSLSocketFactoryWrapper getSslSocketFactory(String cerPath) throws Exception {
-        CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-        InputStream inputStream = new FileInputStream(new File(cerPath));
-        Certificate ca = certificateFactory.generateCertificate(inputStream);
-
-        KeyStore keyStore = KeyStore.getInstance("PKCS12");
-        keyStore.load(null, null);
-        keyStore.setCertificateEntry("server", ca);
-
-        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-        trustManagerFactory.init(keyStore);
-        TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
-
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, trustManagers, new SecureRandom());
-        var socketFactory = sslContext.getSocketFactory();
-
-        SSLSocketFactoryWrapper sSLSocketFactoryWrapper =new SSLSocketFactoryWrapper();
-        sSLSocketFactoryWrapper.socketFactory=socketFactory;
-        sSLSocketFactoryWrapper.x509TrustManager=(X509TrustManager)trustManagers[0];
-        return sSLSocketFactoryWrapper;
-    }
-
-    /**
-     * 双向认证
-     * @param cerPath
-     * @param p12Path
-     * @param password
-     * @return
-     * @throws Exception
-     */
-    public static SSLSocketFactoryWrapper getSslSocketFactory(String cerPath, String p12Path, String password) throws Exception {
-
-        var p12InputStream = new FileInputStream(new File(p12Path));
-        KeyStore kmks = KeyStore.getInstance("PKCS12");
-        kmks.load(p12InputStream, password.toCharArray());
-
-        KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-        keyManagerFactory.init(kmks, password.toCharArray());
-        KeyManager[] kms = keyManagerFactory.getKeyManagers();
-
-        var cerInputStream = new FileInputStream(new File(cerPath));
-        CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-        Certificate ca = certificateFactory.generateCertificate(cerInputStream);
-
-        KeyStore kstm = KeyStore.getInstance("PKCS12");
-        kstm.load(null, null);
-        kstm.setCertificateEntry("server", ca);
-
-        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-        trustManagerFactory.init(kstm);
-        TrustManager[] tms = trustManagerFactory.getTrustManagers();
-
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(kms, tms, new SecureRandom());
-        var socketFactory = sslContext.getSocketFactory();
-
-        cerInputStream.close();
-        p12InputStream.close();
-
-        SSLSocketFactoryWrapper sSLSocketFactoryWrapper =new SSLSocketFactoryWrapper();
-        sSLSocketFactoryWrapper.socketFactory=socketFactory;
-        sSLSocketFactoryWrapper.x509TrustManager=(X509TrustManager)tms[0];
-        return sSLSocketFactoryWrapper;
-    }
-
 }
