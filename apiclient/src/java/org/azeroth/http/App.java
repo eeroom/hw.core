@@ -48,7 +48,7 @@ public class App
         String certPath = "D:\\iiscer.cer";
         //客户端私钥
         String p12Path ="D:\\wchCert.pfx";
-        //双向认证
+        //双向认证，服务端把客户端的公钥设置为信任的证书，windows上使用证书管理器
         SSLSocketFactoryWrapper sSLSocketFactoryWrapper = SSLSocketFactoryWrapper.newInstance(certPath, p12Path, "123456");
         //单向认证，客户端认证服务器
         SSLSocketFactoryWrapper sSLSocketFactoryWrapper2 = SSLSocketFactoryWrapper.newInstance(certPath);
