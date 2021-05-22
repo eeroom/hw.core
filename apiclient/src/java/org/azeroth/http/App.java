@@ -46,12 +46,12 @@ public class App
         String certPath = "D:\\iiscer.cer";
         //客户端私钥
         String p12Path ="D:\\wchCert.pfx";
-        RT rt= getSocketFactory(certPath, p12Path, "123456");
+        SSLSocketFactoryWrapper sSLSocketFactoryWrapper = getSslSocketFactory(certPath, p12Path, "123456");
         //RT rt= getSocketFactory(certPath);
         String url = "https://localhost/WcfTwoWayAuthentication/Home.svc/DoWork";
         ConnectionSpec connectionSpec=new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS).tlsVersions(TlsVersion.TLS_1_2).build();
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
-        clientBuilder.sslSocketFactory(rt.socketFactory,rt.x509TrustManager)
+        clientBuilder.sslSocketFactory(sSLSocketFactoryWrapper.socketFactory, sSLSocketFactoryWrapper.x509TrustManager)
                 .connectionSpecs(java.util.Collections.singletonList(connectionSpec))//指定tls版本
                 .protocols(Collections.singletonList(Protocol.HTTP_1_1))//指定http版本
                 .hostnameVerifier((x,y)->true);//解决报错javax.net.ssl.SSLPeerUnverifiedException: Hostname 127.0.0.1 not verified
@@ -75,7 +75,7 @@ public class App
      * @return
      * @throws Exception
      */
-    private static RT getSocketFactory(String cerPath) throws Exception {
+    private static SSLSocketFactoryWrapper getSslSocketFactory(String cerPath) throws Exception {
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
         InputStream inputStream = new FileInputStream(new File(cerPath));
         Certificate ca = certificateFactory.generateCertificate(inputStream);
@@ -92,10 +92,10 @@ public class App
         sslContext.init(null, trustManagers, new SecureRandom());
         var socketFactory = sslContext.getSocketFactory();
 
-        RT rt=new RT();
-        rt.socketFactory=socketFactory;
-        rt.x509TrustManager=(X509TrustManager)trustManagers[0];
-        return rt;
+        SSLSocketFactoryWrapper sSLSocketFactoryWrapper =new SSLSocketFactoryWrapper();
+        sSLSocketFactoryWrapper.socketFactory=socketFactory;
+        sSLSocketFactoryWrapper.x509TrustManager=(X509TrustManager)trustManagers[0];
+        return sSLSocketFactoryWrapper;
     }
 
     /**
@@ -106,7 +106,7 @@ public class App
      * @return
      * @throws Exception
      */
-    public static RT getSocketFactory(String cerPath, String p12Path, String password) throws Exception {
+    public static SSLSocketFactoryWrapper getSslSocketFactory(String cerPath, String p12Path, String password) throws Exception {
 
         var p12InputStream = new FileInputStream(new File(p12Path));
         KeyStore kmks = KeyStore.getInstance("PKCS12");
@@ -135,10 +135,10 @@ public class App
         cerInputStream.close();
         p12InputStream.close();
 
-        RT rt=new RT();
-        rt.socketFactory=socketFactory;
-        rt.x509TrustManager=(X509TrustManager)tms[0];
-        return rt;
+        SSLSocketFactoryWrapper sSLSocketFactoryWrapper =new SSLSocketFactoryWrapper();
+        sSLSocketFactoryWrapper.socketFactory=socketFactory;
+        sSLSocketFactoryWrapper.x509TrustManager=(X509TrustManager)tms[0];
+        return sSLSocketFactoryWrapper;
     }
 
 }
