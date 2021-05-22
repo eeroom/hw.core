@@ -22,9 +22,18 @@ public class App
     public static void main( String[] args ) throws Throwable {
         //httpsRequest();
         httpchanelRequest();
+        NtlmDemo();
         System.out.println( "Hello World!" );
 
 
+    }
+
+    //服务端启用windows基本认证/window集成认证
+    private static void NtlmDemo() {
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .authenticator(new NTLMAuthenticator("china\\eeroom", "123456"))
+                // .some other init here if necessary
+                .build();
     }
 
     private static void httpchanelRequest() {

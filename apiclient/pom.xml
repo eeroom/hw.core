@@ -25,6 +25,17 @@
       <artifactId>okhttp</artifactId>
       <version>4.2.2</version>
     </dependency>
+    <dependency>
+      <groupId>org.codelibs</groupId>
+      <artifactId>jcifs</artifactId>
+      <version>1.3.18.3</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.servlet</groupId>
+          <artifactId>servlet-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
 
 
   </dependencies>
