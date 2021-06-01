@@ -1,4 +1,4 @@
-package org.azeroth.logutil;
+package org.azeroth.log4jdemo;
 
 import org.apache.logging.log4j.Logger;
 

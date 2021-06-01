@@ -1,7 +1,6 @@
-package org.azeroth.logutil;
+package org.azeroth.log4jdemo;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 public class ConnectionFactory {
     public static Connection getConnection() throws Throwable {

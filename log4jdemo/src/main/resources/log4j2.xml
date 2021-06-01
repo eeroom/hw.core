@@ -1,4 +1,4 @@
-<Configuration status="info" strict="true" package="org.azeroth.logutil">
+<Configuration status="info" strict="true" package="org.azeroth.log4jdemo">
     <Loggers>
         <Root level="debug">
             <AppenderRef ref="STDOUT"/>
@@ -11,7 +11,7 @@
             </Layout>
         </Appender>
         <Appender type="Jdbc" name="db" tableName="Log">
-            <ConnectionFactory class="org.azeroth.logutil.ConnectionFactory" method="getConnection" />
+            <ConnectionFactory class="org.azeroth.log4jdemo.ConnectionFactory" method="getConnection" />
             <Column name="Name" pattern="%sx{Name}" />
         </Appender>
     </Appenders>

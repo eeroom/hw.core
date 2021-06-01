@@ -1,4 +1,4 @@
-package org.azeroth.logutil;
+package org.azeroth.log4jdemo;
 
 public class Student {
     public  int Age;
