@@ -1,6 +1,7 @@
 package org.azeroth.axisclient;
 
 import org.apache.axis.encoding.XMLType;
+import org.apache.axis.soap.SOAPConstants;
 
 import javax.xml.namespace.QName;
 import java.rmi.RemoteException;
@@ -35,27 +36,27 @@ public class App {
 
     private static void invokeGetStudent(int i) throws Throwable {
         String endpointURL = "http://localhost:49755/Home.asmx";
-
+        String xmlns="http://tempuri.org/";
+        String methodName="GetStudentById";
         org.apache.axis.client.Service service = new org.apache.axis.client.Service();
 
         org.apache.axis.client.Call call = (org.apache.axis.client.Call) service.createCall();
         call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS,false);
-        //call.setTimeout(60000);
         call.setTargetEndpointAddress(endpointURL);
         call.setUseSOAPAction(true);
-        call.setSOAPActionURI("http://tempuri.org/GetStudentById");
-        call.setOperationName(new javax.xml.namespace.QName("http://tempuri.org/","GetStudentById"));// 设置操作的名称。
+        call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
+        call.setSOAPActionURI(xmlns+methodName);
+        call.setOperationName(new javax.xml.namespace.QName(xmlns,methodName));// 设置操作的名称。
 
 
         call.registerTypeMapping(Student.class,
-                new QName("http://tempuri.org/","GetStudentById"),
-                new org.apache.axis.encoding.ser.BeanSerializerFactory(Student.class,new QName("http://tempuri.org/","GetStudentById")),
-                new org.apache.axis.encoding.ser.BeanDeserializerFactory(Student.class,new QName("http://tempuri.org/","GetStudentById")));
+                new QName(xmlns,"Student"),
+                new org.apache.axis.encoding.ser.BeanSerializerFactory(Student.class,new QName(xmlns,"Student")),
+                new org.apache.axis.encoding.ser.BeanDeserializerFactory(Student.class,new QName(xmlns,"Student")));
 
-        call.addParameter(new javax.xml.namespace.QName("http://tempuri.org/","id"),
+        call.addParameter(new javax.xml.namespace.QName(xmlns,"id"),
                 org.apache.axis.encoding.XMLType.SOAP_INT,
                 javax.xml.rpc.ParameterMode.IN);// 参数的类型
-        //call.setReturnType(org.apache.axis.encoding.XMLType.SOAP_STRING);// 返回的数据类型
         call.setReturnClass(Student.class);
         Student result = (Student) call.invoke(new Object[]{i});// 执行调用
 
