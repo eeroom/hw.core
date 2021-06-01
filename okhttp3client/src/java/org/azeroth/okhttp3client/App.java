@@ -1,16 +1,8 @@
-package org.azeroth.http;
+package org.azeroth.okhttp3client;
 
 
 import okhttp3.*;
 
-import javax.net.ssl.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.security.KeyStore;
-import java.security.SecureRandom;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
 import java.util.Collections;
 
 /**

@@ -1,4 +1,4 @@
-package org.azeroth.http;
+package org.azeroth.okhttp3client;
 
 import jcifs.ntlmssp.NtlmFlags;
 import jcifs.ntlmssp.Type1Message;

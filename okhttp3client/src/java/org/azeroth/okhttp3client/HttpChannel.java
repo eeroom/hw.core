@@ -1,4 +1,4 @@
-package org.azeroth.http;
+package org.azeroth.okhttp3client;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
