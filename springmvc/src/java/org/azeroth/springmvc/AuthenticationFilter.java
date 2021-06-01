@@ -21,7 +21,7 @@ public class AuthenticationFilter implements Filter {
         //取到ioc容器
         var context= WebApplicationContextUtils.getWebApplicationContext(servletRequest.getServletContext());
         var uw= context.getBean(UserInfoWrapper.class);
-        uw.setName("张三");
+        uw.setName("userName");
         filterChain.doFilter(servletRequest,servletResponse);
     }
 
