@@ -1,13 +1,18 @@
 package org.azeroth.activemqSender;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.jms.core.JmsOperations;
+import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 
 import javax.jms.Destination;
 import javax.jms.Session;
 
 public class App {
     public static void main(String[] args) throws Throwable{
-        invoke();
+        //invoke();
+        invokeWithSpring();
 
     }
 
@@ -32,5 +37,17 @@ public class App {
         producer.close();
         session.close();
         cnn.close();
+    }
+
+    static void invokeWithSpring() throws Throwable{
+        var context=new org.springframework.context.annotation.AnnotationConfigApplicationContext(RootConfig.class);
+
+        var jmo= context.getBean(JmsOperations.class);
+
+        var props= PropertiesLoaderUtils.loadAllProperties("application.properties");
+        var queuename= props.getProperty("activemq.queuename");
+
+        jmo.convertAndSend(queuename,"hello world");
+
     }
 }
