@@ -14,6 +14,9 @@ public class App {
 
     }
 
+    /*
+    使用spring的jmstemplate接收消息
+     */
     private static void invokerWithSpring() throws Throwable {
         var context=new org.springframework.context.annotation.AnnotationConfigApplicationContext(RootConfig.class);
 
