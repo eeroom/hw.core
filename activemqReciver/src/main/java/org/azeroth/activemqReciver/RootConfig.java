@@ -34,10 +34,23 @@ public class RootConfig {
     @Value("${activemq.mqurl}")
     String mqurl;
 
+    @Value("${activemq.queuename}")
+    String queuename;
+
     @Bean
     public ConnectionFactory createConnectionFactory(){
         var fac=new org.apache.activemq.ActiveMQConnectionFactory(mqurl);
         return fac;
+    }
+
+    @Bean
+    public org.springframework.jms.listener.MessageListenerContainer create(ConnectionFactory fac){
+        var lcontainer=new org.springframework.jms.listener.DefaultMessageListenerContainer();
+        lcontainer.setConnectionFactory(fac);
+        var listener=new TaskMessageListener();
+        lcontainer.setMessageListener(listener);
+        lcontainer.setDestinationName(queuename);
+        return lcontainer;
     }
 
 

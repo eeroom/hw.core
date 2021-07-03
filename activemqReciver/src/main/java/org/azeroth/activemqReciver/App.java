@@ -9,9 +9,16 @@ import javax.jms.Session;
 public class App {
     public static void main(String[] arg) throws Throwable{
         //invoke();
-        invokerWithSpring();
+        //invokerWithSpring();
+        invokerWithSpringListener();
 
 
+    }
+
+    private static void invokerWithSpringListener() {
+        var context=new org.springframework.context.annotation.AnnotationConfigApplicationContext(RootConfig.class);
+        var container= context.getBean(org.springframework.jms.listener.MessageListenerContainer.class);
+        container.start();
     }
 
     /*
