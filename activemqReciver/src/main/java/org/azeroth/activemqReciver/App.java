@@ -1,12 +1,31 @@
 package org.azeroth.activemqReciver;
 
+import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.jms.core.JmsOperations;
+
+import javax.jms.ObjectMessage;
 import javax.jms.Session;
 
 public class App {
     public static void main(String[] arg) throws Throwable{
-        invoke();
+        //invoke();
+        invokerWithSpring();
 
 
+    }
+
+    private static void invokerWithSpring() throws Throwable {
+        var context=new org.springframework.context.annotation.AnnotationConfigApplicationContext(RootConfig.class);
+
+        var jmo= context.getBean(JmsOperations.class);
+
+        var props= PropertiesLoaderUtils.loadAllProperties("application.properties");
+        var queuename= props.getProperty("activemq.queuename");
+
+        while (true){
+            var msg= (TaskMessage)jmo.receiveAndConvert(queuename);
+            System.out.println("收到消息："+msg.Id);
+        }
     }
 
     /*

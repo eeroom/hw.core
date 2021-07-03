@@ -46,8 +46,10 @@ public class App {
 
         var props= PropertiesLoaderUtils.loadAllProperties("application.properties");
         var queuename= props.getProperty("activemq.queuename");
-
-        jmo.convertAndSend(queuename,"hello world");
+        var msg=new TaskMessage();
+        msg.Age=100;
+        msg.Id="se";
+        jmo.convertAndSend(queuename,msg);
 
     }
 }
