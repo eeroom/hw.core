@@ -31,12 +31,13 @@
       <artifactId>spring-context</artifactId>
       <version>4.3.26.RELEASE</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-aspects -->
     <dependency>
-      <groupId>org.aspectj</groupId>
-      <artifactId>aspectjweaver</artifactId>
-      <version>1.8.10</version>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aspects</artifactId>
+      <version>4.3.26.RELEASE</version>
     </dependency>
+
 
   </dependencies>
 
