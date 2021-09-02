@@ -30,7 +30,7 @@ public class RootConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(ab)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("org.azeroth.springmvc.controller"))
+                .apis(RequestHandlerSelectors.basePackage("org.azeroth.workflow"))
                 .paths(PathSelectors.any())
                 .build();
     }
