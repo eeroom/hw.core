@@ -1,8 +1,15 @@
 package org.azeroth.workflow;
 
+import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.ProcessEngineConfiguration;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -34,5 +41,33 @@ public class RootConfig {
                 .apis(RequestHandlerSelectors.basePackage("org.azeroth.workflow"))
                 .paths(PathSelectors.any())
                 .build();
+    }
+
+    @Value("${camundaJdbcUrl}")
+    String camundaJdbcUrl;
+
+    @Value("${camundaJdbcUsername}")
+    String camundaJdbcUsername;
+
+    @Value("${Gutop_Pwd}")
+    String camundaJdbcPassword;
+
+    @Bean
+    @Scope(WebApplicationContext.SCOPE_REQUEST)
+    public ProcessEngineConfiguration createProcessEngineConfiguration(){
+        var cfg= org.camunda.bpm.engine.ProcessEngineConfiguration.createStandaloneProcessEngineConfiguration();
+        cfg.setJdbcDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        cfg.setDatabaseType("mssql");
+        cfg.setJdbcUrl(this.camundaJdbcUrl);
+        cfg.setJdbcUsername(this.camundaJdbcUsername);
+        cfg.setJdbcPassword(this.camundaJdbcPassword);
+        cfg.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
+        return cfg;
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public ProcessEngine createProcessEngine(ProcessEngineConfiguration cfg){
+        return cfg.buildProcessEngine();
     }
 }
