@@ -12,8 +12,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@ComponentScan(excludeFilters ={@ComponentScan.Filter(value = EnableWebMvc.class)})
-@EnableSwagger2
+
 public class RootConfig {
 
     @Bean
@@ -30,7 +29,7 @@ public class RootConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(ab)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("org.azeroth.springmvc.controller"))
+                .apis(RequestHandlerSelectors.basePackage("org.azeroth.workflow"))
                 .paths(PathSelectors.any())
                 .build();
     }

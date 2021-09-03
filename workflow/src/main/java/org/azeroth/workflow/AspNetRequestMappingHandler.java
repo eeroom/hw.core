@@ -9,7 +9,6 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
 import java.lang.reflect.Method;
 
-@Component
 public class AspNetRequestMappingHandler extends org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping {
 
     public AspNetRequestMappingHandler(){

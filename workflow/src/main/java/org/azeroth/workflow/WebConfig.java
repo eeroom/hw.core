@@ -6,14 +6,16 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration;
 
 @org.springframework.context.annotation.Configuration
-@org.springframework.web.servlet.config.annotation.EnableWebMvc
 @org.springframework.context.annotation.ComponentScan
-public class WebConfig extends org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter {
+@EnableSwagger2
+public class WebConfig extends org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport {
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
@@ -49,6 +51,8 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
 //    public MultipartResolver getStandardServletMultipartResolver(){
 //        return new StandardServletMultipartResolver();
 //    }
-
+    protected RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
+        return new AspNetRequestMappingHandler();
+    }
 
 }
