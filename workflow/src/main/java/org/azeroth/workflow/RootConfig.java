@@ -12,7 +12,6 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-
 public class RootConfig {
 
     @Bean
@@ -29,7 +28,7 @@ public class RootConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(ab)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("org.azeroth.workflow"))
+                .apis(RequestHandlerSelectors.basePackage("org.azeroth.springmvc.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
