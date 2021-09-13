@@ -1,7 +1,10 @@
 package org.azeroth.workflow;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -11,6 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration;
+import java.util.List;
 
 @org.springframework.context.annotation.Configuration
 @org.springframework.context.annotation.ComponentScan
@@ -55,4 +59,12 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
         return new AspNetRequestMappingHandler();
     }
 
+    @Autowired
+    AspNetHandlerMethodArgumentResolver aspNetHandlerMethodArgumentResolver;
+
+    @Override
+    protected void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        //支持asp.net风格的参数模型绑定；根据请求的context-type,自定使用json方式或者表单方式进行模型绑定，不需要额外对参数设置特性）
+        argumentResolvers.add(aspNetHandlerMethodArgumentResolver);
+    }
 }
