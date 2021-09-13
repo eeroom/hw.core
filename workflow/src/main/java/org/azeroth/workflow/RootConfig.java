@@ -17,7 +17,8 @@ public class RootConfig {
     @Bean
     public Docket createRestApi() {
         //启用swagger,添加@EnableSwagger2,添加这个bean
-        //默认地址 http://localhost:8084/doc.html
+        // com.github.xiaoymin->swagger-bootstrap-ui 这类类库提供了swagger-ui的入口页面，doc.html,放在类库的classpath/resources目录下,也就对应网站的 /doc.html，例如http://localhost:8084/doc.html
+        // io.springfox->springfox-swagger2,EnableSwagger2注解会注册其涉及的bean,核心是注册了一个HandlerMapping,HandlerMapping的核心是Swagger2Controller，提供的核心api,/v2/api-docs
         var ab= new ApiInfoBuilder()
                 .title("azeroth-api")
                 .description("swagger-bootstrap-ui")
