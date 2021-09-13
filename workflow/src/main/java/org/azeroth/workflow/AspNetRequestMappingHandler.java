@@ -12,9 +12,6 @@ import java.lang.reflect.Method;
 public class AspNetRequestMappingHandler extends org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping {
 
     public AspNetRequestMappingHandler(){
-        var pathMatcher= (AntPathMatcher)this.getPathMatcher();
-        //忽略请求路径的url的大小写，默认是区分大小写，w3标准是url和请求参数的名称不区分大小写
-        pathMatcher.setCaseSensitive(false);
         //org.springframework.web.servlet.DispatcherServlet在initHandlerMappings中会对所有的handlerMapping排序，
         //这里保证RequestMappingHandlerMappingAspNet排第一个，
         //因为RequestMappingHandlerMapping加了Component,会被初始化到dispather，并且是第一个

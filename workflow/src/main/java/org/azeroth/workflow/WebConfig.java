@@ -42,7 +42,6 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
 
     /**
      * 忽略请求路径的url的大小写，默认是区分大小写，w3标准是url和请求参数的名称不区分大小写，
-     * 对其他的默认加载的handlerMapping起作用，对RequestMappingHandlerMappingAspNet不起作用
      * @param configurer
      */
     @Override
