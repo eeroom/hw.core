@@ -18,7 +18,7 @@ public class Deploy {
 
     ProcessEngine processEngine;
 
-    @RequestMapping(method= RequestMethod.POST, path = "/deploy/add")
+    @HttpPost
     public DeployAdd add(DeployAdd deployAdd){
         return new DeployAdd();
     }
