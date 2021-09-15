@@ -3,14 +3,19 @@ package org.azeroth.workflow;
 import com.fasterxml.classmate.TypeResolver;
 import org.azeroth.workflow.swagger2.AspNetHandlerMethodResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -26,7 +31,7 @@ import javax.servlet.ServletRegistration;
 import java.util.List;
 
 @org.springframework.context.annotation.Configuration
-@org.springframework.context.annotation.ComponentScan
+@org.springframework.context.annotation.ComponentScan(excludeFilters ={@ComponentScan.Filter(classes = RootConfig.class,type = FilterType.ASSIGNABLE_TYPE  )})
 @EnableSwagger2
 public class WebConfig extends org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport {
     @Override
@@ -105,4 +110,21 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
         //注入点的位置：springfox.documentation.spring.web.plugins.WebMvcRequestHandlerProvider的构造函数，
         return new AspNetHandlerMethodResolver(resolver);
     }
+
+    @Value("${upload.tmpdir}")
+    String uploadtmpdir;
+    @Value("${upload.maxUploadSize}")
+    int maxUploadSize;
+    @Value("${upload.maxInMemorySize}")
+    int maxInMemorySize;
+
+
+    //需要依赖额外的包，这里不采用
+    public MultipartResolver multipartResolver(){
+        var mr=new CommonsMultipartResolver();
+        mr.setMaxInMemorySize(this.maxInMemorySize);
+        mr.setMaxUploadSize(this.maxUploadSize);
+        return mr;
+    }
+
 }

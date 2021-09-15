@@ -1,5 +1,6 @@
 package org.azeroth.workflow;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.FrameworkServlet;
@@ -36,7 +37,9 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
         //开启支持multipart/form-data，这样才能上传文件
-        registration.setMultipartConfig(new MultipartConfigElement("D:/springmvc_multipart_formdata",2097152,4194304,0));
+        //这里是tomcat依照约定直接调用到这里，不好利用spring容器的能力读取配置文件，所以把上传文件的配置移动到webconfig中配置一个上传文件相关的bean
+         var tmpdir=System.getProperty("java.io.tmpdir");
+        registration.setMultipartConfig(new MultipartConfigElement(tmpdir,2097152,4194304,0));
     }
 
     @Override
