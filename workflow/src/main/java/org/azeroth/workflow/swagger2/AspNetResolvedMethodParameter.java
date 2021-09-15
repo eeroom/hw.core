@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import net.bytebuddy.description.annotation.AnnotationDescription;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.service.ResolvedMethodParameter;
 
 import java.lang.annotation.Annotation;
@@ -17,6 +18,9 @@ public class AspNetResolvedMethodParameter extends ResolvedMethodParameter {
     static List<Annotation> getAnnotation(MethodParameter methodParameter){
         var lst=methodParameter.getParameterAnnotations();
         if(lst.length>0)
+            return Lists.newArrayList(lst);
+        RequestMapping rm= methodParameter.getMethodAnnotation(RequestMapping.class);
+        if(rm!=null)
             return Lists.newArrayList(lst);
         if(methodParameter.getContainingClass().getPackageName().indexOf("org.azeroth.workflow.controller")<0)
             return Lists.newArrayList(lst);;
