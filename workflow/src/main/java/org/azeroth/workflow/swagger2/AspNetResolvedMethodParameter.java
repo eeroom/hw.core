@@ -3,6 +3,7 @@ package org.azeroth.workflow.swagger2;
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.collect.Lists;
 import net.bytebuddy.description.annotation.AnnotationDescription;
+import org.azeroth.workflow.HttpGet;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,9 @@ public class AspNetResolvedMethodParameter extends ResolvedMethodParameter {
             return Lists.newArrayList(lst);
         RequestMapping rm= methodParameter.getMethodAnnotation(RequestMapping.class);
         if(rm!=null)
+            return Lists.newArrayList(lst);
+        var hg=methodParameter.getMethodAnnotation(HttpGet.class);
+        if(hg!=null)
             return Lists.newArrayList(lst);
         if(methodParameter.getMethod().getParameters().length!=1)
             return Lists.newArrayList(lst);
