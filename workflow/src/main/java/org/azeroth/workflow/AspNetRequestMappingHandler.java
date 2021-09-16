@@ -1,6 +1,7 @@
 package org.azeroth.workflow;
 
 import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,8 +47,6 @@ public class AspNetRequestMappingHandler extends org.springframework.web.servlet
         if(handlerType.getAnnotation(org.springframework.stereotype.Controller.class)==null
                 && handlerType.getAnnotation(org.springframework.web.bind.annotation.RestController.class)==null)
             return null;
-        if(method.getParameters().length>1)
-            return null;
         int flag=method.getModifiers();
         if(!java.lang.reflect.Modifier.isPublic(flag) || java.lang.reflect.Modifier.isStatic(flag))
             return null;
@@ -66,13 +65,15 @@ public class AspNetRequestMappingHandler extends org.springframework.web.servlet
             lstm.add(RequestMethod.GET);
         if(httpPost!=null){
             lstm.add(RequestMethod.POST);
-            lstc.add(HttpPost.contentJson);
-            lstc.add(HttpPost.contentForm);
+            lstc.add(MediaType.APPLICATION_JSON_VALUE);
+            lstc.add(MediaType.MULTIPART_FORM_DATA_VALUE);
+            lstc.add(MediaType.APPLICATION_FORM_URLENCODED_VALUE);
         }
         if(lstm.size()==0){
             lstm.add(RequestMethod.POST);
-            lstc.add(HttpPost.contentJson);
-            lstc.add(HttpPost.contentForm);
+            lstc.add(MediaType.APPLICATION_JSON_VALUE);
+            lstc.add(MediaType.MULTIPART_FORM_DATA_VALUE);
+            lstc.add(MediaType.APPLICATION_FORM_URLENCODED_VALUE);
         }
         RequestMethod[] lstMethod=new RequestMethod[lstm.size()];
         lstm.toArray(lstMethod);

@@ -3,6 +3,7 @@ package org.azeroth.workflow;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -34,9 +35,9 @@ public class AspNetHandlerMethodArgumentResolver implements org.springframework.
         var httpContext= (Map<String,Object>)this.applicationContext.getBean("httpContext");
         var method= (String)httpContext.get("Method");
         var contentType=httpContext.get("ContentType").toString().toLowerCase();
-        if("post".equalsIgnoreCase(method))
+        if(!"post".equalsIgnoreCase(method))
             return false;
-        if(contentType.indexOf(HttpPost.contentJson)<0 && contentType.indexOf(HttpPost.contentForm)<0)
+        if(contentType.indexOf(MediaType.APPLICATION_JSON_VALUE)<0 && contentType.indexOf(MediaType.APPLICATION_FORM_URLENCODED_VALUE)<0 &&contentType.indexOf(MediaType.MULTIPART_FORM_DATA_VALUE)<0)
             return false;
         if(this.adapter==null){
             this.adapter=(RequestMappingHandlerAdapter)this.applicationContext.getBean("requestMappingHandlerAdapter");
@@ -50,7 +51,7 @@ public class AspNetHandlerMethodArgumentResolver implements org.springframework.
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
         var sr=(ServletRequest)nativeWebRequest.getNativeRequest(ServletRequest.class);
         var parameterType=sr.getContentType().toLowerCase();
-        if(parameterType.indexOf(HttpPost.contentJson)>=0)
+        if(parameterType.indexOf(MediaType.APPLICATION_JSON_VALUE)>=0)
             return this.parsejson.resolveArgument(methodParameter,modelAndViewContainer,nativeWebRequest,webDataBinderFactory);
         else
             return this.parsewwwformdata.resolveArgument(methodParameter,modelAndViewContainer,nativeWebRequest,webDataBinderFactory);
