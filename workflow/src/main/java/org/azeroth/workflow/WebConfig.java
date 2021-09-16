@@ -4,12 +4,10 @@ import com.fasterxml.classmate.TypeResolver;
 import org.azeroth.workflow.swagger2.AspNetHandlerMethodResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -28,7 +26,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @org.springframework.context.annotation.Configuration
 @org.springframework.context.annotation.ComponentScan(excludeFilters ={@ComponentScan.Filter(classes = RootConfig.class,type = FilterType.ASSIGNABLE_TYPE  )})
@@ -70,6 +70,18 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
 //    }
     protected RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
         return new AspNetRequestMappingHandler();
+    }
+
+    /**
+     * MydispatherServlet中把一些需要用到的信息写到字典，方便后续使用
+     * 例如：AspNetHandlerMethodArgumentResolver需要根据当前请求的POST,GET，content-type等信息决定是否解析当前请求的参数
+     * @return
+     */
+    @Bean
+    @Scope(WebApplicationContext.SCOPE_REQUEST)
+    public Map<String,Object> httpContext(){
+        var mp=new HashMap<String,Object>();
+        return mp;
     }
 
     @Autowired

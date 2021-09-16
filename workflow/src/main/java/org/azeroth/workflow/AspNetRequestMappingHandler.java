@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 public class AspNetRequestMappingHandler extends org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping {
 
@@ -45,6 +46,8 @@ public class AspNetRequestMappingHandler extends org.springframework.web.servlet
         if(handlerType.getAnnotation(org.springframework.stereotype.Controller.class)==null
                 && handlerType.getAnnotation(org.springframework.web.bind.annotation.RestController.class)==null)
             return null;
+        if(method.getParameters().length>1)
+            return null;
         int flag=method.getModifiers();
         if(!java.lang.reflect.Modifier.isPublic(flag) || java.lang.reflect.Modifier.isStatic(flag))
             return null;
@@ -56,22 +59,30 @@ public class AspNetRequestMappingHandler extends org.springframework.web.servlet
         //设定api默认的http方法
         var httpGet = AnnotatedElementUtils.findMergedAnnotation(method, HttpGet.class);
         var httpPost = AnnotatedElementUtils.findMergedAnnotation(method, HttpPost.class);
-        RequestMethod[] lstMethod;
-        if(httpGet==null &&httpPost==null && handlerType.getAnnotation(org.springframework.stereotype.Controller.class)!=null)
-            lstMethod=new RequestMethod[]{RequestMethod.GET};
-        else if(httpGet==null &&httpPost==null && handlerType.getAnnotation(org.springframework.web.bind.annotation.RestController.class)!=null)
-            lstMethod=new RequestMethod[]{RequestMethod.POST};
-        else if(httpGet!=null && httpPost!=null)
-            lstMethod=new RequestMethod[]{RequestMethod.GET,RequestMethod.POST};
-        else if(httpGet!=null)
-            lstMethod=new RequestMethod[]{RequestMethod.GET};
-        else
-            lstMethod=new RequestMethod[]{RequestMethod.POST};
+        var lstm=new ArrayList<RequestMethod>();
+        var lstc=new ArrayList<String>();
+
+        if(httpGet!=null)
+            lstm.add(RequestMethod.GET);
+        if(httpPost!=null){
+            lstm.add(RequestMethod.POST);
+            lstc.add(HttpPost.contentJson);
+            lstc.add(HttpPost.contentForm);
+        }
+        if(lstm.size()==0){
+            lstm.add(RequestMethod.POST);
+            lstc.add(HttpPost.contentJson);
+            lstc.add(HttpPost.contentForm);
+        }
+        RequestMethod[] lstMethod=new RequestMethod[lstm.size()];
+        lstm.toArray(lstMethod);
+        String[] lstConsume=new String[lstc.size()];
+        lstc.toArray(lstConsume);
         var rmi= RequestMappingInfo.paths(this.resolveEmbeddedValuesInPatterns(new String[]{"/"+controllerName+"/"+method.getName()}))
                 .methods(lstMethod)//这里决定api的请求方法，GET,POST,PUT等
                 .params(new String[0])
                 .headers(new String[0])
-                .consumes(new String[0])
+                .consumes(lstConsume)
                 .produces(new String[0])
                 .mappingName("")
                 .customCondition(null)

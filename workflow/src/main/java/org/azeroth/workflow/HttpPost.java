@@ -9,4 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HttpPost {
+    public static String contentJson="application/json";
+    public static String contentForm="application/x-www-form-urlencoded";
 }
