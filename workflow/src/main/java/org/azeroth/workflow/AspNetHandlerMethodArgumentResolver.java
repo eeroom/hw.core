@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBody
 
 import javax.servlet.ServletRequest;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 解析前提，
@@ -34,9 +35,9 @@ public class AspNetHandlerMethodArgumentResolver implements org.springframework.
             return false;
         var httpContext= (Map<String,Object>)this.applicationContext.getBean("httpContext");
         var method= (String)httpContext.get("Method");
-        var contentType=httpContext.get("ContentType").toString().toLowerCase();
         if(!"post".equalsIgnoreCase(method))
             return false;
+        var contentType= Optional.ofNullable(httpContext.get("ContentType")).orElse("").toString().toLowerCase();
         if(contentType.indexOf(MediaType.APPLICATION_JSON_VALUE)<0 && contentType.indexOf(MediaType.APPLICATION_FORM_URLENCODED_VALUE)<0 &&contentType.indexOf(MediaType.MULTIPART_FORM_DATA_VALUE)<0)
             return false;
         if(this.adapter==null){
