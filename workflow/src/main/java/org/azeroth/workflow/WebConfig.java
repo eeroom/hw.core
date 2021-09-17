@@ -141,16 +141,19 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
 
         //配置各个方法的请求头设置（全局），Access-Token是请求头名称
         var lstAuthenticationScop=new AuthorizationScope[1];
+
         lstAuthenticationScop[0]=new AuthorizationScope("global","全局jwt");
         var sr=new SecurityReference(authenHeaderName,lstAuthenticationScop);
-        var lstSr= Lists.newArrayList(sr);
+        var sr2=new SecurityReference("Authorization",lstAuthenticationScop);
+        var lstSr= Lists.newArrayList(sr,sr2);
         var sc= SecurityContext.builder()
                 .securityReferences(lstSr)
                 .forPaths(PathSelectors.any())
                 .build();
         var apiKey=new ApiKey(authenHeaderName,authenHeaderName,"header");
+        var apiKey2=new ApiKey("Authorization","Authorization","header");
         docket.securityContexts(Lists.newArrayList(sc))
-                .securitySchemes(Lists.newArrayList(apiKey));
+                .securitySchemes(Lists.newArrayList(apiKey,apiKey2));
 
         return docket;
     }
