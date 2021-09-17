@@ -17,9 +17,8 @@ public class Deploy {
 
     ProcessEngine processEngine;
 
-    //这里涉及文件和普通表单数据，asp.net风格的改动和swaage-ui配合的不好，所以使用PostMapping
-    //使用asp.net风格的做法，这里仍然ok,但是swagger-ui不能正常工作，
-    @PostMapping(path = "Deploy/add",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    //@PostMapping(path = "Deploy/add",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @HttpPost
     public DeployAdd add(DeployAdd deployAdd, MultipartFile bpmnFile){
         return new DeployAdd();
     }
