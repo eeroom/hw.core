@@ -1,6 +1,7 @@
 package org.azeroth.workflow;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.collect.Lists;
 import org.azeroth.workflow.swagger2.AspNetHandlerMethodResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,15 +18,23 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.ModelRef;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.Parameter;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,12 +114,45 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
                 .version("1.0")
                 .build();
 
-        return new Docket(DocumentationType.SWAGGER_2)
+
+
+
+
+        var docket= new Docket(DocumentationType.SWAGGER_2)
+                .enable(true)
                 .apiInfo(ab)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("org.azeroth.workflow.controller"))
                 .paths(PathSelectors.any())
                 .build();
+        //配置各个方法的请求头设置（非全局），Access-Token是请求头名称
+        String authenHeaderName="Access-Token";
+        var ticketPar=new ParameterBuilder();
+        var tokenParameter =ticketPar.name(authenHeaderName)//请求头名称
+                .description("jwt")
+                .modelRef(new ModelRef("string"))
+                .parameterType("header")
+                .required(false)
+                .build();
+        var lstp=new ArrayList<Parameter>();
+        lstp.add(tokenParameter);
+        //每个方法的参数列表都会多这个参数
+        //docket.globalOperationParameters(lstp);
+
+        //配置各个方法的请求头设置（全局），Access-Token是请求头名称
+        var lstAuthenticationScop=new AuthorizationScope[1];
+        lstAuthenticationScop[0]=new AuthorizationScope("global","全局jwt");
+        var sr=new SecurityReference(authenHeaderName,lstAuthenticationScop);
+        var lstSr= Lists.newArrayList(sr);
+        var sc= SecurityContext.builder()
+                .securityReferences(lstSr)
+                .forPaths(PathSelectors.any())
+                .build();
+        var apiKey=new ApiKey(authenHeaderName,authenHeaderName,"header");
+        docket.securityContexts(Lists.newArrayList(sc))
+                .securitySchemes(Lists.newArrayList(apiKey));
+
+        return docket;
     }
 
 
