@@ -107,20 +107,16 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
         //启用swagger,添加@EnableSwagger2,添加这个bean
         // springfox-swagger-ui这类类库提供了swagger-ui的入口页面，swagger-ui.html,
         // io.springfox->springfox-swagger2,EnableSwagger2注解会注册其涉及的bean,核心是注册了一个HandlerMapping,HandlerMapping的核心是Swagger2Controller，提供的核心api,/v2/api-docs
-        var ab= new ApiInfoBuilder()
+        var apiInfo= new ApiInfoBuilder()
                 .title("azeroth-api")
                 .description("swagger-bootstrap-ui")
                 .termsOfServiceUrl("http://localhost:8084/")
                 .version("1.0")
                 .build();
 
-
-
-
-
         var docket= new Docket(DocumentationType.SWAGGER_2)
                 .enable(true)
-                .apiInfo(ab)
+                .apiInfo(apiInfo)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("org.azeroth.workflow.controller"))
                 .paths(PathSelectors.any())
