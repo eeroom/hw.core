@@ -19,6 +19,8 @@ public class ControllerHandler implements ResponseBodyAdvice<Object> {
     public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
         if(!org.springframework.http.converter.json.MappingJackson2HttpMessageConverter.class.isAssignableFrom(aClass))
             return false;
+        if(methodParameter.getMethod().getDeclaringClass().getPackageName().indexOf("workflow.controller")<0)
+            return false;
         return true;
     }
 
@@ -30,5 +32,13 @@ public class ControllerHandler implements ResponseBodyAdvice<Object> {
         rt.setCode(HttpServletResponse.SC_OK);
         rt.setData(o);
         return rt;
+    }
+
+    @ExceptionHandler(Throwable.class)
+    public String handlerError(Throwable ex){
+//        var rt=new ApiResultWrapper();
+//        rt.setCode(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//        rt.setMessage(ex.getMessage());
+        return ex.getMessage();
     }
 }
