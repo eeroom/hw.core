@@ -12,6 +12,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ContextResource;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -61,4 +63,11 @@ public class RootConfig {
         return pe;
     }
 
+    //用于存放本次请求的当前用户信息，因为AuthenticationHandlerInterceptor里面要用到，他又只能拿到rootconfig对应的容器，所以把这个bean放在这里，
+    //如果直接在class上标注@component,rootconfig对应的容器获取不到这个bean，因为rootconfig对应的容器没有扫包，只有webconfig的容器进行了扫包
+    @Bean
+    @Scope(WebApplicationContext.SCOPE_REQUEST)
+    public LoginUserInfo loginUserInfo(){
+        return new LoginUserInfo();
+    }
 }
