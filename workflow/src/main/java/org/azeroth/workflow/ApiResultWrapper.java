@@ -1,6 +1,9 @@
 package org.azeroth.workflow;
 
 public class ApiResultWrapper {
+    public ApiResultWrapper(){
+        this.code=200;
+    }
     public Object getData() {
         return data;
     }
