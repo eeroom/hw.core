@@ -51,7 +51,7 @@ public class AuthenticationHandlerInterceptor implements HandlerInterceptor {
 
     private boolean noLogin(HttpServletResponse httpServletResponse) throws Exception {
         var apiresult=new ApiResultWrapper();
-        apiresult.setCode(HttpServletResponse.SC_FORBIDDEN);
+        apiresult.setCode(HttpServletResponse.SC_UNAUTHORIZED);
         apiresult.setMessage("请登陆");
         com.fasterxml.jackson.databind.ObjectMapper objectMapper=new ObjectMapper();
         //反序列的时候，如果json中有额外的字段，class没有与其对应的属性，默认报错，这样配置就不会报错，
