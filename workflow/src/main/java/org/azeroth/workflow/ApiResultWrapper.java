@@ -1,8 +1,10 @@
 package org.azeroth.workflow;
 
+import javax.servlet.http.HttpServletResponse;
+
 public class ApiResultWrapper {
     public ApiResultWrapper(){
-        this.code=200;
+        this.code= HttpServletResponse.SC_OK;
     }
     public Object getData() {
         return data;
