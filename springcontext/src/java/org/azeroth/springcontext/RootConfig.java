@@ -6,6 +6,7 @@ import org.springframework.context.annotation.*;
 @ComponentScan
 @PropertySource(value = {"classpath:application.properties"})
 @EnableAspectJAutoProxy
+@Import(CalculationBeanPostProcessorRegistrar.class)
 public class RootConfig {
     //PropertySource引入配置文件
 }
