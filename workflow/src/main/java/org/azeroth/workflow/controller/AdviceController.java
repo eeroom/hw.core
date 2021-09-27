@@ -41,7 +41,7 @@ public class AdviceController implements ResponseBodyAdvice<Object> {
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<ApiResultWrapper> handlerError(Throwable ex){
         var rt=new ApiResultWrapper();
-        rt.setCode(500);
+        rt.setCode(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         rt.setMessage(ex.getMessage());
         rt.setTag(ex.toString());
         return new ResponseEntity<>(rt, HttpStatus.OK);
