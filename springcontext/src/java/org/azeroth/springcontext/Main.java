@@ -11,6 +11,7 @@ public class Main {
         //建立切点，参照aspectj的规则
         org.springframework.context.annotation.AnnotationConfigApplicationContext context=
                 new org.springframework.context.annotation.AnnotationConfigApplicationContext(RootConfig.class);
+        var sayhello= context.getBean("seyhello");
         Calculation cal= context.getBean(Calculation.class);
         cal.Handler();
     }
