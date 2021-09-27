@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.AbstractFilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.annotation.DeferredImportSelector;
 import org.springframework.web.servlet.DispatcherServlet;
 
 @org.springframework.boot.autoconfigure.SpringBootApplication
@@ -48,6 +49,18 @@ public class App {
         var tomcatEmbeddedServletContainerFactory2= org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory.class;
         //initialize方法中启动tomcat
         var tomcatEmbeddedServletContainer= TomcatEmbeddedServletContainer.class;
+
+        //org.springframework.boot.autoconfigure.SpringBootApplication最终import了EnableAutoConfigurationImportSelector
+        // springcontext的大量的配置都是利用EnableAutoConfigurationImportSelector注册的
+        //spring的重要约定接口DeferredImportSelector和ImportSelector
+        var deferredImportSelector= DeferredImportSelector.class;
+
+        //涉及mvc的配置类
+        var mvccfg1= org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration.class;
+        var mvccfg2= org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter.class;
+        var mvccfg3= org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration.EnableWebMvcConfiguration.class;
+
+
         org.springframework.boot.SpringApplication.run(App.class);
     }
 }
