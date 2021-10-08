@@ -11,7 +11,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 
-public class CalculationBeanPostProcessor implements BeanFactoryAware, BeanPostProcessor, ApplicationContextAware, ResourceLoaderAware {
+public class MyBeanPostProcessor implements BeanFactoryAware, BeanPostProcessor, ApplicationContextAware, ResourceLoaderAware {
     BeanFactory beanFactory;
     ApplicationContext applicationContext;
     ResourceLoader resourceLoader;
