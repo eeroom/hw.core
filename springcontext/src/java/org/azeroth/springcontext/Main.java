@@ -1,14 +1,10 @@
 package org.azeroth.springcontext;
 
+import org.springframework.beans.factory.config.BeanPostProcessor;
+
 public class Main {
 
     public static  void  main(String[] args){
-
-        //引入spring的ioc容器
-        //aop
-        //依赖aspectjweaver，ioc的容器配置添加EnableAspectJAutoProxy
-        //建立切面，一个实现类
-        //建立切点，参照aspectj的规则
         //使用配置类参数的构造函数，会直接调用refresh方法，不够灵活，不能在refresh之前使用AnnotationConfigApplicationContext的一些方法
         //这里用无参构造函数，后续显式调用refresh
         org.springframework.context.annotation.AnnotationConfigApplicationContext context=
@@ -27,11 +23,27 @@ public class Main {
          */
 
         /**
-         * spring提供很多Aware在bean中需要获取一些容器相关的数据，比如容器本身，
+         * spring提供很多基于Aware的回调接口，方便在bean中获取一些想要的容器相关的数据，比如容器本身，
+         * bean对应的class实现这些接口，spring在实例化bean的时候会调用这些接口对应的方法，
          */
+        var resourceLoaderAware= org.springframework.context.ResourceLoaderAware.class;
+        var applicationContextAware= org.springframework.context.ApplicationContextAware.class;
+        var applicationEventPublisherAware= org.springframework.context.ApplicationEventPublisherAware.class;
+        var environmentAware= org.springframework.context.EnvironmentAware.class;
+        var beanFactoryAware= org.springframework.beans.factory.BeanFactoryAware.class;
+        /**
+         * spring预留了实例化bean操作的前、后的回调接口，让用户可以在实例化之前或之后对bean的实例进行操作
+         */
+        var beanPostProcessor= org.springframework.beans.factory.config.BeanPostProcessor.class;
+        var commonAnnotationBeanPostProcessor= org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.class;
 
         /**
-         * spring预留的让用户处理bean实例化的一些约定，processer
+         * aop,bean的类型对此无感知，不会侵入原类型
+         * 配置类标注@EnableAspectJAutoProxy
+         * 定义切面类标注为@Aspect，同时也必须标注@Component，注册切面类为bean
+         * 切面类定义切点方法，标注为@@Around等几个aspectj约定的注解，参照aspectj的切点定义规则
+         * spring容器实例化的bean本身就是一个原类型对应的代理类型；后续调用这个bean实例的方法或者字段的时候，代理对象会判断当前调用是否匹配某个或多个切点方法，然后实现出aop的效果
+         * 参看本项目的CalFilter切面类
          */
         var sayhello= context.getBean("seyhello");
         Calculation cal= context.getBean(Calculation.class);
