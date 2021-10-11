@@ -48,13 +48,13 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
         this.registration=registration;
     }
 
+    javax.servlet.FilterRegistration.Dynamic authenticationFilterDynamic;
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         super.onStartup(servletContext);
         //对应web.xml文件的Filter部分
-        var fdy= servletContext.addFilter("AuthenticationFilter",AuthenticationFilter.class);
-        fdy.setInitParameter("a","hello world");
-        fdy.addMappingForUrlPatterns(null,false,"/*");
+        //后续在contextInitialized中再利用容器读取配置文件数据对filter进行配置
+        this.authenticationFilterDynamic= servletContext.addFilter("AuthenticationFilter",AuthenticationFilter.class);
     }
 
     @Override
@@ -79,6 +79,9 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
         var mapProperties= contextRoot.getBean(MapProperties.class);
         //配置上传功能
         this.registration.setMultipartConfig(new MultipartConfigElement(mapProperties.uploadtmpdir,mapProperties.maxUploadSize,mapProperties.maxUploadSize,mapProperties.maxInMemorySize));
+        //配置filter
+        this.authenticationFilterDynamic.setInitParameter("a1",mapProperties.camundaJdbcDriver);
+        this.authenticationFilterDynamic.addMappingForUrlPatterns(null,false,"/*");
     }
 
     @Override
