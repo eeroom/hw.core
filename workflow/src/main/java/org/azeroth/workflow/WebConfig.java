@@ -89,12 +89,18 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
         return new AspNetRequestMappingHandler();
     }
 
+    @Bean
+    public AspNetHandlerMethodArgumentResolver aspNetHandlerMethodArgumentResolver(){
+        return new AspNetHandlerMethodArgumentResolver();
+    }
+
+    @Autowired
+    AspNetHandlerMethodArgumentResolver aspNetHandlerMethodArgumentResolver;
+
     @Override
     protected void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         //支持asp.net风格的参数模型绑定；根据请求的context-type,自定使用json方式或者表单方式进行模型绑定，不需要额外对参数设置特性）
-        var aspNetHandlerMethodArgumentResolver=new AspNetHandlerMethodArgumentResolver();
-        aspNetHandlerMethodArgumentResolver.setApplicationContext(this.getApplicationContext());
-        argumentResolvers.add(aspNetHandlerMethodArgumentResolver);
+        argumentResolvers.add(this.aspNetHandlerMethodArgumentResolver);
     }
 
     @Bean
