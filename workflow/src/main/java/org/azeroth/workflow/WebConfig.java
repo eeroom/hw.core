@@ -89,17 +89,7 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
         return new AspNetRequestMappingHandler();
     }
 
-    /**
-     * MydispatherServlet中把一些需要用到的信息写到字典，方便后续使用
-     * 例如：AspNetHandlerMethodArgumentResolver需要根据当前请求的POST,GET，content-type等信息决定是否解析当前请求的参数
-     * @return
-     */
-    @Bean
-    @Scope(WebApplicationContext.SCOPE_REQUEST)
-    public Map<String,Object> httpContext(){
-        var mp=new HashMap<String,Object>();
-        return mp;
-    }
+
 
     @Autowired
     AspNetHandlerMethodArgumentResolver aspNetHandlerMethodArgumentResolver;
