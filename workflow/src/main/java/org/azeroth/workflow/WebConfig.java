@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.multipart.MultipartResolver;
@@ -40,8 +43,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 这个容器只扫描控制器的bean,
+ * 如果不扫，全部交给rootconfig的容器去扫，swagger不能正常工作
+ */
 @org.springframework.context.annotation.Configuration
-@org.springframework.context.annotation.ComponentScan(excludeFilters ={@ComponentScan.Filter(classes = RootConfig.class,type = FilterType.ASSIGNABLE_TYPE  )})
+@org.springframework.context.annotation.ComponentScan(useDefaultFilters = false,includeFilters ={@ComponentScan.Filter(type = FilterType.ANNOTATION,classes = {Controller.class, RestController.class, ControllerAdvice.class})})
 @EnableSwagger2
 public class WebConfig extends org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport {
     @Override

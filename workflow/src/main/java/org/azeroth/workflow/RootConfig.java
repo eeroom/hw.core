@@ -13,6 +13,9 @@ import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ContextResource;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -23,8 +26,14 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * 这个容器不扫描控制器的bean，不扫描webconfig中定义的bean,
+ * 如果不扫，全部交给webconfig的容器去扫，在filter、springmvc的拦截器让容器实例化bean的时候不方便（比如取配置文件数据，注入其它的bean），因为那些里面拿的都是rootconfig对应的容器
+ */
 @Configuration
 @PropertySource(ApplicationContext.CLASSPATH_URL_PREFIX+"application.properties")
+@org.springframework.context.annotation.ComponentScan(excludeFilters ={@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes = WebConfig.class ),
+@ComponentScan.Filter(type = FilterType.ANNOTATION,classes = {Controller.class, RestController.class, ControllerAdvice.class})})
 public class RootConfig {
     @Value("${camundaJdbcDriver}")
     String camundaJdbcDriver;
