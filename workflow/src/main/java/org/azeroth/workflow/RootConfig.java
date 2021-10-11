@@ -35,33 +35,15 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @org.springframework.context.annotation.ComponentScan(excludeFilters ={@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes = WebConfig.class ),
 @ComponentScan.Filter(type = FilterType.ANNOTATION,classes = {Controller.class, RestController.class, ControllerAdvice.class})})
 public class RootConfig {
-    @Value("${camundaJdbcDriver}")
-    String camundaJdbcDriver;
-
-    @Value("${camundaJdbcUrl}")
-    String camundaJdbcUrl;
-
-    @Value("${camundaJdbcUsername}")
-    String camundaJdbcUsername;
-
-    @Value("${camundaJdbcPwd}")
-    String camundaJdbcPwd;
-
-    @Value("${camundaDatabaseType}")
-    String camundaDatabaseType;
-
-    @Value("${camundaDatabaseSchemaUpdate}")
-    String camundaDatabaseSchemaUpdate;
-
     @Bean
-    public org.camunda.bpm.engine.ProcessEngineConfiguration processEngineConfiguration(){
+    public org.camunda.bpm.engine.ProcessEngineConfiguration processEngineConfiguration(MapProperties mapProperties){
         var cfg=org.camunda.bpm.engine.ProcessEngineConfiguration.createStandaloneProcessEngineConfiguration();
-        cfg.setJdbcDriver(this.camundaJdbcDriver);
-        cfg.setJdbcUrl(this.camundaJdbcUrl);
-        cfg.setJdbcUsername(this.camundaJdbcUsername);
-        cfg.setJdbcPassword(this.camundaJdbcPwd);
-        cfg.setDatabaseType(this.camundaDatabaseType);
-        cfg.setDatabaseSchemaUpdate(this.camundaDatabaseSchemaUpdate);
+        cfg.setJdbcDriver(mapProperties.camundaJdbcDriver);
+        cfg.setJdbcUrl(mapProperties.camundaJdbcUrl);
+        cfg.setJdbcUsername(mapProperties.camundaJdbcUsername);
+        cfg.setJdbcPassword(mapProperties.camundaJdbcPwd);
+        cfg.setDatabaseType(mapProperties.camundaDatabaseType);
+        cfg.setDatabaseSchemaUpdate(mapProperties.camundaDatabaseSchemaUpdate);
         return cfg;
     }
 
