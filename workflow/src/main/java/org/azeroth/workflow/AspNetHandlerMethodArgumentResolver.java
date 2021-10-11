@@ -23,7 +23,6 @@ import java.util.Optional;
  * 请求方法必须为post
  * context必须为json或者application/x-www-form-urlencoded
  */
-@Component
 public class AspNetHandlerMethodArgumentResolver implements org.springframework.web.method.support.HandlerMethodArgumentResolver,org.springframework.context.ApplicationContextAware {
     RequestMappingHandlerAdapter adapter;
     ModelAttributeMethodProcessor parsewwwformdata;
