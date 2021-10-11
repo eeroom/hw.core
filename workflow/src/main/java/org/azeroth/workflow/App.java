@@ -2,12 +2,13 @@ package org.azeroth.workflow;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.FrameworkServlet;
 
 import javax.servlet.*;
 
-public class App extends  org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer {
+public class App extends  org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer implements ServletContextListener {
     @Override
     protected Class<?>[] getRootConfigClasses() {
         //不启用springsecurity
@@ -34,12 +35,17 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
 //        //结束spring-security
 //    }
 
+    ServletRegistration.Dynamic registration;
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
-        //开启支持multipart/form-data，这样才能上传文件
-        //这里是tomcat依照约定直接调用到这里，不好利用spring容器的能力读取配置文件，所以把上传文件的配置移动到webconfig中配置一个上传文件相关的bean
-         var tmpdir=System.getProperty("java.io.tmpdir");
-        registration.setMultipartConfig(new MultipartConfigElement(tmpdir,2097152,4194304,0));
+        /**
+         * 开启支持multipart/form-data，这样才能上传文件
+         * 这里是app的父类直接调用到这里，没法利用spring容器的能力读取配置文件，要么硬编码，要么其它方式读取配置文件数据然后进行配置
+         * 2021年10月11日更新，利用ServletContextListener，待tomcat启动后，rootconfig的容器refresh之后，通过容器读取配置文件的数据，然后配置上传部分的功能
+         */
+//         var tmpdir=System.getProperty("java.io.tmpdir");
+//        registration.setMultipartConfig(new MultipartConfigElement(tmpdir,2097152,4194304,0));
+        this.registration=registration;
     }
 
     @Override
@@ -63,5 +69,20 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
         //添加这个RequestContextListener，就可以在filter里面使用ioc的时候，处理request,session等作用域的bean
         org.springframework.web.context.request.RequestContextListener listener=new org.springframework.web.context.request.RequestContextListener();
         servletContext.addListener(listener);
+        //利用rootconfig的容器读取配置文件数据，然后配置servlet的上传功能
+        servletContext.addListener(this);
+    }
+
+    @Override
+    public void contextInitialized(ServletContextEvent servletContextEvent) {
+        var contextRoot= WebApplicationContextUtils.getWebApplicationContext(servletContextEvent.getServletContext());
+        var mapProperties= contextRoot.getBean(MapProperties.class);
+        //配置上传功能
+        this.registration.setMultipartConfig(new MultipartConfigElement(mapProperties.uploadtmpdir,mapProperties.maxUploadSize,mapProperties.maxUploadSize,mapProperties.maxInMemorySize));
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+
     }
 }

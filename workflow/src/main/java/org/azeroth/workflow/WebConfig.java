@@ -162,22 +162,6 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
         return new AspNetHandlerMethodResolver(resolver);
     }
 
-    @Value("${upload.tmpdir}")
-    String uploadtmpdir;
-    @Value("${upload.maxUploadSize}")
-    int maxUploadSize;
-    @Value("${upload.maxInMemorySize}")
-    int maxInMemorySize;
-
-
-    //需要依赖额外的包，这里不采用
-    public MultipartResolver multipartResolver(){
-        var mr=new CommonsMultipartResolver();
-        mr.setMaxInMemorySize(this.maxInMemorySize);
-        mr.setMaxUploadSize(this.maxUploadSize);
-        return mr;
-    }
-
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthenticationHandlerInterceptor());

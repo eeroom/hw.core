@@ -23,4 +23,11 @@ public class MapProperties {
     @Value("${camundaDatabaseSchemaUpdate}")
     String camundaDatabaseSchemaUpdate;
 
+    @Value("${upload.tmpdir}")
+    String uploadtmpdir;
+    @Value("${upload.maxUploadSize}")
+    int maxUploadSize;
+    @Value("${upload.maxInMemorySize}")
+    int maxInMemorySize;
+
 }
