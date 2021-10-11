@@ -32,11 +32,12 @@ import java.util.Map;
 /**
  * 这个容器不扫描控制器的bean，不扫描webconfig中定义的bean,
  * 如果不扫，全部交给webconfig的容器去扫，在filter、springmvc的拦截器让容器实例化bean的时候不方便（比如取配置文件数据，注入其它的bean），因为那些里面拿的都是rootconfig对应的容器
+ * 2021年10月11日更新：简化扫包，WebConfig不扫包，通过aspNetRequestMappingHandler.setDetectHandlerMethodsInAncestorContexts(true)，作用是查找controller的时候检测父容器，
+ * 这样api也能正常，之前不扫包swagger不能正常工作的原因就是（控制器被父容器扫描，然后aspNetRequestMappingHandler的容器是webconfig,查找控制器的时候没有去检测父容器）
  */
 @Configuration
 @PropertySource(ApplicationContext.CLASSPATH_URL_PREFIX+"application.properties")
-@org.springframework.context.annotation.ComponentScan(excludeFilters ={@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes = WebConfig.class ),
-@ComponentScan.Filter(type = FilterType.ANNOTATION,classes = {Controller.class, RestController.class, ControllerAdvice.class})})
+@org.springframework.context.annotation.ComponentScan(excludeFilters ={@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes = WebConfig.class )})
 public class RootConfig {
 
     /**

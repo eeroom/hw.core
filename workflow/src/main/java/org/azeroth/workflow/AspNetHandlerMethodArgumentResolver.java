@@ -22,7 +22,13 @@ import java.util.Optional;
  * 控制器方法没有RequestMapping及其派生的注解，可以有httppost,httpget
  * 请求方法必须为post
  * context必须为json或者application/x-www-form-urlencoded
+ * 2021年10月11日更新：移除@Component注释。因为AspNetHandlerMethodArgumentResolver依赖requestMappingHandlerAdapter这个bean,
+ * 但是这个bean是定义在WebMvcConfigurationSupport中的，也就是注册在webconfig的容器中
+ * 又因为webconfig的容器不扫包，而是rootconfig的容器扫包，所以AspNetHandlerMethodArgumentResolver必须定义在webconfig中，
+ * 如果让rootconfig的容器扫进去，那么后续获取requestMappingHandlerAdapter这个bean的时候就会获取不到
+ * 如果是让webconfig的容器扫这个bean,就可以直接添加@Component注解，不用在webconfig利用@bean来定义这个bean
  */
+//@Component
 public class AspNetHandlerMethodArgumentResolver implements org.springframework.web.method.support.HandlerMethodArgumentResolver,org.springframework.context.ApplicationContextAware {
     RequestMappingHandlerAdapter adapter;
     ModelAttributeMethodProcessor parsewwwformdata;

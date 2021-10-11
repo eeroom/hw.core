@@ -46,9 +46,10 @@ import java.util.Map;
 /**
  * 这个容器只扫描控制器的bean,
  * 如果不扫，全部交给rootconfig的容器去扫，swagger不能正常工作
+ * 2021年10月11日更新：简化扫包，WebConfig不扫包，通过aspNetRequestMappingHandler.setDetectHandlerMethodsInAncestorContexts(true)，作用是查找controller的时候检测父容器，
+ * 这样api也能正常，之前不扫包swagger不能正常工作的原因就是（控制器被父容器扫描，然后aspNetRequestMappingHandler的容器是webconfig,查找控制器的时候没有去检测父容器）
  */
 @org.springframework.context.annotation.Configuration
-@org.springframework.context.annotation.ComponentScan(useDefaultFilters = false,includeFilters ={@ComponentScan.Filter(type = FilterType.ANNOTATION,classes = {Controller.class, RestController.class, ControllerAdvice.class})})
 @EnableSwagger2
 public class WebConfig extends org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport {
     @Override
@@ -86,9 +87,19 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
 //        return new StandardServletMultipartResolver();
 //    }
     protected RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
-        return new AspNetRequestMappingHandler();
+        var aspNetRequestMappingHandler= new AspNetRequestMappingHandler();
+        //这个设置为true,查找所有控制器的时候会检测父容器
+        aspNetRequestMappingHandler.setDetectHandlerMethodsInAncestorContexts(true);
+        return aspNetRequestMappingHandler;
     }
 
+    /**
+     * 因为AspNetHandlerMethodArgumentResolver依赖requestMappingHandlerAdapter这个bean,
+     * 但是这个bean是定义在WebMvcConfigurationSupport中的，也就是注册在webconfig的容器中
+     * 又因为webconfig的容器不扫包，而是rootconfig的容器扫包，所以AspNetHandlerMethodArgumentResolver必须定义在webconfig中，
+     * 如果让rootconfig的容器扫进去，那么后续获取requestMappingHandlerAdapter这个bean的时候就会获取不到
+     * @return
+     */
     @Bean
     public AspNetHandlerMethodArgumentResolver aspNetHandlerMethodArgumentResolver(){
         return new AspNetHandlerMethodArgumentResolver();
