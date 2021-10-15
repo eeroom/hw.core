@@ -1,6 +1,7 @@
 package org.azeroth.springcontext;
 
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.ApplicationListener;
 
 public class Main {
 
@@ -10,6 +11,8 @@ public class Main {
         org.springframework.context.annotation.AnnotationConfigApplicationContext context=
                 new org.springframework.context.annotation.AnnotationConfigApplicationContext();
         context.register(RootConfig.class);
+        context.addApplicationListener(new MyApplicationListenerOnFinishRefresh());
+        context.addApplicationListener(new MyApplicationListenerOnMyEvent());
         context.refresh();
         /**
          * 向容易注册bean的常见方式
@@ -37,6 +40,20 @@ public class Main {
         var beanPostProcessor= org.springframework.beans.factory.config.BeanPostProcessor.class;
         var commonAnnotationBeanPostProcessor= org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.class;
 
+        /**
+         * 事件体系，内置事件;org.springframework.context.support.AbstractApplicationContext提供对这些内置事件的支持，分别在对应的方法中触发这些事件
+         * 用户通过AbstractApplicationContext提供的addApplicationListener方法向容器注册事件监听器，
+         * 监听器需要实现接口ApplicationListener<E extends ApplicationEvent>
+         * 用户自定义事件，参看rootconfig2中的示例
+         */
+        //AbstractApplicationContext的finishRefresh方法中触发
+        var contextRefreshedEvent=org.springframework.context.event.ContextRefreshedEvent.class;
+        //AbstractApplicationContext的start方法触发
+        var contextStartedEvent=org.springframework.context.event.ContextStartedEvent.class;
+        var contextStoppedEvent=org.springframework.context.event.ContextStoppedEvent.class;
+        var contextClosedEvent=org.springframework.context.event.ContextClosedEvent.class;
+        var abstractApplicationContext=org.springframework.context.support.AbstractApplicationContext.class;
+        var applicationListener= org.springframework.context.ApplicationListener.class;
         /**
          * aop,bean的类型对此无感知，不会侵入原类型
          * 配置类标注@EnableAspectJAutoProxy
