@@ -1,12 +1,17 @@
 package org.azeroth.workflow;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.FrameworkServlet;
 
 import javax.servlet.*;
+import java.nio.channels.ClosedSelectorException;
 
 public class App extends  org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer implements ServletContextListener {
     @Override
@@ -70,22 +75,55 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
         org.springframework.web.context.request.RequestContextListener listener=new org.springframework.web.context.request.RequestContextListener();
         servletContext.addListener(listener);
         //利用rootconfig的容器读取配置文件数据，然后配置servlet的上传功能
-        servletContext.addListener(this);
+        //2021年10月15日更新，改用springcontext的事件体系，利用ContextRefreshedEvent事件的回调方法
+        //servletContext.addListener(this);
     }
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        var contextRoot= WebApplicationContextUtils.getWebApplicationContext(servletContextEvent.getServletContext());
-        var mapProperties= contextRoot.getBean(MapProperties.class);
-        //配置上传功能
-        this.registration.setMultipartConfig(new MultipartConfigElement(mapProperties.uploadtmpdir,mapProperties.maxUploadSize,mapProperties.maxUploadSize,mapProperties.maxInMemorySize));
-        //配置filter
-        this.authenticationFilterDynamic.setInitParameter("a1",mapProperties.camundaJdbcDriver);
-        this.authenticationFilterDynamic.addMappingForUrlPatterns(null,false,"/*");
+        /**
+         * 利用ServletContextListener的回调方法实现：利用容器读取配置信息然后配置servlet的上传功能，配置filter的初始参数
+         * 2021年10月15日更新，改用springcontext的事件体系，利用ContextRefreshedEvent事件的回调方法
+         */
+//        var contextRoot= WebApplicationContextUtils.getWebApplicationContext(servletContextEvent.getServletContext());
+//        var mapProperties= contextRoot.getBean(MapProperties.class);
+//        //配置上传功能
+//        this.registration.setMultipartConfig(new MultipartConfigElement(mapProperties.uploadtmpdir,mapProperties.maxUploadSize,mapProperties.maxUploadSize,mapProperties.maxInMemorySize));
+//        //配置filter
+//        this.authenticationFilterDynamic.setInitParameter("a1",mapProperties.camundaJdbcDriver);
+//        this.authenticationFilterDynamic.addMappingForUrlPatterns(null,false,"/*");
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
 
+    }
+
+    @Override
+    protected ApplicationContextInitializer<?>[] getServletApplicationContextInitializers() {
+        return new ApplicationContextInitializer[]{new ApplicationContextInitializerToDelayConfig()};
+    }
+
+    class ApplicationContextInitializerToDelayConfig implements ApplicationContextInitializer<AnnotationConfigWebApplicationContext>{
+
+        @Override
+        public void initialize(AnnotationConfigWebApplicationContext annotationConfigWebApplicationContext) {
+            annotationConfigWebApplicationContext.addApplicationListener(new ApplicationListenerToDelayConfig());
+        }
+    }
+
+    class ApplicationListenerToDelayConfig implements ApplicationListener<org.springframework.context.event.ContextRefreshedEvent> {
+
+        @Override
+        public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+            //基于springcontext的事件体系，在ContextRefreshedEvent事件的回调方法中，利用容器读取配置信息然后配置servlet的上传功能，配置filter的初始参数
+            var contextRoot=(AnnotationConfigWebApplicationContext)contextRefreshedEvent.getApplicationContext();
+            var mapProperties= contextRoot.getBean(MapProperties.class);
+            //配置上传功能
+            App.this.registration.setMultipartConfig(new MultipartConfigElement(mapProperties.uploadtmpdir,mapProperties.maxUploadSize,mapProperties.maxUploadSize,mapProperties.maxInMemorySize));
+            //配置filter
+            App.this.authenticationFilterDynamic.setInitParameter("a1",mapProperties.camundaJdbcDriver);
+            App.this.authenticationFilterDynamic.addMappingForUrlPatterns(null,false,"/*");
+        }
     }
 }
