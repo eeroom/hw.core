@@ -44,7 +44,7 @@ public class Main {
          * 事件体系，内置事件;org.springframework.context.support.AbstractApplicationContext提供对这些内置事件的支持，分别在对应的方法中触发这些事件
          * 用户通过AbstractApplicationContext提供的addApplicationListener方法向容器注册事件监听器，
          * 监听器需要实现接口ApplicationListener<E extends ApplicationEvent>
-         * 用户自定义事件，参看rootconfig2中的示例
+         * 用户自定义事件，参看rootconfig2中的示例,原理和内置事件体系的套路一样
          */
         //AbstractApplicationContext的finishRefresh方法中触发
         var contextRefreshedEvent=org.springframework.context.event.ContextRefreshedEvent.class;
