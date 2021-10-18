@@ -61,6 +61,8 @@ public class App {
         var mvccfg3= org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration.EnableWebMvcConfiguration.class;
 
 
-        org.springframework.boot.SpringApplication.run(App.class);
+        //org.springframework.boot.SpringApplication.run(App.class);
+        var app=new org.springframework.boot.SpringApplication(App.class);
+        app.run();
     }
 }
