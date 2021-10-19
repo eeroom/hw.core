@@ -60,6 +60,8 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
         //对应web.xml文件的Filter部分
         //后续在contextInitialized中再利用容器读取配置文件数据对filter进行配置
         this.authenticationFilterDynamic= servletContext.addFilter("AuthenticationFilter",AuthenticationFilter.class);
+        var corscfg=servletContext.addFilter("CORSFilter",CORSFilter.class);
+        corscfg.addMappingForUrlPatterns(null,false,"/*");
     }
 
     @Override
