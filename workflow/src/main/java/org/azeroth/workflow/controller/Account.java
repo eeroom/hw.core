@@ -5,6 +5,7 @@ import org.azeroth.workflow.ApiResultWrapper;
 import org.azeroth.workflow.HttpPost;
 import org.azeroth.workflow.SkipAuthentication;
 import org.azeroth.workflow.viewModel.LoginInput;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -12,10 +13,12 @@ import java.util.Date;
 
 @RestController
 public class Account {
+    @Autowired
+    HttpServletResponse response;
 
     @SkipAuthentication
     @HttpPost
-    public ApiResultWrapper login(LoginInput loginInput, HttpServletResponse response){
+    public ApiResultWrapper login(LoginInput loginInput){
         var token= com.auth0.jwt.JWT.create()
                 .withIssuer("workflow")
                 .withIssuedAt(new Date())
