@@ -9,6 +9,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 @RestController
 @Scope(WebApplicationContext.SCOPE_REQUEST)
@@ -19,9 +20,8 @@ public class CamundaController {
 
     @HttpPost
     public DeployAdd add(DeployAdd deployAdd, MultipartFile bpmnFile) throws Throwable {
-
         var dlm= this.processEngine.getRepositoryService().createDeployment()
-                .addZipInputStream(new java.util.zip.ZipInputStream(bpmnFile.getInputStream()))
+                .addZipInputStream(new java.util.zip.ZipInputStream(bpmnFile.getInputStream(), Charset.forName("GBK")))
                 .deploy();
         return new DeployAdd();
     }

@@ -58,7 +58,6 @@ public class RootConfig {
     }
 
     @Bean
-    @Scope(AbstractBeanFactory.SCOPE_PROTOTYPE)
     public org.camunda.bpm.engine.ProcessEngine processEngine(ProcessEngineConfiguration cfg){
         var pe=cfg.buildProcessEngine();
         return pe;
