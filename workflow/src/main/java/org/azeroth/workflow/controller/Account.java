@@ -6,6 +6,8 @@ import org.azeroth.workflow.HttpPost;
 import org.azeroth.workflow.SkipAuthentication;
 import org.azeroth.workflow.viewModel.LoginInput;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -13,20 +15,22 @@ import java.util.Date;
 
 @RestController
 public class Account {
-    @Autowired
-    HttpServletResponse response;
-
     @SkipAuthentication
     @HttpPost
-    public ApidataWrapper login(LoginInput loginInput){
+    public ResponseEntity<ApidataWrapper> login(LoginInput loginInput){
         var token= com.auth0.jwt.JWT.create()
                 .withIssuer("workflow")
                 .withIssuedAt(new Date())
                 .withClaim("userName",loginInput.getLoginName())
                 .sign(Algorithm.HMAC256("hw@123456"));
-        response.setHeader("Authorization",token);
-        var rw=new ApidataWrapper();
-        rw.setMessage("登陆成功");
-        return  rw;
+        var apidata=new ApidataWrapper();
+        apidata.setCode(HttpServletResponse.SC_OK);
+        apidata.setMessage("登陆成功");
+        apidata.setData(token);
+        //使用ResponseEntity指定响应头、content-type，
+        //下载文件的场景可以把文件流作为ResponseEntity的body
+        var rt= ResponseEntity.ok().header("Authorization",token)
+                .body(apidata);
+        return  rt;
     }
 }
