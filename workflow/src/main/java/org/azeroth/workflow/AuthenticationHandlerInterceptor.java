@@ -1,7 +1,6 @@
 package org.azeroth.workflow;
 
 import com.auth0.jwt.algorithms.Algorithm;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
@@ -50,7 +49,7 @@ public class AuthenticationHandlerInterceptor implements HandlerInterceptor {
     }
 
     private boolean noLogin(HttpServletResponse httpServletResponse) throws Exception {
-        var apiresult=new ApiResultWrapper();
+        var apiresult=new ApidataWrapper();
         apiresult.setCode(HttpServletResponse.SC_UNAUTHORIZED);
         apiresult.setMessage("请登陆");
         com.fasterxml.jackson.databind.ObjectMapper objectMapper=new ObjectMapper();

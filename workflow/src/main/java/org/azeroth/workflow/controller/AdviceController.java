@@ -1,6 +1,6 @@
 package org.azeroth.workflow.controller;
 
-import org.azeroth.workflow.ApiResultWrapper;
+import org.azeroth.workflow.ApidataWrapper;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,7 +10,6 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,19 +27,17 @@ public class AdviceController implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
-        if(o instanceof ApiResultWrapper)
+        if(o instanceof ApidataWrapper)
             return o;
-        if(o instanceof ResponseEntity<?>)
-            return o;
-        var rt= new ApiResultWrapper();
+        var rt= new ApidataWrapper();
         rt.setCode(HttpServletResponse.SC_OK);
         rt.setData(o);
         return rt;
     }
 
     @ExceptionHandler(Throwable.class)
-    public ResponseEntity<ApiResultWrapper> handlerError(Throwable ex){
-        var rt=new ApiResultWrapper();
+    public ResponseEntity<ApidataWrapper> handlerError(Throwable ex){
+        var rt=new ApidataWrapper();
         rt.setCode(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         rt.setMessage(ex.getMessage());
         rt.setTag(ex.toString());

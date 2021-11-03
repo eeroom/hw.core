@@ -2,8 +2,8 @@ package org.azeroth.workflow;
 
 import javax.servlet.http.HttpServletResponse;
 
-public class ApiResultWrapper {
-    public ApiResultWrapper(){
+public class ApidataWrapper {
+    public ApidataWrapper(){
         this.code= HttpServletResponse.SC_OK;
     }
     public Object getData() {
