@@ -68,12 +68,14 @@ public class AspNetRequestMappingHandler extends org.springframework.web.servlet
             lstc.add(MediaType.APPLICATION_JSON_VALUE);
             lstc.add(MediaType.MULTIPART_FORM_DATA_VALUE);
             lstc.add(MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+            lstc.add(MediaType.ALL_VALUE);
         }
         if(lstm.size()==0){
             lstm.add(RequestMethod.POST);
             lstc.add(MediaType.APPLICATION_JSON_VALUE);
             lstc.add(MediaType.MULTIPART_FORM_DATA_VALUE);
             lstc.add(MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+            lstc.add(MediaType.ALL_VALUE);
         }
         RequestMethod[] lstMethod=new RequestMethod[lstm.size()];
         lstm.toArray(lstMethod);
