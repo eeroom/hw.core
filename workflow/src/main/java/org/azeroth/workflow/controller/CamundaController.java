@@ -4,6 +4,7 @@ import org.azeroth.workflow.HttpPost;
 import org.azeroth.workflow.viewModel.DeployAdd;
 import org.camunda.bpm.engine.impl.persistence.entity.DeploymentEntity;
 import org.camunda.bpm.engine.repository.Deployment;
+import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ public class CamundaController {
     org.camunda.bpm.engine.ProcessEngine processEngine;
 
     @HttpPost
-    public DeployAdd add(DeployAdd deployAdd, MultipartFile bpmnFile) throws Throwable {
+    public DeployAdd deploy(DeployAdd deployAdd, MultipartFile bpmnFile) throws Throwable {
         var dlm= this.processEngine.getRepositoryService().createDeployment()
                 .addZipInputStream(new java.util.zip.ZipInputStream(bpmnFile.getInputStream(), Charset.forName("GBK")))
                 .deploy();
@@ -32,16 +33,42 @@ public class CamundaController {
     }
 
     @HttpPost
-    public List<?> getAllDeploy() throws Throwable {
-        var lstDeployment= this.processEngine.getRepositoryService().createDeploymentQuery()
-                .orderByDeploymentId()
+    public List<?> getProcessDefinitionEntity() throws Throwable {
+        var lstDeployment= this.processEngine.getRepositoryService().createProcessDefinitionQuery()
+                .latestVersion()
+                .orderByProcessDefinitionKey()
                 .asc()
                 .list()
                 .stream()
-                .map(x->new Deployment() {
+                .map(x->new ProcessDefinition() {
+                    @Override
+                    public String getDescription() {
+                        return x.getDescription();
+                    }
+
+                    @Override
+                    public boolean hasStartFormKey() {
+                        return x.hasStartFormKey();
+                    }
+
+                    @Override
+                    public boolean isSuspended() {
+                        return x.isSuspended();
+                    }
+
+                    @Override
+                    public String getVersionTag() {
+                        return x.getVersionTag();
+                    }
+
                     @Override
                     public String getId() {
                         return x.getId();
+                    }
+
+                    @Override
+                    public String getCategory() {
+                        return x.getCategory();
                     }
 
                     @Override
@@ -50,18 +77,38 @@ public class CamundaController {
                     }
 
                     @Override
-                    public Date getDeploymentTime() {
-                        return x.getDeploymentTime();
+                    public String getKey() {
+                        return x.getKey();
                     }
 
                     @Override
-                    public String getSource() {
-                        return x.getSource();
+                    public int getVersion() {
+                        return x.getVersion();
+                    }
+
+                    @Override
+                    public String getResourceName() {
+                        return x.getResourceName();
+                    }
+
+                    @Override
+                    public String getDeploymentId() {
+                        return x.getDeploymentId();
+                    }
+
+                    @Override
+                    public String getDiagramResourceName() {
+                        return x.getDiagramResourceName();
                     }
 
                     @Override
                     public String getTenantId() {
                         return x.getTenantId();
+                    }
+
+                    @Override
+                    public Integer getHistoryTimeToLive() {
+                        return x.getHistoryTimeToLive();
                     }
                 })
                 .collect(java.util.stream.Collectors.toList());
