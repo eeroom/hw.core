@@ -3,6 +3,7 @@ package org.azeroth.workflow.controller;
 import org.azeroth.workflow.HttpPost;
 import org.azeroth.workflow.LoginUserInfo;
 import org.azeroth.workflow.viewModel.DeployAdd;
+import org.azeroth.workflow.viewModel.CompleteTaskParameter;
 import org.azeroth.workflow.viewModel.StartProcessParameter;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.Charset;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -340,6 +342,20 @@ public class CamundaController {
                 })
                 .collect(java.util.stream.Collectors.toList());
         return lsttask;
+    }
+
+    public  void  complete(CompleteTaskParameter completeTaskParameter){
+        //map中的键和可能值，流程图和completeTaskParameter要事先约定好，
+        // 这里的约定是，UserTask完成后，如果需要根据完成的结果来决定后续不同的分支走向，就通过result这个参数，参数值的可能情况有：ok,deleget，驳回
+        if(completeTaskParameter.getResult().equals("deleget")){
+            //转审批
+            this.processEngine.getTaskService().delegateTask(completeTaskParameter.getId(),completeTaskParameter.getTag());
+            return;
+        }
+        var map=new HashMap<String,Object>();
+        map.put("result",completeTaskParameter.getResult());
+        this.processEngine.getTaskService()
+                .complete(completeTaskParameter.getId(),map);
     }
 
 }
