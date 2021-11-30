@@ -20,4 +20,14 @@ public class StudentInfo {
     }
 
     int age;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    int id;
 }

@@ -1,6 +1,7 @@
 package org.azeroth.nalu;
 
-import org.springframework.aop.ThrowsAdvice;
+import org.azeroth.nalu.node.SelectNode;
+import org.azeroth.nalu.node.WhereNode;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -12,10 +13,10 @@ public class DbSet<T> implements MyAction2<DbSet<?>,String>,MyFunction<ResultSet
     T entityIdentity;
     Class<T> meta;
     PropertyNameHandler handler;
-    String tableName;
-    String tableAlias;
-    ArrayList<NodeWhere> lstwh=new ArrayList<>();
-    ArrayList<String> lstselect=new ArrayList<>();
+    public String tableName;
+    public String tableAlias;
+    WhereNode whereNode;
+    ArrayList<SelectNode> lstselect=new ArrayList<>();
     DbContext dbContext;
     public DbSet(){
 
@@ -23,7 +24,7 @@ public class DbSet<T> implements MyAction2<DbSet<?>,String>,MyFunction<ResultSet
 
     public DbSet(Class<T> meta,DbContext dbContext) throws Throwable {
         this.meta=meta;
-        this.tableName=this.meta.getName();
+        this.tableName=this.meta.getSimpleName();
         this.entityIdentity=meta.getConstructor(null).newInstance(null);
         this.handler=new PropertyNameHandler(this,this.entityIdentity);
         //使用cglib创建class的代理对象，java自带的代理类只能创建基于接口的代理对象，
@@ -43,19 +44,25 @@ public class DbSet<T> implements MyAction2<DbSet<?>,String>,MyFunction<ResultSet
         this.setInvokeCallback(this);
         exp.apply(this.entityProxy);
         for (var item : this.lstTarget){
-            item.item1.lstselect.add(item.item2);
+            var col=new Column<>(item.item1,item.item2);
+            var snode=new SelectNode(col);
+            item.item1.lstselect.add(snode);
         }
         return this;
     }
 
-    public DbSet<T> where(Function<DbSet<T>,NodeWhere> pred){
+    public DbSet<T> where(Function<DbSet<T>, WhereNode> pred){
         var wh= pred.apply(this);
-        this.lstwh.add(wh);
+        if(this.whereNode==null)
+            this.whereNode=wh;
+        else
+            this.whereNode=this.whereNode.and(wh);
         return this;
     }
 
-    public <B> DbSet<Tuple.Tuple2<T,B>> join(DbSet<B> right, MyFunction2<DbSet<T>,DbSet<B>,NodeWhere> on){
-            var dbset= new DbSetComplex<>(this,right,(x,y)->Tuple.create(x,y));
+    public <B> DbSet<Tuple.Tuple2<T,B>> join(DbSet<B> right, MyFunction2<DbSet<T>,DbSet<B>, WhereNode> on){
+            var dbset= new DbSetComplex<>(this,right,on,(x,y)->Tuple.create(x,y));
+            dbset.dbContext=this.dbContext;
             return dbset;
     }
 
@@ -72,8 +79,9 @@ public class DbSet<T> implements MyAction2<DbSet<?>,String>,MyFunction<ResultSet
         this.handler.invokeCallback=callback;
     }
 
-    public  List<T> toList(){
-        var lst=this.dbContext.toList(this);
+    public  List<T> toList() throws Throwable {
+        int a=3;
+        var lst=this.dbContext.toList(this,(x,y)->this.initParseSqlContext(x,y));
         return lst;
     }
 
@@ -83,6 +91,25 @@ public class DbSet<T> implements MyAction2<DbSet<?>,String>,MyFunction<ResultSet
         var obj=this.meta.getConstructor(null).newInstance(null);
 
         return  obj;
+    }
+
+    void  initParseSqlContext(ParseSqlContext context,boolean initLeftTable){
+        this.tableAlias="T"+context.nextTableIndex();
+        context.lstTable.add(this);
+        context.whereNode=this.addWhereNode(context.whereNode,this.whereNode);
+        if(initLeftTable)
+            context.fromTable=this;
+        this.lstselect.forEach(x->x.index=context.nextColIndex());
+        this.lstselect.forEach(x->x.nameNick="c"+x.index);
+        context.lstSelectNode.addAll(this.lstselect);
+    }
+
+    WhereNode addWhereNode(WhereNode left, WhereNode right) {
+        if(left==null)
+            return right;
+        if(right==null)
+            return left;
+        return left.and(right);
     }
 }
 

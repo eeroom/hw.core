@@ -18,7 +18,7 @@ class PropertyNameHandler implements org.springframework.cglib.proxy.InvocationH
     public void setName(String name) {
         if(name.equals("toString"))
             return;
-        this.name = name;
+        this.name = name.substring(3);
     }
 
     String name;
