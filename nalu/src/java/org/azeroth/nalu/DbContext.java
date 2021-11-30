@@ -3,15 +3,15 @@ package org.azeroth.nalu;
 import java.util.List;
 import java.util.function.Function;
 
-public class Query {
+public class DbContext {
 
     NodeWhere where;
     NodeWhere having;
-    public <T> DbSet<T> DbSet(Class<T> meta){
+    public <T> DbSet<T> DbSet(Class<T> meta) throws Throwable {
         return new DbSet<>(meta);
     }
 
-    public Query Where(NodeWhere nw){
+    public DbContext Where(NodeWhere nw){
         if(this.where==null)
             this.where=nw;
         else
@@ -19,7 +19,7 @@ public class Query {
         return this;
     }
 
-    public Query Having(NodeWhere nw){
+    public DbContext Having(NodeWhere nw){
         if(this.having==null)
             this.having=nw;
         else
