@@ -101,6 +101,11 @@ static HashMap<String,HashMap<String,Method>> dictSetMethod=new HashMap<>();
         return lst;
     }
 
+    public <R>  List<R> toList(MyFunction<T,R> mapper) throws Throwable {
+        var lst=this.dbContext.toList(x->mapper.apply(this.map(x)),(x, y)->this.initParseSqlContext(x,y));
+        return lst;
+    }
+
 
     T map(ResultSet resultSet) throws Throwable {
         var obj=this.meta.getConstructor(null).newInstance(null);
