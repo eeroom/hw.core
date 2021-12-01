@@ -3,7 +3,6 @@ package org.azeroth.nalu;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
@@ -16,7 +15,10 @@ public class DbSet<T> {
     String tableName;
     String tableAlias;
     WhereNode whereNode;
-    ArrayList<SelectNode> lstselect=new ArrayList<>();
+    WhereNode havingNode;
+    ArrayList<SelectNode> lstSelectNode =new ArrayList<>();
+    ArrayList<OrderbyNode> lstOrderbyNode=new ArrayList<>();
+    ArrayList<Column> lstGroupByNode=new ArrayList<>();
     DbContext dbContext;
     static HashMap<String,HashMap<String,Method>> dictSetMethod=new HashMap<>();
     static HashMap<String,HashMap<String,Method>> dictGetMethod=new HashMap<>();
@@ -63,7 +65,7 @@ public class DbSet<T> {
         for (var item : this.lstTarget){
             var col=new Column<>(item.item1,item.item2);
             var snode=new SelectNode(col);
-            item.item1.lstselect.add(snode);
+            item.item1.lstSelectNode.add(snode);
         }
         return this;
     }
@@ -124,7 +126,7 @@ public class DbSet<T> {
     T map(ResultSet resultSet) throws Throwable {
         var obj=this.meta.getConstructor(null).newInstance(null);
         var dict=dictSetMethod.get(this.meta.getName());
-        for (var snode:this.lstselect){
+        for (var snode:this.lstSelectNode){
             var value= resultSet.getObject(snode.nameNick);
             dict.get(snode.column.colName).invoke(obj,value);
         }
@@ -137,9 +139,9 @@ public class DbSet<T> {
         context.whereNode=this.addWhereNode(context.whereNode,this.whereNode);
         if(initLeftTable)
             context.fromTable=this;
-        this.lstselect.forEach(x->x.index=context.nextColIndex());
-        this.lstselect.forEach(x->x.nameNick="c"+x.index);
-        context.lstSelectNode.addAll(this.lstselect);
+        this.lstSelectNode.forEach(x->x.index=context.nextColIndex());
+        this.lstSelectNode.forEach(x->x.nameNick="c"+x.index);
+        context.lstSelectNode.addAll(this.lstSelectNode);
     }
 
     WhereNode addWhereNode(WhereNode left, WhereNode right) {
@@ -157,5 +159,43 @@ public class DbSet<T> {
         this.takerows=takerows;
         return this;
     }
+
+    public <R> DbSet<T> orderBy(Function<T,R> handler){
+        this.setProxyHookHandler(this::onProxyHandlerInvokedHandler);
+        handler.apply(this.entityProxy);
+        var wrapper=this.lstTarget.get(0);
+        var col=new Column<>(wrapper.item1,wrapper.item2);
+        this.lstOrderbyNode.add(new OrderbyNode(col,OrderbyOpt.asc));
+        return this;
+    }
+
+    public <R> DbSet<T> orderByDescending(Function<T,R> handler){
+        this.setProxyHookHandler(this::onProxyHandlerInvokedHandler);
+        handler.apply(this.entityProxy);
+        var wrapper=this.lstTarget.get(0);
+        var col=new Column<>(wrapper.item1,wrapper.item2);
+        this.lstOrderbyNode.add(new OrderbyNode(col,OrderbyOpt.desc));
+        return this;
+    }
+
+    public DbSet<T> having(Function<DbSet<T>, WhereNode> pred){
+        var wh= pred.apply(this);
+        if(this.havingNode==null)
+            this.havingNode=wh;
+        else
+            this.havingNode=this.havingNode.and(wh);
+        return this;
+    }
+
+    public <R> DbSet<T> groupBy(Function<T,R> handler){
+        this.setProxyHookHandler(this::onProxyHandlerInvokedHandler);
+        handler.apply(this.entityProxy);
+        var wrapper=this.lstTarget.get(0);
+        var col=new Column<>(wrapper.item1,wrapper.item2);
+        this.lstGroupByNode.add(col);
+        return this;
+    }
+
+
 }
 

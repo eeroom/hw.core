@@ -1,17 +1,12 @@
 package org.azeroth.nalu;
 
-import org.azeroth.nalu.ColOperator;
-import org.azeroth.nalu.Column;
-import org.azeroth.nalu.ParseSqlContext;
-import org.azeroth.nalu.WhereNode;
-
 import java.util.ArrayList;
 
 public class WhereNodeLeaf<C> extends WhereNode {
     Column<C> col;
-    ColOperator opt;
+    ColOpt opt;
     Object value;
-    public WhereNodeLeaf(Column<C> col, ColOperator opt, Object value){
+    public WhereNodeLeaf(Column<C> col, ColOpt opt, Object value){
         this.col=col;
         this.opt=opt;
         this.value=value;
@@ -30,7 +25,7 @@ public class WhereNodeLeaf<C> extends WhereNode {
         }
         var pname=context.nextParameterName();
         context.dictParameter.add(Tuple.create(pname,this.value));
-        var sql= String.format("%s %s %s",this.col.parse(context),this.opt.getName(),pname);
+        var sql= String.format("%s %s %s",this.col.parse(context),this.opt.getSql(),pname);
         return sql;
     }
 
@@ -42,7 +37,7 @@ public class WhereNodeLeaf<C> extends WhereNode {
             lstpName.add(pname);
             context.dictParameter.add(Tuple.create(pname,obj));
         }
-        var sql= String.format("%s %s (%s)",this.col.parse(context),this.opt.getName(),String.join(",",lstpName));
+        var sql= String.format("%s %s (%s)",this.col.parse(context),this.opt.getSql(),String.join(",",lstpName));
         return sql;
     }
 }

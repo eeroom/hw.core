@@ -14,7 +14,7 @@ public class JoinNode implements IParseSql {
 
     @Override
     public String parse(ParseSqlContext context) {
-        var sql=String.format("%s %s AS %s ON %s",this.joinOpt.getName()
+        var sql=String.format("%s %s AS %s ON %s",this.joinOpt.getSql()
                 ,this.rightDbSet.tableName
                 ,this.rightDbSet.tableAlias
                 ,this.jw.parse(context));

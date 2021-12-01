@@ -1,6 +1,6 @@
 package org.azeroth.nalu;
 
-public enum ColOperator {
+public enum ColOpt {
     lt("<"),
     gt(">"),
     eq("="),
@@ -12,12 +12,12 @@ public enum ColOperator {
     notlike("not like"),
     between("between"),
     notbetween("not between");
-    private ColOperator(String name){
-        this.name=name;
+    private ColOpt(String sql){
+        this.sql=sql;
     }
-    String name;
+    String sql;
 
-    public String  getName(){
-        return this.name;
+    public String getSql(){
+        return this.sql;
     }
 }

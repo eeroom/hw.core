@@ -11,29 +11,29 @@ public class Column<C> implements IParseSql {
     }
 
     public WhereNodeLeaf<C> lt(C value){
-        return new WhereNodeLeaf<>(this,ColOperator.lt,value);
+        return new WhereNodeLeaf<>(this, ColOpt.lt,value);
     }
 
     public WhereNodeLeaf<C> gt(C value){
-        return new WhereNodeLeaf<>(this,ColOperator.gt,value);
+        return new WhereNodeLeaf<>(this, ColOpt.gt,value);
     }
 
     public WhereNodeLeaf<C> in(C... value){
-        return new WhereNodeLeaf<>(this,ColOperator.in,value);
+        return new WhereNodeLeaf<>(this, ColOpt.in,value);
     }
 
     public WhereNodeLeaf<C> like(C value){
-        return new WhereNodeLeaf<>(this,ColOperator.like,value);
+        return new WhereNodeLeaf<>(this, ColOpt.like,value);
     }
 
     public WhereNode eq(C value){
-        return new WhereNodeLeaf<>(this,ColOperator.eq,value);
+        return new WhereNodeLeaf<>(this, ColOpt.eq,value);
     }
     public WhereNode eq(Column<C> column){
         return  new WhereJoinOnNode(this,column);
     }
     public WhereNodeLeaf<C> between(C... value){
-        return new WhereNodeLeaf<>(this,ColOperator.between,value);
+        return new WhereNodeLeaf<>(this, ColOpt.between,value);
     }
 
     @Override
