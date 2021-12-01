@@ -21,7 +21,7 @@ public class ParseSqlContext {
 
     int parameterIndex=0;
     String nextParameterName(){
-        return "p_"+(this.parameterIndex++)+"_p";
+        return "?";
     }
-    HashMap<String,Object> dictParameter=new HashMap<>();
+    ArrayList<Tuple.Tuple2<String,Object>> dictParameter=new ArrayList<>();
 }

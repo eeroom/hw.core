@@ -6,7 +6,7 @@ import org.azeroth.nalu.DbContext;
 public class T4 {
 
     public static void test() throws Throwable {
-        DbContext dbContext=new DbContext();
+        DbContext dbContext=new MyDbContext();
         var lst= dbContext.DbSet(StudentInfo.class)
                 .select(x-> Columns.of(x.getAge(),x.getName()))
                 .where(x->x.col(a->a.getAge()).lt(3))

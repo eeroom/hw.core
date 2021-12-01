@@ -1,7 +1,10 @@
 package org.azeroth.nalu;
 
+import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
 
@@ -15,12 +18,29 @@ public class DbSet<T> {
     WhereNode whereNode;
     ArrayList<SelectNode> lstselect=new ArrayList<>();
     DbContext dbContext;
+static HashMap<String,HashMap<String,Method>> dictSetMethod=new HashMap<>();
+    static HashMap<String,HashMap<String,Method>> dictGetMethod=new HashMap<>();
+
     public DbSet(){
 
     }
 
     DbSet(DbContext dbContext,Class<T> meta) throws Throwable {
         this.meta=meta;
+        if(dictSetMethod.get(meta.getName())==null){
+            HashMap<String,Method> dictset=new HashMap<>();
+            HashMap<String,Method> dictget=new HashMap<>();
+            var lstmethod=meta.getDeclaredMethods();
+            for (var mt:lstmethod){
+                if(mt.getName().startsWith("set")){
+                    dictset.put(mt.getName().substring(3),mt);
+                }else  if(mt.getName().startsWith("get")){
+                    dictget.put(mt.getName().substring(3),mt);
+                }
+            }
+            dictSetMethod.put(meta.getName(),dictset);
+            dictGetMethod.put(meta.getName(),dictget);
+        }
         this.tableName=this.meta.getSimpleName();
         this.entityIdentity=meta.getConstructor(null).newInstance(null);
         this.handler=new PropertyNameHandler(this,this.entityIdentity);
@@ -84,7 +104,11 @@ public class DbSet<T> {
 
     T map(ResultSet resultSet) throws Throwable {
         var obj=this.meta.getConstructor(null).newInstance(null);
-
+        var dict=dictSetMethod.get(this.meta.getName());
+        for (var snode:this.lstselect){
+            var value= resultSet.getObject(snode.nameNick);
+            dict.get(snode.column.colName).invoke(obj,value);
+        }
         return  obj;
     }
 

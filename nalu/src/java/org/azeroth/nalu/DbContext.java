@@ -1,38 +1,38 @@
 package org.azeroth.nalu;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class DbContext {
+public abstract class DbContext {
 
     public <T> DbSet<T> DbSet(Class<T> meta) throws Throwable {
         return new DbSet<>(this,meta);
     }
 
-    protected  <T> List<T> toList(MyFunction<ResultSet,T> map,MyAction2<ParseSqlContext,Boolean> preparecontex) throws Throwable {
+    protected abstract Connection getConnection() throws SQLException;
 
+    protected  <T> List<T> toList(MyFunction<ResultSet,T> map,MyAction2<ParseSqlContext,Boolean> preparecontex) throws Throwable {
         ParseSqlContext context=new ParseSqlContext();
         preparecontex.execute(context,true);
-        String cmdstr=this.parse(context);
-        String cnnstr="jdbc:sqlserver://127.0.0.1\\sqlexpress:1433;DatabaseName=hw";
-        var cnn= java.sql.DriverManager.getConnection(cnnstr,"sa","123456");
-
-
-        var st= cnn.createStatement();
-        var pst= cnn.prepareStatement("");
-
-        cmdstr="select * from Log";
-        var rs= st.executeQuery(cmdstr);
-        while (rs.next()){
-            System.out.println("Id="+rs.getLong("Id"));
-            System.out.println("Name="+rs.getString("Name"));
+        String cmdstr=this.parseSql(context);
+        var cnn= this.getConnection();
+        var pst= cnn.prepareStatement(cmdstr);
+        for (var i=1;i<=context.dictParameter.size();i++){
+            pst.setObject(i,context.dictParameter.get(i));
         }
-
-
-        return null;
+        var rs= pst.executeQuery();
+        ArrayList<T> lst=new ArrayList<>();
+        while (rs.next()){
+            var obj= map.apply(rs);
+            lst.add(obj);
+        }
+        return lst;
     }
 
-   protected  String parse(ParseSqlContext context) {
+   protected  String parseSql(ParseSqlContext context) {
         var lstselect=context.lstSelectNode.stream().map(x->x.parse(context)).collect(java.util.stream.Collectors.toList());
         String selectstr=String.join(",",lstselect);
         String fromstr=String.format("%s as %s",context.fromTable.tableName,context.fromTable.tableAlias);
