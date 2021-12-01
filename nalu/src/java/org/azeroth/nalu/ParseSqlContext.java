@@ -4,24 +4,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ParseSqlContext {
-   int tableIndex=0;
+   private int tableIndex=0;
    int nextTableIndex(){
        return this.tableIndex++;
    }
-   ArrayList<DbSet> lstTable=new ArrayList<>();
-   WhereNode whereNode;
-   DbSet fromTable;
-   ArrayList<SelectNode> lstSelectNode=new ArrayList<>();
-    int colindex=0;
+   public ArrayList<DbSet> lstTable=new ArrayList<>();
+   public WhereNode whereNode;
+   public WhereNode havingNode;
+   public DbSet fromTable;
+   public ArrayList<SelectNode> lstSelectNode=new ArrayList<>();
+    private int colindex=0;
     int nextColIndex() {
         return colindex++;
     }
 
-    ArrayList<JoinNode> lstJoin=new ArrayList<>();
+    public ArrayList<JoinNode> lstJoinNode =new ArrayList<>();
 
-    int parameterIndex=0;
-    String nextParameterName(){
+    private int parameterIndex=0;
+    protected String nextParameterName(){
         return "?";
     }
-    ArrayList<Tuple.Tuple2<String,Object>> dictParameter=new ArrayList<>();
+    public ArrayList<Tuple.Tuple2<String,Object>> lstDbParameter =new ArrayList<>();
+    public ArrayList<OrderbyNode> lstOrderByNode=new ArrayList<>();
+    public ArrayList<Column> lstGroupByNode=new ArrayList<>();
+    public  int takerows;
+    public  int skiprows;
 }

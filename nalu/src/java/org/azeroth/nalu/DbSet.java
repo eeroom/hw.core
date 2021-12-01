@@ -137,11 +137,16 @@ public class DbSet<T> {
         this.tableAlias="T"+context.nextTableIndex();
         context.lstTable.add(this);
         context.whereNode=this.addWhereNode(context.whereNode,this.whereNode);
+        context.havingNode=this.addWhereNode(context.havingNode,this.havingNode);
         if(initLeftTable)
             context.fromTable=this;
         this.lstSelectNode.forEach(x->x.index=context.nextColIndex());
         this.lstSelectNode.forEach(x->x.nameNick="c"+x.index);
         context.lstSelectNode.addAll(this.lstSelectNode);
+        context.lstGroupByNode.addAll(this.lstGroupByNode);
+        context.lstOrderByNode.addAll(this.lstOrderbyNode);
+        context.takerows=this.takerows;
+        context.skiprows=this.skiprows;
     }
 
     WhereNode addWhereNode(WhereNode left, WhereNode right) {
@@ -155,6 +160,10 @@ public class DbSet<T> {
     int skiprows;
     int takerows;
     public DbSet<T> skipTake(int skiprows,int takerows){
+        if(skiprows<0)
+            throw  new IllegalArgumentException("skiprows不能小于0");
+        if(takerows<=0)
+            throw new IllegalArgumentException("takerows不能小于1");
         this.skiprows=skiprows;
         this.takerows=takerows;
         return this;
@@ -165,7 +174,7 @@ public class DbSet<T> {
         handler.apply(this.entityProxy);
         var wrapper=this.lstTarget.get(0);
         var col=new Column<>(wrapper.item1,wrapper.item2);
-        this.lstOrderbyNode.add(new OrderbyNode(col,OrderbyOpt.asc));
+        wrapper.item1.lstOrderbyNode.add(new OrderbyNode(col,OrderbyOpt.asc));
         return this;
     }
 
@@ -174,7 +183,7 @@ public class DbSet<T> {
         handler.apply(this.entityProxy);
         var wrapper=this.lstTarget.get(0);
         var col=new Column<>(wrapper.item1,wrapper.item2);
-        this.lstOrderbyNode.add(new OrderbyNode(col,OrderbyOpt.desc));
+        wrapper.item1.lstOrderbyNode.add(new OrderbyNode(col,OrderbyOpt.desc));
         return this;
     }
 
@@ -192,7 +201,7 @@ public class DbSet<T> {
         handler.apply(this.entityProxy);
         var wrapper=this.lstTarget.get(0);
         var col=new Column<>(wrapper.item1,wrapper.item2);
-        this.lstGroupByNode.add(col);
+        wrapper.item1.lstGroupByNode.add(col);
         return this;
     }
 

@@ -24,7 +24,7 @@ public class WhereNodeLeaf<C> extends WhereNode {
                 break;
         }
         var pname=context.nextParameterName();
-        context.dictParameter.add(Tuple.create(pname,this.value));
+        context.lstDbParameter.add(Tuple.create(pname,this.value));
         var sql= String.format("%s %s %s",this.col.parse(context),this.opt.getSql(),pname);
         return sql;
     }
@@ -35,7 +35,7 @@ public class WhereNodeLeaf<C> extends WhereNode {
         for (C obj : lstValue) {
             var pname=context.nextParameterName();
             lstpName.add(pname);
-            context.dictParameter.add(Tuple.create(pname,obj));
+            context.lstDbParameter.add(Tuple.create(pname,obj));
         }
         var sql= String.format("%s %s (%s)",this.col.parse(context),this.opt.getSql(),String.join(",",lstpName));
         return sql;
