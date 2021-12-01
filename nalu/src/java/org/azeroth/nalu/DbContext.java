@@ -21,7 +21,7 @@ public abstract class DbContext {
         var cnn= this.getConnection();
         var pst= cnn.prepareStatement(cmdstr);
         for (var i=1;i<=context.dictParameter.size();i++){
-            pst.setObject(i,context.dictParameter.get(i));
+            pst.setObject(i,context.dictParameter.get(i).item2);
         }
         var rs= pst.executeQuery();
         ArrayList<T> lst=new ArrayList<>();
