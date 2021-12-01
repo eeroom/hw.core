@@ -22,14 +22,21 @@ public abstract class DbContext {
         for (var i = 1; i<=context.lstDbParameter.size(); i++){
             pst.setObject(i,context.lstDbParameter.get(i).item2);
         }
-        var rs= pst.executeQuery();
+        var rt=new PagingList<T>();
         ArrayList<T> lst=new ArrayList<>();
+        rt.lst= lst;
+        var rs= pst.executeQuery();
+        if(context.takerows>0){
+            if(!rs.next())
+                return rt;
+
+        }
         while (rs.next()){
             var obj= map.apply(rs);
             lst.add(obj);
         }
-        var rt=new PagingList<T>();
-        rt.lst= lst;
+
+
         return rt;
     }
 
