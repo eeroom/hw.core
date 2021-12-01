@@ -18,7 +18,7 @@ public class DbSet<T> {
     WhereNode whereNode;
     ArrayList<SelectNode> lstselect=new ArrayList<>();
     DbContext dbContext;
-static HashMap<String,HashMap<String,Method>> dictSetMethod=new HashMap<>();
+    static HashMap<String,HashMap<String,Method>> dictSetMethod=new HashMap<>();
     static HashMap<String,HashMap<String,Method>> dictGetMethod=new HashMap<>();
 
     public DbSet(){
@@ -83,6 +83,12 @@ static HashMap<String,HashMap<String,Method>> dictSetMethod=new HashMap<>();
             return dbset;
     }
 
+    public <B,C> DbSet<C> join(DbSet<B> right, MyFunction2<DbSet<T>,DbSet<B>, WhereNode> on,MyFunction2<T,B,C> mapper){
+        var dbset= new DbSetComplex<>(this,right,on,mapper);
+        dbset.dbContext=this.dbContext;
+        return dbset;
+    }
+
     //这是为了涉及where条件的时候，执行lambda的时候，得到该lamda对应的表和列
     ArrayList<Tuple.Tuple2<DbSet<?>,String>> lstTarget=new ArrayList<>();
     //这是为了涉及where条件的时候，执行lambda的时候，得到该lamda对应的表和列
@@ -96,16 +102,24 @@ static HashMap<String,HashMap<String,Method>> dictSetMethod=new HashMap<>();
     }
 
     public  List<T> toList() throws Throwable {
-        int a=3;
+        var wrapper=this.dbContext.toList(this::map,(x, y)->this.initParseSqlContext(x,y));
+        return wrapper.getLst();
+    }
+
+    public <R>  List<R> toList(MyFunction<T,R> mapper) throws Throwable {
+        var wrapper=this.dbContext.toList(x->mapper.apply(this.map(x)),(x, y)->this.initParseSqlContext(x,y));
+        return wrapper.getLst();
+    }
+
+    public  PagingList<T> toListByPaging() throws Throwable {
         var lst=this.dbContext.toList(this::map,(x, y)->this.initParseSqlContext(x,y));
         return lst;
     }
 
-    public <R>  List<R> toList(MyFunction<T,R> mapper) throws Throwable {
-        var lst=this.dbContext.toList(x->mapper.apply(this.map(x)),(x, y)->this.initParseSqlContext(x,y));
-        return lst;
+    public <R>   PagingList<R> toListByPaging(MyFunction<T,R> mapper) throws Throwable {
+        var wrapper=this.dbContext.toList(x->mapper.apply(this.map(x)),(x, y)->this.initParseSqlContext(x,y));
+        return wrapper;
     }
-
 
     T map(ResultSet resultSet) throws Throwable {
         var obj=this.meta.getConstructor(null).newInstance(null);
@@ -134,6 +148,14 @@ static HashMap<String,HashMap<String,Method>> dictSetMethod=new HashMap<>();
         if(right==null)
             return left;
         return left.and(right);
+    }
+
+    int skiprows;
+    int takerows;
+    public DbSet<T> skipTake(int skiprows,int takerows){
+        this.skiprows=skiprows;
+        this.takerows=takerows;
+        return this;
     }
 }
 

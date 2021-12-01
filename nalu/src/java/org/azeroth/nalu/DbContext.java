@@ -14,7 +14,7 @@ public abstract class DbContext {
 
     protected abstract Connection getConnection() throws SQLException;
 
-    protected  <T> List<T> toList(MyFunction<ResultSet,T> map,MyAction2<ParseSqlContext,Boolean> preparecontex) throws Throwable {
+    protected  <T> PagingList<T> toList(MyFunction<ResultSet,T> map,MyAction2<ParseSqlContext,Boolean> preparecontex) throws Throwable {
         ParseSqlContext context=new ParseSqlContext();
         preparecontex.execute(context,true);
         String cmdstr=this.parseSql(context);
@@ -29,7 +29,9 @@ public abstract class DbContext {
             var obj= map.apply(rs);
             lst.add(obj);
         }
-        return lst;
+        var rt=new PagingList<T>();
+        rt.lst= lst;
+        return rt;
     }
 
    protected  String parseSql(ParseSqlContext context) {
