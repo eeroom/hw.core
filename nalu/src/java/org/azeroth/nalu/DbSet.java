@@ -1,20 +1,17 @@
 package org.azeroth.nalu;
 
-import org.azeroth.nalu.node.SelectNode;
-import org.azeroth.nalu.node.WhereNode;
-
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class DbSet<T> implements MyAction2<DbSet<?>,String>,MyFunction<ResultSet,T> {
+public class DbSet<T> {
     T entityProxy;
     T entityIdentity;
     Class<T> meta;
     PropertyNameHandler handler;
-    public String tableName;
-    public String tableAlias;
+    String tableName;
+    String tableAlias;
     WhereNode whereNode;
     ArrayList<SelectNode> lstselect=new ArrayList<>();
     DbContext dbContext;
@@ -22,7 +19,7 @@ public class DbSet<T> implements MyAction2<DbSet<?>,String>,MyFunction<ResultSet
 
     }
 
-    public DbSet(Class<T> meta,DbContext dbContext) throws Throwable {
+    DbSet(DbContext dbContext,Class<T> meta) throws Throwable {
         this.meta=meta;
         this.tableName=this.meta.getSimpleName();
         this.entityIdentity=meta.getConstructor(null).newInstance(null);
@@ -34,14 +31,14 @@ public class DbSet<T> implements MyAction2<DbSet<?>,String>,MyFunction<ResultSet
     }
 
     public <R> Column<R> col(Function<T,R> exp){
-        this.setInvokeCallback(this);
+        this.setProxyHookHandler(this::onProxyHandlerInvokedHandler);
         exp.apply(this.entityProxy);
         Column<R> column=new Column(this.lstTarget.get(0).item1,this.lstTarget.get(0).item2);
         return column;
     }
 
     public <R> DbSet<T> select(Function<T,Columns> exp){
-        this.setInvokeCallback(this);
+        this.setProxyHookHandler(this::onProxyHandlerInvokedHandler);
         exp.apply(this.entityProxy);
         for (var item : this.lstTarget){
             var col=new Column<>(item.item1,item.item2);
@@ -69,25 +66,23 @@ public class DbSet<T> implements MyAction2<DbSet<?>,String>,MyFunction<ResultSet
     //这是为了涉及where条件的时候，执行lambda的时候，得到该lamda对应的表和列
     ArrayList<Tuple.Tuple2<DbSet<?>,String>> lstTarget=new ArrayList<>();
     //这是为了涉及where条件的时候，执行lambda的时候，得到该lamda对应的表和列
-    @Override
-    public void execute(DbSet<?> dbSet, String s) {
+    void onProxyHandlerInvokedHandler(DbSet<?> dbSet, String s) {
         this.lstTarget.add(Tuple.create(dbSet,s));
     }
 
-    public void  setInvokeCallback(MyAction2<DbSet<?>,String> callback){
+    void setProxyHookHandler(MyAction2<DbSet<?>,String> handler){
         this.lstTarget.clear();
-        this.handler.invokeCallback=callback;
+        this.handler.onInvoked =handler;
     }
 
     public  List<T> toList() throws Throwable {
         int a=3;
-        var lst=this.dbContext.toList(this,(x,y)->this.initParseSqlContext(x,y));
+        var lst=this.dbContext.toList(this::map,(x, y)->this.initParseSqlContext(x,y));
         return lst;
     }
 
 
-    @Override
-    public T apply(ResultSet resultSet) throws Throwable {
+    T map(ResultSet resultSet) throws Throwable {
         var obj=this.meta.getConstructor(null).newInstance(null);
 
         return  obj;

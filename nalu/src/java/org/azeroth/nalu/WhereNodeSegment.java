@@ -1,7 +1,8 @@
-package org.azeroth.nalu.node;
+package org.azeroth.nalu;
 
 import org.azeroth.nalu.Logic;
 import org.azeroth.nalu.ParseSqlContext;
+import org.azeroth.nalu.WhereNode;
 
 public class WhereNodeSegment extends WhereNode {
 

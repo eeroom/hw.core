@@ -1,6 +1,6 @@
 package org.azeroth.nalu;
 
-public enum JoinOpt {
+enum JoinOpt {
     inner("inner join",1),
     left("left join",2),
     right("right join",3),
@@ -12,7 +12,7 @@ public enum JoinOpt {
         this.index=index;
     }
 
-    public String getName(){
+    String getName(){
         return  this.name;
     }
 

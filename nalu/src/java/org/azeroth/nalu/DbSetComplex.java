@@ -1,10 +1,6 @@
 package org.azeroth.nalu;
 
-import org.azeroth.nalu.node.JoinNode;
-import org.azeroth.nalu.node.WhereNode;
-
 import java.sql.ResultSet;
-import java.util.function.Function;
 
 public class DbSetComplex<T,B,C> extends DbSet<C> {
     DbSet<T> left;
@@ -21,15 +17,15 @@ public class DbSetComplex<T,B,C> extends DbSet<C> {
     }
 
     @Override
-    public void setInvokeCallback(MyAction2<DbSet<?>, String> callback) {
+    public void setProxyHookHandler(MyAction2<DbSet<?>, String> handler) {
         this.lstTarget.clear();
-        this.left.setInvokeCallback(callback);
-        this.rigth.setInvokeCallback(callback);
+        this.left.setProxyHookHandler(handler);
+        this.rigth.setProxyHookHandler(handler);
     }
 
     @Override
-    public C apply(ResultSet resultSet) throws Throwable {
-        var obj= this.mapper.apply(this.left.apply(resultSet),this.rigth.apply(resultSet));
+    public C map(ResultSet resultSet) throws Throwable {
+        var obj= this.mapper.apply(this.left.map(resultSet),this.rigth.map(resultSet));
         return obj;
 
     }

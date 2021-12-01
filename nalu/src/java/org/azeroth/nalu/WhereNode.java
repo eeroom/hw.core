@@ -1,8 +1,4 @@
-package org.azeroth.nalu.node;
-
-import org.azeroth.nalu.IParseSql;
-import org.azeroth.nalu.Logic;
-import org.azeroth.nalu.ParseSqlContext;
+package org.azeroth.nalu;
 
 public abstract   class WhereNode implements IParseSql {
 

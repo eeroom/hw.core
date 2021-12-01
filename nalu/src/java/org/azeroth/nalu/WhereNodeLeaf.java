@@ -1,11 +1,11 @@
-package org.azeroth.nalu.node;
+package org.azeroth.nalu;
 
 import org.azeroth.nalu.ColOperator;
 import org.azeroth.nalu.Column;
 import org.azeroth.nalu.ParseSqlContext;
+import org.azeroth.nalu.WhereNode;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class WhereNodeLeaf<C> extends WhereNode {
     Column<C> col;

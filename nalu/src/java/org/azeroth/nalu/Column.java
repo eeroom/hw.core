@@ -1,9 +1,5 @@
 package org.azeroth.nalu;
 
-import org.azeroth.nalu.node.WhereJoinOnNode;
-import org.azeroth.nalu.node.WhereNode;
-import org.azeroth.nalu.node.WhereNodeLeaf;
-
 public class Column<C> implements IParseSql {
 
     DbSet<?> dbSet;

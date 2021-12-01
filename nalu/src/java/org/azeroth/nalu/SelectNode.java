@@ -1,4 +1,4 @@
-package org.azeroth.nalu.node;
+package org.azeroth.nalu;
 
 import org.azeroth.nalu.Column;
 import org.azeroth.nalu.IParseSql;

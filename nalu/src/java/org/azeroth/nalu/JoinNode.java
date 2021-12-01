@@ -1,9 +1,4 @@
-package org.azeroth.nalu.node;
-
-import org.azeroth.nalu.DbSet;
-import org.azeroth.nalu.IParseSql;
-import org.azeroth.nalu.JoinOpt;
-import org.azeroth.nalu.ParseSqlContext;
+package org.azeroth.nalu;
 
 public class JoinNode implements IParseSql {
 

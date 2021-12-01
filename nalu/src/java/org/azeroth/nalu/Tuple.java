@@ -9,7 +9,7 @@ public class Tuple {
     }
 
     public static class Tuple2<T,B>{
-        T item1;
-        B item2;
+       public T item1;
+       public B item2;
     }
 }

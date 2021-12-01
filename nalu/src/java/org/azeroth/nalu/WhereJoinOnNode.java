@@ -1,7 +1,4 @@
-package org.azeroth.nalu.node;
-
-import org.azeroth.nalu.Column;
-import org.azeroth.nalu.ParseSqlContext;
+package org.azeroth.nalu;
 
 public class WhereJoinOnNode extends WhereNode {
     Column left;

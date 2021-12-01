@@ -1,6 +1,6 @@
 package org.azeroth.nalu;
 
-public enum  Logic {
+enum  Logic {
     and,
     or
 }
