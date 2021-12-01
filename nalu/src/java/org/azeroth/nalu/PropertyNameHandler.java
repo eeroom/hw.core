@@ -3,22 +3,31 @@ package org.azeroth.nalu;
 import java.lang.reflect.Method;
 
 class PropertyNameHandler implements org.springframework.cglib.proxy.InvocationHandler{
-    public String getName() {
+    DbSet<?> dbSet;
+    Object target;
+    MyAction2<DbSet<?>,String> onInvoked;
+    PropertyNameHandler(DbSet<?> dbSet,Object target){
+        this.dbSet=dbSet;
+        this.target=target;
+    }
+
+    String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    void setName(String name) {
         if(name.equals("toString"))
             return;
-        this.name = name;
+        this.name = name.substring(3);
     }
 
     String name;
     @Override
     public Object invoke(Object o, Method method, Object[] objects) throws Throwable {
         this.setName(method.getName());
-        if(method.getReturnType().getName().equals("java.lang.String"))
-             return "";
-        return 0;
+        var rt=method.invoke(this.target,objects);
+        if(onInvoked !=null)
+            onInvoked.execute(this.dbSet,this.name);
+        return rt;
     }
 }

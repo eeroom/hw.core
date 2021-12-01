@@ -1,34 +1,44 @@
 package org.azeroth.nalu;
 
-public class Column<T,C> {
+public class Column<C> implements IParseSql {
 
-    DbSet<T> dbSet;
-String colName;
-    public Column(DbSet<T> dbSet,String colName){
+    DbSet<?> dbSet;
+    String colName;
+
+    public Column(DbSet<?> dbSet,String colName){
         this.dbSet=dbSet;
         this.colName=colName;
     }
 
-    public NodeWhereLeaf<T,C> lt(C value){
-        return new NodeWhereLeaf<>(this,ColOperator.lt,value);
+    public WhereNodeLeaf<C> lt(C value){
+        return new WhereNodeLeaf<>(this,ColOperator.lt,value);
     }
 
-    public NodeWhereLeaf<T,C> gt(C value){
-        return new NodeWhereLeaf<>(this,ColOperator.gt,value);
+    public WhereNodeLeaf<C> gt(C value){
+        return new WhereNodeLeaf<>(this,ColOperator.gt,value);
     }
 
-    public NodeWhereLeaf<T,C> in(C... value){
-        return new NodeWhereLeaf<>(this,ColOperator.in,value);
+    public WhereNodeLeaf<C> in(C... value){
+        return new WhereNodeLeaf<>(this,ColOperator.in,value);
     }
 
-    public NodeWhereLeaf<T,C> like(C value){
-        return new NodeWhereLeaf<>(this,ColOperator.like,value);
+    public WhereNodeLeaf<C> like(C value){
+        return new WhereNodeLeaf<>(this,ColOperator.like,value);
     }
 
-    public NodeWhere eq(C value){
-        return new NodeWhereLeaf<>(this,ColOperator.eq,value);
+    public WhereNode eq(C value){
+        return new WhereNodeLeaf<>(this,ColOperator.eq,value);
     }
-    public NodeWhereLeaf<T,C> between(C... value){
-        return new NodeWhereLeaf<>(this,ColOperator.between,value);
+    public WhereNode eq(Column<C> column){
+        return  new WhereJoinOnNode(this,column);
+    }
+    public WhereNodeLeaf<C> between(C... value){
+        return new WhereNodeLeaf<>(this,ColOperator.between,value);
+    }
+
+    @Override
+    public String parse(ParseSqlContext context) {
+        var sql= this.dbSet.tableAlias+"."+this.colName;
+        return sql;
     }
 }
