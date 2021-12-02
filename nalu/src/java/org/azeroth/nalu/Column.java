@@ -41,4 +41,36 @@ public class Column<C> implements IParseSql {
         var sql= this.dbSet.tableAlias+"."+this.colName;
         return sql;
     }
+
+    public ColumnByFunction<C> max(){
+        return new ColumnByFunction<>(this.dbSet,this.colName,FunctionOpt.max);
+    }
+
+    public ColumnByFunction<C> min(){
+        return new ColumnByFunction<>(this.dbSet,this.colName,FunctionOpt.min);
+    }
+
+    public ColumnByFunction<C> avg(){
+        return new ColumnByFunction<>(this.dbSet,this.colName,FunctionOpt.avg);
+    }
+
+    public ColumnByFunction<C> lower(){
+        return new ColumnByFunction<>(this.dbSet,this.colName,FunctionOpt.lower);
+    }
+
+    public ColumnByFunction<C> upper(){
+        return new ColumnByFunction<>(this.dbSet,this.colName,FunctionOpt.upper);
+    }
+
+    public ColumnByFunction<C> sum(){
+        return new ColumnByFunction<>(this.dbSet,this.colName,FunctionOpt.sum);
+    }
+
+    public ColumnByFunction<C> count(){
+        return new ColumnByFunction<>(this.dbSet,this.colName,FunctionOpt.count);
+    }
+
+    public ColumnByMyFunction mydefine(MyFunction2<String,ParseSqlContext,String> myfunction){
+        return new ColumnByMyFunction(this.dbSet,this.colName,myfunction);
+    }
 }

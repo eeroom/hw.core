@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class DbSet<T> {
     T entityProxy;
@@ -59,7 +60,7 @@ public class DbSet<T> {
         return column;
     }
 
-    public <R> DbSet<T> select(Function<T,Columns> exp){
+    public DbSet<T> select(Function<T,Columns> exp){
         this.setProxyHookHandler(this::onProxyHandlerInvokedHandler);
         exp.apply(this.entityProxy);
         for (var item : this.lstTarget){
@@ -70,6 +71,22 @@ public class DbSet<T> {
         return this;
     }
 
+    public <C> DbSet<T> selectCol(Function<DbSet<T>,Column<C>> exp){
+        var col= exp.apply(this);
+        var snode=new SelectNode(col);
+        col.dbSet.lstSelectNode.add(snode);
+        return this;
+    }
+
+    public <C> DbSet<T> selectAllCol(){
+        var lst= dictGetMethod.get(this.meta.getName()).keySet().stream()
+                .map(colName->new Column(this,colName))
+                .map(col->new SelectNode(col))
+                .collect(Collectors.toList());
+        this.lstSelectNode.addAll(lst);
+        return this;
+    }
+
     public DbSet<T> where(Function<DbSet<T>, WhereNode> pred){
         var wh= pred.apply(this);
         if(this.whereNode==null)
@@ -77,6 +94,11 @@ public class DbSet<T> {
         else
             this.whereNode=this.whereNode.and(wh);
         return this;
+    }
+
+    public WhereNode mydefine(MyFunction2<String, ParseSqlContext,String> wherestr){
+        var wh=new WhereNodeMyDefine(this,wherestr);
+        return wh;
     }
 
     public <B> DbSet<Tuple.Tuple2<T,B>> join(DbSet<B> right, MyFunction2<DbSet<T>,DbSet<B>, WhereNode> on){
@@ -204,7 +226,5 @@ public class DbSet<T> {
         wrapper.item1.lstGroupByNode.add(col);
         return this;
     }
-
-
 }
 
