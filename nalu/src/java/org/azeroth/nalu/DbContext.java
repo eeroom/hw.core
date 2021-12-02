@@ -9,22 +9,42 @@ import java.util.List;
 public abstract class DbContext {
     protected String rowCountFiledName = "_rowsCount";
 
-    ArrayList<MyFunction2<Connection,ParseSqlContext,Integer>> lstexecute=new ArrayList<>();
+    ArrayList<MyFunction2Throwable<Connection,ParseSqlContext,Integer>> lstexecute=new ArrayList<>();
 
-    public <T> DbSet<T> dbSet(Class<T> meta) throws Throwable {
+    public <T> DbSet<T> DbSet(Class<T> meta) throws Throwable {
         return new DbSet<>(this,meta);
     }
 
-    public <T> DbSetAdd add(T entity) throws Throwable {
+    public <T> DbSetAdd<T> add(T entity) throws Throwable {
         var lst=new ArrayList<T>();
         lst.add(entity);
-        var add=new DbSetAdd(lst);
+        var add=new DbSetAdd(entity.getClass(),lst);
         lstexecute.add(add::execute);
         return add;
     }
 
-    public <T> DbSetAdd add(List<T> lstentity) throws Throwable {
-        var add=new DbSetAdd(lstentity);
+    public <T> DbSetAdd<T> add(List<T> lstentity) throws Throwable {
+        var add=new DbSetAdd(lstentity.get(0).getClass(),lstentity);
+        lstexecute.add(add::execute);
+        return add;
+    }
+
+    public <T> DbSetDel<T> delete(T entity) throws Throwable {
+        var lst=new ArrayList<T>();
+        lst.add(entity);
+        var add=new DbSetDel(entity.getClass(),lst);
+        lstexecute.add(add::execute);
+        return add;
+    }
+
+    public <T> DbSetDel<T> delete(List<T> lstentity) throws Throwable {
+        var add=new DbSetDel(lstentity.get(0).getClass(),lstentity);
+        lstexecute.add(add::execute);
+        return add;
+    }
+
+    public <T> DbSetDelSimple<T> delete(Class<T> meta) throws Throwable {
+        var add=new DbSetDelSimple<>(meta);
         lstexecute.add(add::execute);
         return add;
     }

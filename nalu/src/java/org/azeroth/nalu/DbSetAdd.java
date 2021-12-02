@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 public class DbSetAdd<T> extends TableSet<T> {
     List<T> lstEntity;
     ArrayList<Column> lstcol=new ArrayList<>();
-    DbSetAdd(List<T> lst) throws Throwable {
+    DbSetAdd(Class<T> meta,List<T> lst) throws Throwable {
+        super(meta);
         this.lstEntity= lst;
     }
 
