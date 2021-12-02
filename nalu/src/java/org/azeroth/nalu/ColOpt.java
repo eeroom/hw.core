@@ -4,6 +4,7 @@ public enum ColOpt {
     lt("<"),
     gt(">"),
     eq("="),
+    noteq("!="),
     lteq("<="),
     gteq(">="),
     like("like"),
@@ -11,7 +12,11 @@ public enum ColOpt {
     notin("not in"),
     notlike("not like"),
     between("between"),
-    notbetween("not between");
+    notbetween("not between"),
+    eqnull("is null"),
+    noteqnull("is not null"),
+    exists("exists"),
+    notexists("not exists");
     private ColOpt(String sql){
         this.sql=sql;
     }

@@ -1,6 +1,7 @@
 package org.azeroth.nalu;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class WhereNodeLeaf<C> extends WhereNode {
     Column<C> col;
@@ -17,9 +18,17 @@ public class WhereNodeLeaf<C> extends WhereNode {
     public String parse(ParseSqlContext context) {
         switch (this.opt){
             case in:
-                return this.toSqlWithIn(context);
             case notin:
                 return this.toSqlWithIn(context);
+            case eqnull:
+            case noteqnull:
+                return this.toSqlWithNull(context);
+            case between:
+            case notbetween:
+                return this.toSqlWithBetween(context);
+            case exists:
+            case notexists:
+                return this.toSqlWithExists(context);
             default:
                 break;
         }
@@ -40,4 +49,23 @@ public class WhereNodeLeaf<C> extends WhereNode {
         var sql= String.format("%s %s (%s)",this.col.parse(context),this.opt.getSql(),String.join(",",lstpName));
         return sql;
     }
+
+     String toSqlWithNull(ParseSqlContext context){
+        var sql=String.format("%s %s",this.col.parse(context),this.opt.getSql());
+        return sql;
+     }
+
+    String toSqlWithBetween(ParseSqlContext context){
+        var rangeValue=(C[])this.value;
+        var pname1=context.nextParameterName();
+        context.lstDbParameter.add(Tuple.create(pname1,rangeValue[0]));
+        var pname2=context.nextParameterName();
+        context.lstDbParameter.add(Tuple.create(pname1,rangeValue[1]));
+        var sql=String.format("%s %s %s and %s",this.col.parse(context),this.opt.getSql(),pname1,pname2);
+        return  sql;
+    }
+
+     String toSqlWithExists(ParseSqlContext context){
+        throw  new IllegalArgumentException("方法未完成");
+     }
 }

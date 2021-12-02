@@ -10,5 +10,4 @@ public abstract   class WhereNode implements IParseSql {
         return new WhereNodeSegment(this, LogicOpt.or,right);
     }
 
-
 }

@@ -14,26 +14,59 @@ public class Column<C> implements IParseSql {
         return new WhereNodeLeaf<>(this, ColOpt.lt,value);
     }
 
+    public WhereNodeLeaf<C> lteq(C value){
+        return new WhereNodeLeaf<>(this, ColOpt.lteq,value);
+    }
+
     public WhereNodeLeaf<C> gt(C value){
         return new WhereNodeLeaf<>(this, ColOpt.gt,value);
+    }
+
+    public WhereNodeLeaf<C> gteq(C value){
+        return new WhereNodeLeaf<>(this, ColOpt.gteq,value);
     }
 
     public WhereNodeLeaf<C> in(C... value){
         return new WhereNodeLeaf<>(this, ColOpt.in,value);
     }
 
+    public WhereNodeLeaf<C> notin(C... value){
+        return new WhereNodeLeaf<>(this, ColOpt.notin,value);
+    }
+
     public WhereNodeLeaf<C> like(C value){
         return new WhereNodeLeaf<>(this, ColOpt.like,value);
+    }
+
+    public WhereNodeLeaf<C> notlike(C value){
+        return new WhereNodeLeaf<>(this, ColOpt.notlike,value);
     }
 
     public WhereNode eq(C value){
         return new WhereNodeLeaf<>(this, ColOpt.eq,value);
     }
+
+    public WhereNode noteq(C value){
+        return new WhereNodeLeaf<>(this, ColOpt.eq,value);
+    }
+
     public WhereNode eq(Column<C> column){
         return  new WhereJoinOnNode(this,column);
     }
-    public WhereNodeLeaf<C> between(C... value){
+    public WhereNodeLeaf<C> range(C... value){
         return new WhereNodeLeaf<>(this, ColOpt.between,value);
+    }
+
+    public WhereNodeLeaf<C> notrange(C... value){
+        return new WhereNodeLeaf<>(this, ColOpt.notbetween,value);
+    }
+
+    public WhereNode eqnull(){
+        return new WhereNodeLeaf<>(this, ColOpt.eqnull,null);
+    }
+
+    public WhereNode noteqnull(){
+        return new WhereNodeLeaf<>(this, ColOpt.noteqnull,null);
     }
 
     @Override
