@@ -29,14 +29,13 @@ public abstract class DbContext {
         if(context.takerows>0){
             if(!rs.next())
                 return rt;
-
+            lst.add(map.apply(rs));
+            rt.count=rs.getInt(this.rowCountFiledName);
         }
         while (rs.next()){
             var obj= map.apply(rs);
             lst.add(obj);
         }
-
-
         return rt;
     }
 
@@ -48,7 +47,7 @@ public abstract class DbContext {
      */
    protected  String parseSql(ParseSqlContext context) {
         var lstselect=context.lstSelectNode.stream().map(x->x.parse(context)).collect(java.util.stream.Collectors.toList());
-        String selectstr=String.join(",",lstselect);
+        String selectstr=String.join(",\r\n",lstselect);
         String fromstr=String.format("%s as %s",context.fromTable.tableName,context.fromTable.tableAlias);
         var joinstr="";
         if(context.lstJoinNode.size()>0)
@@ -58,13 +57,13 @@ public abstract class DbContext {
             wherestr="where "+context.whereNode.parse(context);
         String groupbystr="";
         if(context.lstGroupByNode.size()>0)
-            groupbystr=String.join(",",context.lstGroupByNode.stream().map(x->x.parse(context)).collect(java.util.stream.Collectors.toList()));
+            groupbystr="group by "+String.join(",",context.lstGroupByNode.stream().map(x->x.parse(context)).collect(java.util.stream.Collectors.toList()));
         String havingstr="";
         if(context.havingNode!=null)
-            havingstr=context.havingNode.parse(context);
+            havingstr="having "+context.havingNode.parse(context);
         String orderbystr="";
         if(context.lstOrderByNode.size()>0)
-            orderbystr=String.join(",",context.lstOrderByNode.stream().map(x->x.parse(context)).collect(java.util.stream.Collectors.toList()));
+            orderbystr="order by "+String.join(",",context.lstOrderByNode.stream().map(x->x.parse(context)).collect(java.util.stream.Collectors.toList()));
         if(context.takerows<1){//不分页
             var sql=String.format("select %s \r\n from %s\r\n%s\r\n%s\r\n%s\r\n%s\r\n%s",
                     selectstr,
@@ -77,7 +76,7 @@ public abstract class DbContext {
             return sql;
         }else {
             var tmpRowIndex = "_theRowIndex";
-            var cmdstr =String.format("select %s,ROW_NUMBER() OVER(%s) AS %s \r\n from %s\r\n%s\r\n%s\r\n%s\r\n%s",
+            var cmdstr =String.format("select %s,\r\nROW_NUMBER() OVER(%s) AS %s \r\n from %s\r\n%s\r\n%s\r\n%s\r\n%s",
                     selectstr,
                     orderbystr,
                     tmpRowIndex,
