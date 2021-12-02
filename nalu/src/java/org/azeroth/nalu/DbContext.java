@@ -4,11 +4,41 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class DbContext {
     protected String rowCountFiledName = "_rowsCount";
-    public <T> DbSet<T> DbSet(Class<T> meta) throws Throwable {
+
+    ArrayList<MyFunction2<Connection,ParseSqlContext,Integer>> lstexecute=new ArrayList<>();
+
+    public <T> DbSet<T> dbSet(Class<T> meta) throws Throwable {
         return new DbSet<>(this,meta);
+    }
+
+    public <T> DbSetAdd add(T entity) throws Throwable {
+        var lst=new ArrayList<T>();
+        lst.add(entity);
+        var add=new DbSetAdd(lst);
+        lstexecute.add(add::execute);
+        return add;
+    }
+
+    public <T> DbSetAdd add(List<T> lstentity) throws Throwable {
+        var add=new DbSetAdd(lstentity);
+        lstexecute.add(add::execute);
+        return add;
+    }
+
+    public int saveChange() throws Throwable {
+        var cnn= this.getConnection();
+        cnn.setAutoCommit(false);
+        int rst=0;
+        for (var handler:this.lstexecute){
+            var context=new ParseSqlContext();
+            rst+= handler.apply(cnn,context);
+        }
+        cnn.commit();
+        return rst;
     }
 
     protected abstract Connection getConnection() throws SQLException;
