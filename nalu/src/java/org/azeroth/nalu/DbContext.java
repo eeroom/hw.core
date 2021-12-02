@@ -69,8 +69,8 @@ public abstract class DbContext {
         String cmdstr=this.parseSql(context);
         var cnn= this.getConnection();
         var pst= cnn.prepareStatement(cmdstr);
-        for (var i = 1; i<=context.lstDbParameter.size(); i++){
-            pst.setObject(i,context.lstDbParameter.get(i).item2);
+        for (var i = 0; i<context.lstDbParameter.size(); i++){
+            pst.setObject(i+1,context.lstDbParameter.get(i).item2);
         }
         var rt=new PagingList<T>();
         ArrayList<T> lst=new ArrayList<>();
