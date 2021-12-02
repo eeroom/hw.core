@@ -39,6 +39,8 @@ public class DbSetComplex<T,B,C> extends DbSet<C> {
         context.whereNode=this.addWhereNode(context.whereNode,this.whereNode);
         context.havingNode=this.addWhereNode(context.havingNode,this.havingNode);
         context.lstJoinNode.add(new JoinNode(this.rigth,this.joinjw,this.joinOpt));
+        context.lstGroupByNode.addAll(this.lstGroupByNode);
+        context.lstOrderByNode.addAll(this.lstOrderbyNode);
         context.takerows=this.takerows;
         context.skiprows=this.skiprows;
     }
