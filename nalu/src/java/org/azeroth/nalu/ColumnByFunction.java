@@ -2,7 +2,7 @@ package org.azeroth.nalu;
 
 public class ColumnByFunction<C> extends Column<C> {
     FunctionOpt functionOpt;
-    public ColumnByFunction(DbSet<?> dbSet, String colName,FunctionOpt functionOpt) {
+    public ColumnByFunction(TableSet<?> dbSet, String colName,FunctionOpt functionOpt) {
         super(dbSet, colName);
         this.functionOpt=functionOpt;
     }

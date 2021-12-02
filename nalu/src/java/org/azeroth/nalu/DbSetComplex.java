@@ -8,7 +8,7 @@ public class DbSetComplex<T,B,C> extends DbSet<C> {
     MyFunction2<T,B,C> mapper;
     WhereNode joinjw;
     JoinOpt joinOpt;
-    public DbSetComplex(DbSet<T> left,DbSet<B> rigth,MyFunction2<DbSet<T>,DbSet<B>, WhereNode> on,MyFunction2<T,B,C> mapper){
+    DbSetComplex(DbSet<T> left,DbSet<B> rigth,MyFunction2<DbSet<T>,DbSet<B>, WhereNode> on,MyFunction2<T,B,C> mapper){
         this.dbContext=dbContext;
         this.left=left;
         this.rigth=rigth;
@@ -19,14 +19,14 @@ public class DbSetComplex<T,B,C> extends DbSet<C> {
     }
 
     @Override
-    public void setProxyHookHandler(MyAction2<DbSet<?>, String> handler) {
+    void setProxyHookHandler(MyAction2<TableSet<?>, String> handler) {
         this.lstTarget.clear();
         this.left.setProxyHookHandler(handler);
         this.rigth.setProxyHookHandler(handler);
     }
 
     @Override
-    public C map(ResultSet resultSet) throws Throwable {
+    C map(ResultSet resultSet) throws Throwable {
         var obj= this.mapper.apply(this.left.map(resultSet),this.rigth.map(resultSet));
         return obj;
 

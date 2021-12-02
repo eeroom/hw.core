@@ -3,7 +3,7 @@ package org.azeroth.nalu;
 public class ColumnByMyFunction<C> extends Column<C> {
     MyFunction2<String,ParseSqlContext,String> myfunction;
 
-    public ColumnByMyFunction(DbSet<?> dbSet, String colName, MyFunction2<String,ParseSqlContext,String> myfunction) {
+    public ColumnByMyFunction(TableSet<?> dbSet, String colName, MyFunction2<String,ParseSqlContext,String> myfunction) {
         super(dbSet, colName);
         this.myfunction=myfunction;
     }

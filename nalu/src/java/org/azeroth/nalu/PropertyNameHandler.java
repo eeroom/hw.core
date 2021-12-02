@@ -3,10 +3,10 @@ package org.azeroth.nalu;
 import java.lang.reflect.Method;
 
 class PropertyNameHandler implements org.springframework.cglib.proxy.InvocationHandler{
-    DbSet<?> dbSet;
+    TableSet<?> dbSet;
     Object target;
-    MyAction2<DbSet<?>,String> onInvoked;
-    PropertyNameHandler(DbSet<?> dbSet,Object target){
+    MyAction2<TableSet<?>,String> onInvoked;
+    PropertyNameHandler(TableSet<?> dbSet,Object target){
         this.dbSet=dbSet;
         this.target=target;
     }

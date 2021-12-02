@@ -2,10 +2,10 @@ package org.azeroth.nalu;
 
 public class Column<C> implements IParseSql {
 
-    DbSet<?> dbSet;
+    TableSet<?> dbSet;
     String colName;
 
-    public Column(DbSet<?> dbSet,String colName){
+    public Column(TableSet<?> dbSet,String colName){
         this.dbSet=dbSet;
         this.colName=colName;
     }
