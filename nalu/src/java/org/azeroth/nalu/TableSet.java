@@ -28,7 +28,16 @@ public class TableSet<T> {
         //使用cglib创建class的代理对象，java自带的代理类只能创建基于接口的代理对象，
         //这里是创建数据库model的pojo对象的代理，没有接口，所以需要使用cglib的
         this.entityProxy= (T)org.springframework.cglib.proxy.Enhancer.create(meta,this.handler);
-        this.tableName=this.meta.getSimpleName();
+        var ant= this.meta.getAnnotation(Table.class);
+        if(ant==null){
+            this.tableName=this.meta.getSimpleName();
+        }else{
+            if(ant.schemal()==null)
+                this.tableName=ant.name()==null?this.meta.getSimpleName():ant.name();
+            else
+                this.tableName=String.format("%s.%s",ant.schemal(),ant.name()==null?this.meta.getSimpleName():ant.name());
+        }
+        this.tableAlias=this.tableName;
         if(dictSetMethod.get(meta.getName())!=null)
              return;
         HashMap<String, Method> dictset=new HashMap<>();
