@@ -11,7 +11,7 @@ public abstract class DbContext {
 
     ArrayList<MyFunction2Throwable<Connection,ParseSqlContext,Integer>> lstexecute=new ArrayList<>();
 
-    public <T> DbSet<T> DbSet(Class<T> meta) throws Throwable {
+    public <T> DbSet<T> dbSet(Class<T> meta) throws Throwable {
         return new DbSet<>(this,meta);
     }
 
@@ -49,9 +49,34 @@ public abstract class DbContext {
         return add;
     }
 
+    public <T> DbSetEdit<T> edit(T entity) throws Throwable {
+        var lst=new ArrayList<T>();
+        lst.add(entity);
+        var add=new DbSetEdit(entity.getClass(),lst);
+        lstexecute.add(add::execute);
+        return add;
+    }
+
+    public <T> DbSetEdit<T> edit(List<T> lstentity) throws Throwable {
+        var add=new DbSetEdit(lstentity.get(0).getClass(),lstentity);
+        lstexecute.add(add::execute);
+        return add;
+    }
+
+    public <T> DbSetEditSimple<T> edit(Class<T> meta) throws Throwable {
+        var add=new DbSetEditSimple<>(meta);
+        lstexecute.add(add::execute);
+        return add;
+    }
+
     public int saveChange() throws Throwable {
+        return this.saveChange(Connection.TRANSACTION_READ_COMMITTED);
+    }
+
+    public int saveChange(int transactionLevel) throws Throwable {
         var cnn= this.getConnection();
         cnn.setAutoCommit(false);
+        cnn.setTransactionIsolation(transactionLevel);
         int rst=0;
         for (var handler:this.lstexecute){
             var context=new ParseSqlContext();
@@ -61,7 +86,7 @@ public abstract class DbContext {
         return rst;
     }
 
-    protected abstract Connection getConnection() throws SQLException;
+    protected abstract Connection getConnection() throws Throwable;
 
     protected  <T> PagingList<T> toList(MyFunction<ResultSet,T> map,MyAction2<ParseSqlContext,Boolean> preparecontex) throws Throwable {
         ParseSqlContext context=new ParseSqlContext();
