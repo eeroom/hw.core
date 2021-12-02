@@ -78,7 +78,9 @@ public abstract class DbContext {
         cnn.setAutoCommit(false);
         cnn.setTransactionIsolation(transactionLevel);
         int rst=0;
-        for (var handler:this.lstexecute){
+        var lstexe=this.lstexecute;
+        this.lstexecute=new ArrayList<>();
+        for (var handler:lstexe){
             var context=new ParseSqlContext();
             rst+= handler.apply(cnn,context);
         }
