@@ -11,31 +11,40 @@ let cfg = {
 }
 let dictTypeMap = {};
 dictTypeMap["text"]= "String";
-dictTypeMap["uniqueidentifier"]= "java.util.UUID";
-dictTypeMap["date"]= "java.util.Date";
-dictTypeMap["time"]= "java.util.Date";
-dictTypeMap["datetime2"]= "java.util.Date";
-dictTypeMap["tinyint"]= "short";
-dictTypeMap["smallint"]= "short";
-dictTypeMap["int"]= "int";
-dictTypeMap["real"]= "double";
-dictTypeMap["money"]= "double";
-dictTypeMap["datetime"]= "java.util.Date";
-dictTypeMap["float"]= "double";
+dictTypeMap["longtext"]= "String";
 dictTypeMap["ntext"]= "String";
-dictTypeMap["bit"]= "boolean";
-dictTypeMap["decimal"]= "double";
-dictTypeMap["numeric"]= "double";
-dictTypeMap["bigint"]= "long";
-dictTypeMap["varchar"]= "String";
 dictTypeMap["char"]= "String";
-dictTypeMap["nvarchar"]= "String";
 dictTypeMap["nchar"]= "String";
-dictTypeMap["binary"]= "byte[]";
-dictTypeMap["image"]= "byte[]";
-dictTypeMap["longblob"]= "byte[]";
-dictTypeMap["blob"]= "byte[]";
-dictTypeMap["timestamp"]= "java.util.Date";
+dictTypeMap["varchar"]= "String";
+dictTypeMap["nvarchar"]= "String";
+
+dictTypeMap["uniqueidentifier"]= "java.util.UUID";
+
+dictTypeMap["date"]= "java.sql.Date";
+dictTypeMap["time"]= "java.sql.Time";
+dictTypeMap["timestamp"]= "java.sql.Timestamp";
+dictTypeMap["datetime"]= "java.sql.Timestamp";
+dictTypeMap["datetime2"]= "java.util.Date";
+
+dictTypeMap["bit"]= "Boolean";
+dictTypeMap["tinyint"]= "Boolean";
+dictTypeMap["int"]= "Integer";
+dictTypeMap["smallint"]= "Integer";
+
+dictTypeMap["real"]= "Double";
+dictTypeMap["money"]= "Double";
+dictTypeMap["double"]= "Double";
+dictTypeMap["float"]= "Double";
+dictTypeMap["decimal"]= "Double";
+dictTypeMap["numeric"]= "Double";
+
+dictTypeMap["bigint"]= "Long";
+
+dictTypeMap["binary"]= "Byte[]";
+dictTypeMap["image"]= "Byte[]";
+dictTypeMap["longblob"]= "Byte[]";
+dictTypeMap["blob"]= "Byte[]";
+
 let templatestr = fs.readFileSync('./t4-mysql-template.ejs').toString('utf-8');
 let packageName = "org.azeroth.mssqlserverclient";
 let targetDir = "mssqlserverclient\\src\\main\\java\\org\\azeroth\\mssqlserverclient\\";
