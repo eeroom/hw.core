@@ -45,12 +45,14 @@ let targetDir="mssqlserverclient\\src\\main\\java\\org\\azeroth\\mssqlserverclie
 mssql.connect(cfg).then(()=>{
     return mssql.query(`select myremark.value as remark,
                         mytable.name as tableName,
+                        myschema.name as schemalName,
                         mytype.name as typeName,
                         mycol.name,
                         mycol.max_length,
                         mycol.is_nullable,
                         mycol.is_identity
                         from sys.all_objects mytable
+                        join sys.schemas myschema on myschema.schema_id=mytable.schema_id
                         join sys.all_columns mycol on mycol.object_id=mytable.object_id
                         join sys.types mytype on mytype.user_type_id=mycol.user_type_id
                         left join sys.extended_properties myremark on myremark.major_id=mycol.object_id and myremark.minor_id=mycol.column_id
