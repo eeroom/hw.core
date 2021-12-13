@@ -66,7 +66,7 @@ public class TableSet<T> {
      * @param handler
      */
     void setProxyHookHandler(MyAction2<TableSet<?>,String> handler){
-        this.lstTarget.clear();
         this.handler.onInvoked =handler;
+        this.lstTarget.clear();
     }
 }

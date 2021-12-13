@@ -51,7 +51,6 @@ public class ParseSqlContextMysql extends  ParseSqlContext {
                 String.valueOf(this.skiprows),
                 String.valueOf(this.takerows));
             var sqlcount = String.format("select count(0) as _theRowIndex \r\n from %s\r\n%s\r\n%s\r\n%s\r\n%s\r\n%s",
-                    selectstr,
                     fromstr,
                     joinstr,
                     wherestr,
