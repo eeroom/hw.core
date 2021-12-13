@@ -1,5 +1,7 @@
 package org.azeroth.nalu;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -92,6 +94,31 @@ public class ParseSqlContext {
                     String.valueOf(this.skiprows),
                     String.valueOf(this.skiprows+this.takerows-1));
             return sql;
+        }
+    }
+
+    protected  <T> PagingList<T> toList(Connection cnn, MyFunction<ResultSet,T> map) throws Throwable {
+        String cmdstr=this.parseSql();
+        try(var pst= cnn.prepareStatement(cmdstr)) {
+            for (var i = 0; i<this.lstDbParameter.size(); i++){
+                pst.setObject(i+1,this.lstDbParameter.get(i).item2);
+            }
+            var rt=new PagingList<T>();
+            ArrayList<T> lst=new ArrayList<>();
+            rt.lst= lst;
+            try(var rs= pst.executeQuery()) {
+                if(this.takerows>0){
+                    if(!rs.next())
+                        return rt;
+                    lst.add(map.apply(rs));
+                    rt.count=rs.getInt(this.rowCountFiledName);
+                }
+                while (rs.next()){
+                    var obj= map.apply(rs);
+                    lst.add(obj);
+                }
+                return rt;
+            }
         }
     }
 }

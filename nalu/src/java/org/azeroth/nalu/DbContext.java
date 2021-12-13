@@ -74,18 +74,19 @@ public abstract class DbContext {
     }
 
     public int saveChange(int transactionLevel) throws Throwable {
-        var cnn= this.getConnection();
-        cnn.setAutoCommit(false);
-        cnn.setTransactionIsolation(transactionLevel);
-        int rst=0;
-        var lstexe=this.lstexecute;
-        this.lstexecute=new ArrayList<>();
-        for (var handler:lstexe){
-            var context=new ParseSqlContext();
-            rst+= handler.apply(cnn,context);
+        try(var cnn= this.getConnection()){
+            cnn.setAutoCommit(false);
+            cnn.setTransactionIsolation(transactionLevel);
+            int rst=0;
+            var lstexe=this.lstexecute;
+            this.lstexecute=new ArrayList<>();
+            for (var handler:lstexe){
+                var context=new ParseSqlContext();
+                rst+= handler.apply(cnn,context);
+            }
+            cnn.commit();
+            return rst;
         }
-        cnn.commit();
-        return rst;
     }
 
     protected abstract Connection getConnection() throws Throwable;
@@ -95,26 +96,8 @@ public abstract class DbContext {
     protected  <T> PagingList<T> toList(MyFunction<ResultSet,T> map,MyAction2<ParseSqlContext,Boolean> preparecontex) throws Throwable {
         var context=this.getParseSqlContext();
         preparecontex.execute(context,true);
-        String cmdstr=context.parseSql();
-        var cnn= this.getConnection();
-        var pst= cnn.prepareStatement(cmdstr);
-        for (var i = 0; i<context.lstDbParameter.size(); i++){
-            pst.setObject(i+1,context.lstDbParameter.get(i).item2);
+        try(var cnn= this.getConnection()) {
+           return context.toList(cnn,map);
         }
-        var rt=new PagingList<T>();
-        ArrayList<T> lst=new ArrayList<>();
-        rt.lst= lst;
-        var rs= pst.executeQuery();
-        if(context.takerows>0){
-            if(!rs.next())
-                return rt;
-            lst.add(map.apply(rs));
-            rt.count=rs.getInt(context.rowCountFiledName);
-        }
-        while (rs.next()){
-            var obj= map.apply(rs);
-            lst.add(obj);
-        }
-        return rt;
     }
 }
