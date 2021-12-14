@@ -45,7 +45,7 @@ let targetDir="mssqlserverclient\\src\\main\\java\\org\\azeroth\\mssqlserverclie
 mssql.connect(cfg).then(()=>{
     return mssql.query(`select myremark.value as remark,
                         mytable.name as tableName,
-                        myschema.name as schemalName,
+                        myschema.name as schemaName,
                         mytype.name as typeName,
                         mycol.name,
                         mycol.max_length,
@@ -61,7 +61,7 @@ mssql.connect(cfg).then(()=>{
     lodash.forEach(queryRt.recordset,x=>x.typeName=dictTypeMap[x.typeName])
     let dictTable=lodash.groupBy(queryRt.recordset,x=>x.tableName)
     lodash.forEach(dictTable,(rows,tableName)=>{
-        let codestr=ejs.render(templatestr,{packageName,tableName,columns:rows})
+        let codestr=ejs.render(templatestr,{packageName,tableName,columns:rows,schemaName:rows[0].schemaName})
         fs.writeFile(targetDir+tableName+".java",codestr,()=>{
             console.log("ok--"+tableName)
         })

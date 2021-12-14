@@ -1,5 +1,6 @@
 package <%=packageName%>;
 
+@org.azeroth.nalu.Table(schema="<%=schemaName%>")
 public class <%=tableName%> {
 <% columns.forEach(function(col){ %>
     <%=col.typeName%> <%=col.name%>;
