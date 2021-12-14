@@ -32,10 +32,10 @@ public class TableSet<T> {
         if(ant==null){
             this.tableName=this.meta.getSimpleName();
         }else{
-            if(ant.schemal()==null)
+            if(ant.schema()==null)
                 this.tableName=ant.name()==null?this.meta.getSimpleName():ant.name();
             else
-                this.tableName=String.format("%s.%s",ant.schemal(),ant.name()==null?this.meta.getSimpleName():ant.name());
+                this.tableName=String.format("%s.%s",ant.schema(),ant.name()==null?this.meta.getSimpleName():ant.name());
         }
         this.tableAlias=this.tableName;
         if(dictSetMethod.get(meta.getName())!=null)
