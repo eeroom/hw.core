@@ -44,14 +44,7 @@ public class DbSet<T> extends TableSet<T> {
         return this;
     }
 
-    public <C> DbSet<T> selectCol(Function<DbSet<T>,Column<C>> exp){
-        var col= exp.apply(this);
-        var snode=new SelectNode(col);
-        this.lstSelectNode.add(snode);
-        return this;
-    }
-
-    public <C> DbSet<T> selectAllCol(){
+    public DbSet<T> select(){
         var lst= dictGetMethod.get(this.meta.getName()).keySet().stream()
                 .map(colName->new Column(this,colName))
                 .map(col->new SelectNode(col))
@@ -69,19 +62,19 @@ public class DbSet<T> extends TableSet<T> {
         return this;
     }
 
-    public WhereNode mydefine(MyFunction2<String, ParseSqlContext,String> wherestr){
+    public WhereNode whereByRaw(MyFunction2<String, ParseSqlContext,String> wherestr){
         var wh=new WhereNodeMyDefine(this,wherestr);
         return wh;
     }
 
-    public <B> DbSet<Tuple.Tuple2<T,B>> join(DbSet<B> right, MyFunction2<DbSet<T>,DbSet<B>, WhereNode> on){
-            var dbset= new DbSetComplex<>(this,right,on,(x,y)->Tuple.create(x,y));
+    public <B,A> DbSet<Tuple.Tuple2<T,B>> join(DbSet<B> right, Function<T,A> leftcol,Function<B,A> rightcol){
+            var dbset= new DbSetComplex<>(this,right,leftcol,rightcol,(x,y)->Tuple.create(x,y));
             dbset.dbContext=this.dbContext;
             return dbset;
     }
 
-    public <B,C> DbSet<C> join(DbSet<B> right, MyFunction2<DbSet<T>,DbSet<B>, WhereNode> on,MyFunction2<T,B,C> mapper){
-        var dbset= new DbSetComplex<>(this,right,on,mapper);
+    public <B,C,A> DbSet<C> join(DbSet<B> right,  Function<T,A> leftcol,Function<B,A> rightcol,MyFunction2<T,B,C> mapper){
+        var dbset= new DbSetComplex<>(this,right,leftcol,rightcol,mapper);
         dbset.dbContext=this.dbContext;
         return dbset;
     }
