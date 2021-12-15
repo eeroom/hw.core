@@ -79,7 +79,19 @@ public class DbSet<T> extends TableSet<T> {
         return dbset;
     }
 
+    public T firstOrDefualt() throws Throwable{
+        var lst=this.toList();
+        if(lst.size()<1)
+            return null;
+        return lst.get(0);
+    }
 
+    public <R> R firstOrDefualt(MyFunction<T,R> mapper) throws Throwable{
+        var lst=this.toList(mapper);
+        if(lst.size()<1)
+            return null;
+        return lst.get(0);
+    }
 
     public  List<T> toList() throws Throwable {
         var wrapper=this.dbContext.toList(this::map,(x, y)->this.initParseSqlContext(x,y));
