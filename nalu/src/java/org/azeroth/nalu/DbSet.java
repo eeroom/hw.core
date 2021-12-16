@@ -62,9 +62,25 @@ public class DbSet<T> extends TableSet<T> {
         return this;
     }
 
-    public WhereNode whereByRaw(MyFunction2<String, ParseSqlContext,String> wherestr){
+    public DbSet<T> whereByRaw(MyFunction2<String, ParseSqlContext,String> wherestr){
         var wh=new WhereNodeMyDefine(this,wherestr);
-        return wh;
+        if(this.whereNode==null)
+            this.whereNode=wh;
+        else
+            this.whereNode=this.whereNode.and(wh);
+        return this;
+    }
+
+    public DbSet<T> whereIf(boolean flag,Function<DbSet<T>, WhereNode> pred){
+        if(!flag)
+            return this;
+        return this.where(pred);
+    }
+
+    public DbSet<T> whereByRawIf(boolean flag,MyFunction2<String, ParseSqlContext,String> wherestr){
+        if(!flag)
+            return this;
+        return this.whereByRaw(wherestr);
     }
 
     public <B,A> DbSet<Tuple.Tuple2<T,B>> join(DbSet<B> right, Function<T,A> leftcol,Function<B,A> rightcol){
