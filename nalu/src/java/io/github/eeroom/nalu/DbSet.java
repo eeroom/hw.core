@@ -93,14 +93,14 @@ public class DbSet<T> extends TableSet<T> {
         return dbset;
     }
 
-    public T firstOrDefualt() throws Throwable{
+    public T firstOrDefault() throws Throwable{
         var lst=this.toList();
         if(lst.size()<1)
             return null;
         return lst.get(0);
     }
 
-    public <R> R firstOrDefualt(MyFunction<T,R> mapper) throws Throwable{
+    public <R> R firstOrDefault(MyFunction<T,R> mapper) throws Throwable{
         var lst=this.toList(mapper);
         if(lst.size()<1)
             return null;
