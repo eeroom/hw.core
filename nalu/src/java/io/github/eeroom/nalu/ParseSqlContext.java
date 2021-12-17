@@ -75,6 +75,8 @@ public class ParseSqlContext {
                     orderbystr);
             return sql;
         }else {
+            if("".equals(orderbystr))
+                throw new IllegalArgumentException("必须指定排序的列");
             var tmpRowIndex = "_theRowIndex";
             var cmdstr =String.format("select %s,\r\nROW_NUMBER() OVER(%s) AS %s \r\n from %s\r\n%s\r\n%s\r\n%s\r\n%s",
                     selectstr,

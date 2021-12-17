@@ -39,7 +39,9 @@ public class ParseSqlContextMysql extends  ParseSqlContext {
             lstsql.add(sql);
             return lstsql;
         }
-            var sql=String.format("select %s \r\n from %s\r\n%s\r\n%s\r\n%s\r\n%s\r\n%s \r\nlimit %s,%s ",
+        if("".equals(orderbystr))
+            throw new IllegalArgumentException("必须指定排序的列");
+        var sql=String.format("select %s \r\n from %s\r\n%s\r\n%s\r\n%s\r\n%s\r\n%s \r\nlimit %s,%s ",
                 selectstr,
                 fromstr,
                 joinstr,
@@ -49,16 +51,15 @@ public class ParseSqlContextMysql extends  ParseSqlContext {
                 orderbystr,
                 String.valueOf(this.skiprows),
                 String.valueOf(this.takerows));
-            var sqlcount = String.format("select count(0) as _theRowIndex \r\n from %s\r\n%s\r\n%s\r\n%s\r\n%s\r\n%s",
+        var sqlcount = String.format("select count(0) as _theRowIndex \r\n from %s\r\n%s\r\n%s\r\n%s\r\n%s",
                     fromstr,
                     joinstr,
                     wherestr,
                     groupbystr,
-                    havingstr,
-                    orderbystr);
-            lstsql.add(sql);
-            lstsql.add(sqlcount);
-            return  lstsql;
+                    havingstr);
+        lstsql.add(sql);
+        lstsql.add(sqlcount);
+        return  lstsql;
     }
 
     @Override
@@ -98,6 +99,9 @@ public class ParseSqlContextMysql extends  ParseSqlContext {
                 }
             }
             try(var pst= cnn.prepareStatement(lstcmdstr.get(1))) {
+                for (var i = 0; i<this.lstDbParameter.size(); i++){
+                    pst.setObject(i+1,this.lstDbParameter.get(i).item2);
+                }
                 try(var rs= pst.executeQuery()) {
                     rs.next();
                     rt.count= rs.getInt("_theRowIndex");
