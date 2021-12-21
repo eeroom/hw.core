@@ -1,10 +1,8 @@
-package io.github.eeroom.sf;
-
-import javax.servlet.http.HttpServletResponse;
+package io.github.eeroom.entity;
 
 public class ApidataWrapper {
     public ApidataWrapper(){
-        this.code= HttpServletResponse.SC_OK;
+        this.code= 200;
     }
     public Object getData() {
         return data;
