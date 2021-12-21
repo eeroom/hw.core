@@ -35,7 +35,7 @@ dictTypeMap["real"]= "Double";
 dictTypeMap["money"]= "Double";
 dictTypeMap["double"]= "Double";
 dictTypeMap["float"]= "Double";
-dictTypeMap["decimal"]= "Double";
+dictTypeMap["decimal"]= "java.math.BigDecimal";
 dictTypeMap["numeric"]= "Double";
 
 dictTypeMap["bigint"]= "Long";
