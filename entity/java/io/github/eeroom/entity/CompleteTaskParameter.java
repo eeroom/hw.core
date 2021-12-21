@@ -1,34 +1,44 @@
 package io.github.eeroom.entity;
 
 public class CompleteTaskParameter {
-    public String getId() {
-        return id;
-    }
+    String taskId;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    UserTaskResult result;
 
-
-    String id;
-
-    String result;
-
-    public String getResult() {
+    public UserTaskResult getResult() {
         return result;
     }
 
-    public void setResult(String result) {
+    public void setResult(UserTaskResult result) {
         this.result = result;
     }
 
-    public String getTag() {
-        return tag;
+
+    public String getTaskId() {
+        return taskId;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 
-    String tag;
+    public String getCompleteformdatajson() {
+        return completeformdatajson;
+    }
+
+    public void setCompleteformdatajson(String completeformdatajson) {
+        this.completeformdatajson = completeformdatajson;
+    }
+
+    String completeformdatajson;
+
+    public String getDelegetHandler() {
+        return delegetHandler;
+    }
+
+    public void setDelegetHandler(String delegetHandler) {
+        this.delegetHandler = delegetHandler;
+    }
+
+    String delegetHandler;
 }

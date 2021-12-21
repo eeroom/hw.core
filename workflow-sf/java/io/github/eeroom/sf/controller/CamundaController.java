@@ -3,6 +3,7 @@ package io.github.eeroom.sf.controller;
 import io.github.eeroom.entity.CompleteTaskParameter;
 import io.github.eeroom.entity.DeployAdd;
 import io.github.eeroom.entity.StartProcessParameter;
+import io.github.eeroom.entity.UserTaskResult;
 import io.github.eeroom.sf.HttpPost;
 import io.github.eeroom.sf.LoginUserInfo;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
@@ -31,16 +32,16 @@ public class CamundaController {
     LoginUserInfo loginUserInfo;
 
     @HttpPost
-    public DeployAdd deploy(DeployAdd deployAdd, MultipartFile bpmnFile) throws Throwable {
+    public boolean deploy(MultipartFile bpmnFile) throws Throwable {
         var dlm = this.processEngine.getRepositoryService().createDeployment()
                 .addZipInputStream(new java.util.zip.ZipInputStream(bpmnFile.getInputStream(), Charset.forName("GBK")))
                 .deploy();
-        return new DeployAdd();
+        return true;
     }
 
     @HttpPost
     public List<?> getProcessDefinitionEntity() throws Throwable {
-        var lstDeployment = this.processEngine.getRepositoryService().createProcessDefinitionQuery()
+        var lstProcessDefinition = this.processEngine.getRepositoryService().createProcessDefinitionQuery()
                 .latestVersion()
                 .orderByProcessDefinitionKey()
                 .asc()
@@ -118,11 +119,13 @@ public class CamundaController {
                     }
                 })
                 .collect(java.util.stream.Collectors.toList());
-        return lstDeployment;
+        return lstProcessDefinition;
     }
 
     public ProcessInstance startProcess(StartProcessParameter startProcessParameter) {
-
+        var map=new HashMap<String,Object>();
+        map.put("bizType",startProcessParameter.getBizType());
+        map.put("createformdatajson",startProcessParameter.getCreateformdatajson());
         var x = this.processEngine.getRuntimeService()
                 .startProcessInstanceByKey(startProcessParameter.getKey());
         var tmp=new ProcessInstance(){
@@ -166,6 +169,7 @@ public class CamundaController {
                 return x.getTenantId();
             }
         };
+        //往主业务表添加一条记录
         return tmp;
     }
 
@@ -345,17 +349,25 @@ public class CamundaController {
     }
 
     public  void  complete(CompleteTaskParameter completeTaskParameter){
+        //前置校验，当前登录人确实是这个task的处理人
+        var task= this.processEngine.getTaskService().createTaskQuery().taskId(completeTaskParameter.getTaskId())
+                .singleResult();
+        if(task==null)
+            throw new IllegalArgumentException("指定id的task不存在，taskid="+completeTaskParameter.getTaskId());
+        if(!this.loginUserInfo.equals(task.getAssignee()))
+            throw new IllegalArgumentException("您不是该任务的处理人");
         //map中的键和可能值，流程图和completeTaskParameter要事先约定好，
         // 这里的约定是，UserTask完成后，如果需要根据完成的结果来决定后续不同的分支走向，就通过result这个参数，参数值的可能情况有：ok,deleget，驳回
-        if(completeTaskParameter.getResult().equals("deleget")){
-            //转审批
-            this.processEngine.getTaskService().delegateTask(completeTaskParameter.getId(),completeTaskParameter.getTag());
+        if(completeTaskParameter.getResult()== UserTaskResult.deleget){
+            this.processEngine.getTaskService().delegateTask(completeTaskParameter.getTaskId(),completeTaskParameter.getDelegetHandler());
             return;
         }
         var map=new HashMap<String,Object>();
         map.put("result",completeTaskParameter.getResult());
+        map.put("completeformdatajson",completeTaskParameter.getCompleteformdatajson());
         this.processEngine.getTaskService()
-                .complete(completeTaskParameter.getId(),map);
+                .complete(completeTaskParameter.getTaskId(),map);
+        //更新主业务表子表，把状态置为close
     }
 
 }
