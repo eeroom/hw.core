@@ -23,7 +23,14 @@
   </dependencies>
 
   <build>
+    <!--    maven项目默认的路径是/src/main/java,现在改成/src/java，所有需要修改pom的配置文件-->
     <sourceDirectory>${basedir}/src/java</sourceDirectory>
+    <resources>
+      <resource>
+        <!--    maven项目默认的路径是/src/main/resources,现在改成/src/resources，所有需要修改pom的配置文件-->
+        <directory>${basedir}/src/resources</directory>
+      </resource>
+    </resources>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
