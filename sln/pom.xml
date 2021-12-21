@@ -11,6 +11,8 @@
   <modules>
     <module>../sln-ui</module>
     <module>../sln-model</module>
+    <module>../workflow-sf</module>
+    <module>../entity</module>
   </modules>
 
   <name>sln</name>
