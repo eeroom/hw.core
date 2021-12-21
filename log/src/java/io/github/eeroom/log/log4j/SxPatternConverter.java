@@ -1,4 +1,4 @@
-package org.azeroth.log4jdemo;
+package io.github.eeroom.log.log4j;
 
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.plugins.Plugin;

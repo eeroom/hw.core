@@ -1,5 +1,6 @@
-package org.azeroth.log4jdemo;
+package io.github.eeroom.log;
 
+import io.github.eeroom.log.log4j.Student;
 import org.apache.logging.log4j.Logger;
 
 public class App {

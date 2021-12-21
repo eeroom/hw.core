@@ -11,7 +11,7 @@
             </Layout>
         </Appender>
         <Appender type="Jdbc" name="db" tableName="Log">
-            <ConnectionFactory class="org.azeroth.log4jdemo.ConnectionFactory" method="getConnection" />
+            <ConnectionFactory class="io.github.eeroom.log.log4j.ConnectionFactory" method="getConnection" />
             <Column name="Name" pattern="%sx{Name}" />
         </Appender>
     </Appenders>

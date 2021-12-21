@@ -1,4 +1,4 @@
-package org.azeroth.log4jdemo;
+package io.github.eeroom.log.log4j;
 
 public class Student {
     public  int Age;
