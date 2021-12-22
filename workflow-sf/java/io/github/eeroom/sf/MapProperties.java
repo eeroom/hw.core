@@ -1,7 +1,9 @@
 package io.github.eeroom.sf;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MapProperties {
     @Value("${camundaJdbcDriver}")
     String camundaJdbcDriver;
@@ -27,4 +29,13 @@ public class MapProperties {
     int maxUploadSize;
     @Value("${upload.maxInMemorySize}")
     int maxInMemorySize;
+
+    @Value("${db.sf.driver}")
+    String dbsfdriver;
+    @Value("${db.sf.url}")
+    String dbsfurl;
+    @Value("${db.sf.username}")
+    String dbsfusername;
+    @Value("${db.sf.pwd}")
+    String dbsfpwd;
 }

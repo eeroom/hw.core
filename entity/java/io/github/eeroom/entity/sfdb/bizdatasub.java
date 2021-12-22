@@ -1,6 +1,6 @@
 package io.github.eeroom.entity.sfdb;
 
-public class bizsub {
+public class bizdatasub {
 
     Integer id;
 

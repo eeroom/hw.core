@@ -1,6 +1,6 @@
 package io.github.eeroom.entity.sfdb;
 
-public class biz {
+public class bizdata {
 
     String processId;
 
