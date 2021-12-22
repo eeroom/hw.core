@@ -3,12 +3,7 @@ let lodash = require('lodash')
 let fs = require('fs')
 let ejs = require('ejs')
 let { env } = require('process')
-let cfg = {
-    user: 'root',
-    password: env.mysql_pwd,
-    host: 'localhost',
-    database: 'camundaworkflow'
-}
+
 let dictTypeMap = {};
 dictTypeMap["text"]= "String";
 dictTypeMap["longtext"]= "String";
@@ -45,9 +40,17 @@ dictTypeMap["image"]= "Byte[]";
 dictTypeMap["longblob"]= "Byte[]";
 dictTypeMap["blob"]= "Byte[]";
 
+let dbName="workflow-sf"
+let cfg = {
+    user: 'root',
+    password: env.mysql_pwd,
+    host: 'localhost',
+    database: dbName
+}
+
 let templatestr = fs.readFileSync('./t4-mysql-template.ejs').toString('utf-8');
-let packageName = "org.azeroth.mssqlserverclient";
-let targetDir = "mssqlserverclient\\src\\main\\java\\org\\azeroth\\mssqlserverclient\\";
+let packageName = "io.github.eeroom.entity.sfdb";
+let targetDir = "entity\\java\\io\\github\\eeroom\\entity\\sfdb\\";
 
 let cnn = mysql.createConnection(cfg)
 
@@ -61,7 +64,7 @@ cnn.query(sql, function (err, res) {
 })
 
 function createBeanByTemplate(tableName, cnn) {
-    let sql1 = `select * from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='${tableName}'`
+    let sql1 = `select * from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='${tableName}' and TABLE_SCHEMA='${dbName}'`
     let q1 = new Promise((ok, nok) => {
         cnn.query(sql1, (err, res) => {
             ok(res)
