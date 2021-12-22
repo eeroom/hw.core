@@ -127,7 +127,7 @@ public class CamundaController {
         map.put("bizType",startProcessParameter.getBizType());
         map.put("createformdatajson",startProcessParameter.getCreateformdatajson());
         var x = this.processEngine.getRuntimeService()
-                .startProcessInstanceByKey(startProcessParameter.getKey());
+                .startProcessInstanceByKey(startProcessParameter.getKey(),map);
         var tmp=new ProcessInstance(){
             @Override
             public String getProcessDefinitionId() {
@@ -355,7 +355,7 @@ public class CamundaController {
         if(task==null)
             throw new IllegalArgumentException("指定id的task不存在，taskid="+completeTaskParameter.getTaskId());
         if(!this.loginUserInfo.equals(task.getAssignee()))
-            throw new IllegalArgumentException("您不是该任务的处理人");
+            throw new IllegalArgumentException("你不是当前任务的处理人！");
         //map中的键和可能值，流程图和completeTaskParameter要事先约定好，
         // 这里的约定是，UserTask完成后，如果需要根据完成的结果来决定后续不同的分支走向，就通过result这个参数，参数值的可能情况有：ok,deleget，驳回
         if(completeTaskParameter.getResult()== UserTaskResult.deleget){

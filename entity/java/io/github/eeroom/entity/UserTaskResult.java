@@ -1,9 +1,9 @@
 package io.github.eeroom.entity;
 
 public enum UserTaskResult {
-    ok(0,"通过"),
-    abort(1,"驳回"),
-    deleget(2,"转审");
+    ok(1,"通过"),
+    abort(2,"驳回"),
+    deleget(3,"转审");
 
     int value;
     String name;
