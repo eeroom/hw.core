@@ -14,7 +14,6 @@ import java.util.Date;
 @RestController
 public class Account {
     @SkipAuthentication
-    @HttpPost
     public ResponseEntity<ApidataWrapper> login(LoginInput loginInput){
         var token= com.auth0.jwt.JWT.create()
                 .withIssuer("workflow")

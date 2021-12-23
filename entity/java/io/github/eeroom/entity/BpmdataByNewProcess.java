@@ -3,13 +3,17 @@ package io.github.eeroom.entity;
 import java.util.HashMap;
 
 public class BpmdataByNewProcess {
-    public String getTaskId() {
-        return taskId;
+    public int getBizType() {
+        return bizType;
     }
 
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
+    public void setBizType(int bizType) {
+        this.bizType = bizType;
     }
+
+
+    int bizType;
+
 
     public HashMap<String, Object> getFormdata() {
         return formdata;
@@ -19,6 +23,5 @@ public class BpmdataByNewProcess {
         this.formdata = formdata;
     }
 
-    String taskId;
     HashMap<String,Object> formdata;
 }

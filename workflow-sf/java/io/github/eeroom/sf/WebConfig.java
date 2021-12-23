@@ -109,7 +109,7 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
         var apiInfo= new ApiInfoBuilder()
                 .title("azeroth-api")
                 .description("swagger-bootstrap-ui")
-                .termsOfServiceUrl("http://localhost:8084/")
+                .termsOfServiceUrl("http://localhost:8121/")
                 .version("1.0")
                 .build();
 
@@ -117,7 +117,7 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
                 .enable(true)
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("org.azeroth.workflow.controller"))
+                .apis(RequestHandlerSelectors.basePackage("io.github.eeroom"))
                 .paths(PathSelectors.any())
                 .build();
         //配置各个方法的请求头设置（非全局），Access-Token是请求头名称
@@ -127,6 +127,7 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
                 .description("jwt")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header")
+                .defaultValue("3333333333")
                 .required(false)
                 .build();
         var lstp=new ArrayList<Parameter>();

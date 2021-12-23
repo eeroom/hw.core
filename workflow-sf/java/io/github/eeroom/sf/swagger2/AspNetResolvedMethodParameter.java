@@ -28,7 +28,7 @@ public class AspNetResolvedMethodParameter extends ResolvedMethodParameter {
             return Lists.newArrayList(lst);
         if(methodParameter.getMethod().getParameters().length!=1)
             return Lists.newArrayList(lst);
-        if(methodParameter.getContainingClass().getPackageName().indexOf("org.azeroth.workflow.controller")<0)
+        if(methodParameter.getContainingClass().getPackageName().indexOf("io.github.eeroom.sf.controller")<0)
             return Lists.newArrayList(lst);;
         RequestBody tmp= null;
         try {

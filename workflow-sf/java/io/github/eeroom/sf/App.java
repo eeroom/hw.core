@@ -61,7 +61,7 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
 
     @Override
     protected FrameworkServlet createDispatcherServlet(WebApplicationContext context) {
-        return super.createDispatcherServlet(context);
+        return new MyDispatcherServlet(context);
     }
 
     @Override
@@ -119,8 +119,8 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
             //配置上传功能
             App.this.registration.setMultipartConfig(new MultipartConfigElement(mapProperties.uploadtmpdir,mapProperties.maxUploadSize,mapProperties.maxUploadSize,mapProperties.maxInMemorySize));
             //配置filter
-            App.this.authenticationFilterDynamic.setInitParameter("a1",mapProperties.camundaJdbcDriver);
-            App.this.authenticationFilterDynamic.addMappingForUrlPatterns(null,false,"/*");
+//            App.this.authenticationFilterDynamic.setInitParameter("a1",mapProperties.camundaJdbcDriver);
+//            App.this.authenticationFilterDynamic.addMappingForUrlPatterns(null,false,"/*");
         }
     }
 }

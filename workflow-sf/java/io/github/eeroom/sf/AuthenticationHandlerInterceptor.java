@@ -19,7 +19,7 @@ public class AuthenticationHandlerInterceptor implements HandlerInterceptor {
         if(!(o instanceof HandlerMethod))
             return true;
         var method=(HandlerMethod)o;
-        if(method.getMethod().getDeclaringClass().getPackageName().indexOf("workflow.controller")<0)
+        if(method.getMethod().getDeclaringClass().getPackageName().indexOf("sf.controller")<0)
             return true;
         if(method.getMethodAnnotation(SkipAuthentication.class)!=null)
             return true;
