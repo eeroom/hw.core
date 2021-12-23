@@ -24,12 +24,12 @@ public class AssigneeHook implements TaskListener {
             tmp.sethandlerId(x);
             tmp.setprocessId(processId);
             tmp.settaskId(taskId);
-            tmp.setresult(0);
+            tmp.setHandlerByMe(0);
             tmp.settaskstatus(0);
             return tmp;
         }).collect(Collectors.toList());
         dbcontext.add(lstbizdatasub)
-                .setInsertCol(x-> Columns.of(x.gethandlerId(),x.getprocessId(),x.gettaskId(),x.getresult(),x.gettaskstatus()));
+                .setInsertCol(x-> Columns.of(x.gethandlerId(),x.getprocessId(),x.gettaskId(),x.getHandlerByMe(),x.gettaskstatus()));
         dbcontext.saveChange();
     }
 }

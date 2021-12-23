@@ -42,15 +42,17 @@ public class bizdatasub {
         this.handlerId = pValue;
     }
 
-    Integer result;
-
-    public Integer getresult() {
-        return result;
+    public Integer getHandlerByMe() {
+        return handlerByMe;
     }
 
-    public void setresult(Integer pValue) {
-        this.result = pValue;
+    public void setHandlerByMe(Integer handlerByMe) {
+        this.handlerByMe = handlerByMe;
     }
+
+    Integer handlerByMe;
+
+
 
     String completeformdatajson;
 

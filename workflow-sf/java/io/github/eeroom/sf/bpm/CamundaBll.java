@@ -55,11 +55,19 @@ public class CamundaBll {
                 .singleResult();
         if(task==null)
             throw new IllegalArgumentException("指定id的task不存在，taskid="+completeTaskParameter.getTaskId());
-        if(!this.loginUserInfo.equals(task.getAssignee()))
+        if(!this.loginUserInfo.getName().equals(task.getAssignee()))
             throw new IllegalArgumentException("你不是当前任务的处理人！");
         //更新主业务表子表，把状态置为close
+        //一个人任务，多人处理的情况下，当前人记录表单数据，其他人只更新taskstatus
+        this.dbContext.edit(bizdatasub.class)
+                .setUpdateCol(x->x.getcompleteformdatajson(),this.jsonHelper.serializeObject(completeTaskParameter.getFormdata()))
+                .setUpdateCol(x->x.getHandlerByMe(),1)
+                .where(x->x.col(a->a.gettaskId()).eq(completeTaskParameter.getTaskId()))
+                .where(x->x.col(a->a.gettaskstatus()).eq(0))
+                .where(x->x.col(a->a.gethandlerId()).eq(this.loginUserInfo.getName()));
         this.dbContext.edit(bizdatasub.class)
                 .setUpdateCol(x->x.gettaskstatus(),1)
+                .setUpdateCol(x->x.getcompleteformdatajson(),this.jsonHelper.serializeObject(completeTaskParameter.getFormdata()))
                 .where(x->x.col(a->a.gettaskId()).eq(completeTaskParameter.getTaskId()))
                 .where(x->x.col(a->a.gettaskstatus()).eq(0));
         this.dbContext.saveChange();
@@ -75,5 +83,6 @@ public class CamundaBll {
         }else {
             this.processEngine.getTaskService().complete(completeTaskParameter.getTaskId(),completeTaskParameter.getFormdata());
         }
+        int aa=44;
     }
 }

@@ -28,6 +28,7 @@ public class KuaidiController {
         this.bll=bll;
         this.jsonHelper=jsonHelper;
         this.dbContext=dbContext;
+        this.loginUserInfo=loginUserInfo;
     }
 
     @SkipAuthentication
