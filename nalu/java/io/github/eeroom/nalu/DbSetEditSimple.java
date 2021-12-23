@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 public class DbSetEditSimple<T> extends TableSet<T> {
     WhereNode whereNode;
     ArrayList<Tuple.Tuple2<Column,Object>> lstUpdateCol=new ArrayList<>();
-    DbSetEditSimple(Class<T> meta) throws Throwable {
+    DbSetEditSimple(Class<T> meta)  {
         super(meta);
     }
 

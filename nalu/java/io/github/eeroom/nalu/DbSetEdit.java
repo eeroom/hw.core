@@ -10,7 +10,7 @@ public class DbSetEdit<T> extends TableSet<T> {
     List<Column> lstcol;
     MyFunction2<DbSetEdit<T>,T,WhereNode> whCreator;
 
-    DbSetEdit(Class<T> meta,List<T> lstEntity) throws Throwable {
+    DbSetEdit(Class<T> meta,List<T> lstEntity) {
         super(meta);
         this.lstEntity=lstEntity;
     }

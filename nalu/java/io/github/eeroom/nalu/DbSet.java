@@ -19,7 +19,7 @@ public class DbSet<T> extends TableSet<T> {
 
     }
 
-    DbSet(DbContext dbContext,Class<T> meta) throws Throwable {
+    DbSet(DbContext dbContext,Class<T> meta)  {
         super(meta);
         this.dbContext=dbContext;
     }
@@ -93,36 +93,36 @@ public class DbSet<T> extends TableSet<T> {
         return dbset;
     }
 
-    public T firstOrDefault() throws Throwable{
+    public T firstOrDefault() {
         var lst=this.toList();
         if(lst.size()<1)
             return null;
         return lst.get(0);
     }
 
-    public <R> R firstOrDefault(MyFunction<T,R> mapper) throws Throwable{
+    public <R> R firstOrDefault(MyFunction<T,R> mapper) {
         var lst=this.toList(mapper);
         if(lst.size()<1)
             return null;
         return lst.get(0);
     }
 
-    public  List<T> toList() throws Throwable {
+    public  List<T> toList()  {
         var wrapper=this.dbContext.toList(this::map,(x, y)->this.initParseSqlContext(x,y));
         return wrapper.getLst();
     }
 
-    public <R>  List<R> toList(MyFunction<T,R> mapper) throws Throwable {
+    public <R>  List<R> toList(MyFunction<T,R> mapper)  {
         var wrapper=this.dbContext.toList(x->mapper.apply(this.map(x)),(x, y)->this.initParseSqlContext(x,y));
         return wrapper.getLst();
     }
 
-    public  PagingList<T> toListByPaging() throws Throwable {
+    public  PagingList<T> toListByPaging()  {
         var lst=this.dbContext.toList(this::map,(x, y)->this.initParseSqlContext(x,y));
         return lst;
     }
 
-    public <R>   PagingList<R> toListByPaging(MyFunction<T,R> mapper) throws Throwable {
+    public <R>   PagingList<R> toListByPaging(MyFunction<T,R> mapper)  {
         var wrapper=this.dbContext.toList(x->mapper.apply(this.map(x)),(x, y)->this.initParseSqlContext(x,y));
         return wrapper;
     }

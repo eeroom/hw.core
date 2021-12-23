@@ -7,7 +7,7 @@ import java.util.function.Function;
 public class DbSetDel<T> extends TableSet<T> {
     List<T> lstEntity;
     MyFunction2<DbSetDel<T>,T,WhereNode> whCreator;
-    DbSetDel(Class<T> meta,List<T> lstEntity) throws  Throwable{
+    DbSetDel(Class<T> meta,List<T> lstEntity){
         super(meta);
         this.lstEntity=lstEntity;
     }

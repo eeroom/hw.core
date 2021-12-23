@@ -1,5 +1,6 @@
 package io.github.eeroom.nalu;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,9 +22,13 @@ public class TableSet<T> {
 
     }
 
-    TableSet(Class<T> meta) throws Throwable {
+    TableSet(Class<T> meta)  {
         this.meta=meta;
-        this.entityIdentity=meta.getConstructor(null).newInstance(null);
+        try {
+            this.entityIdentity=meta.getConstructor(null).newInstance(null);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
         this.handler=new PropertyNameHandler(this,this.entityIdentity);
         //使用cglib创建class的代理对象，java自带的代理类只能创建基于接口的代理对象，
         //这里是创建数据库model的pojo对象的代理，没有接口，所以需要使用cglib的

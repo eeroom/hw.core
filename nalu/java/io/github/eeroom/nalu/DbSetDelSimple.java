@@ -5,7 +5,7 @@ import java.util.function.Function;
 
 public class DbSetDelSimple<T> extends TableSet<T> {
     WhereNode whereNode;
-    DbSetDelSimple(Class<T> meta) throws Throwable {
+    DbSetDelSimple(Class<T> meta) {
         super(meta);
     }
 
