@@ -8,9 +8,8 @@
       <bpmn:incoming>Flow_04rmids</bpmn:incoming>
       <bpmn:outgoing>Flow_10ljnam</bpmn:outgoing>
     </bpmn:task>
-    <bpmn:userTask id="Activity_1up2c4f" name="酒馆接收包裹">
+    <bpmn:userTask id="Activity_1up2c4f" name="酒馆接收包裹" camunda:assignee="${sender}">
       <bpmn:extensionElements>
-        <camunda:taskListener class="io.github.eeroom.sf.bpm.KuaidiSenderSetter" event="create" />
         <camunda:taskListener class="io.github.eeroom.sf.bpm.AssigneeHook" event="assignment" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_10ljnam</bpmn:incoming>
@@ -25,15 +24,19 @@
     </bpmn:userTask>
     <bpmn:task id="Activity_0m511ea" name="系统处理(通知分析完成)">
       <bpmn:extensionElements>
-        <camunda:executionListener class="io.github.eeroom.sf.bpm.NotifyKuaidiStep" event="start" />
+        <camunda:executionListener class="io.github.eeroom.sf.bpm.KuaidiNoticer" event="start" />
         <camunda:inputOutput>
-          <camunda:inputParameter name="step">check</camunda:inputParameter>
+          <camunda:inputParameter name="msgkeys">zhongliang</camunda:inputParameter>
+          <camunda:inputParameter name="msgtype">check</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1q0qzid</bpmn:incoming>
       <bpmn:outgoing>Flow_0p53sx0</bpmn:outgoing>
     </bpmn:task>
-    <bpmn:userTask id="Activity_01og2hz" name="系统处理(等待审批)">
+    <bpmn:userTask id="Activity_01og2hz" name="系统处理(等待审批)" camunda:assignee="${thirdpartId}">
+      <bpmn:extensionElements>
+        <camunda:taskListener class="io.github.eeroom.sf.bpm.AssigneeHook" event="assignment" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0p53sx0</bpmn:incoming>
       <bpmn:outgoing>Flow_1cpo3tl</bpmn:outgoing>
     </bpmn:userTask>

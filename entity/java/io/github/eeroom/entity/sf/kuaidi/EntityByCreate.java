@@ -1,17 +1,11 @@
-package io.github.eeroom.entity;
+package io.github.eeroom.entity.sf.kuaidi;
 
-public class KuaidiCreateInput {
-    String deptName;
+public class EntityByCreate {
+    String thirdpartId;
     String sender;
     String reciver;
-
-    public String getDeptName() {
-        return deptName;
-    }
-
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
-    }
+    int senderCityId;
+    int reciveCityId;
 
     public String getSender() {
         return sender;
@@ -45,6 +39,13 @@ public class KuaidiCreateInput {
         this.reciveCityId = reciveCityId;
     }
 
-    int senderCityId;
-    int reciveCityId;
+    public String getThirdpartId() {
+        return thirdpartId;
+    }
+
+    public void setThirdpartId(String thirdpartId) {
+        this.thirdpartId = thirdpartId;
+    }
+
+
 }

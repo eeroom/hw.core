@@ -62,4 +62,15 @@ public class bizdata {
         this.createformdatajson = pValue;
     }
 
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    int status;
+
 }

@@ -1,24 +1,20 @@
 package io.github.eeroom.sf.controller;
 
-import io.github.eeroom.entity.CompleteTaskParameter;
-import io.github.eeroom.entity.DeployAdd;
-import io.github.eeroom.entity.StartProcessParameter;
-import io.github.eeroom.entity.UserTaskResult;
+import io.github.eeroom.entity.BpmdataByNewProcess;
+import io.github.eeroom.entity.BpmdataByUserTask;
 import io.github.eeroom.sf.HttpPost;
+import io.github.eeroom.sf.JsonHelper;
 import io.github.eeroom.sf.LoginUserInfo;
 import io.github.eeroom.sf.SfDbContext;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.DelegationState;
 import org.camunda.bpm.engine.task.Task;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 import java.nio.charset.Charset;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import io.github.eeroom.entity.sfdb.*;
 @RestController
@@ -29,11 +25,12 @@ public class CamundaController {
     LoginUserInfo loginUserInfo;
 
     SfDbContext dbContext;
-
-    public CamundaController(org.camunda.bpm.engine.ProcessEngine processEngine, LoginUserInfo loginUserInfo, SfDbContext dbContext){
+    JsonHelper jsonHelper;
+    public CamundaController(org.camunda.bpm.engine.ProcessEngine processEngine, LoginUserInfo loginUserInfo, SfDbContext dbContext, JsonHelper jsonHelper){
         this.processEngine=processEngine;
         this.loginUserInfo=loginUserInfo;
         this.dbContext=dbContext;
+        this.jsonHelper=jsonHelper;
     }
 
 
@@ -46,7 +43,7 @@ public class CamundaController {
     }
 
     @HttpPost
-    public List<?> getProcessDefinitionEntity() throws Throwable {
+    public List<?> getProcessDefinitionEntity()  {
         var lstProcessDefinition = this.processEngine.getRepositoryService().createProcessDefinitionQuery()
                 .latestVersion()
                 .orderByProcessDefinitionKey()
@@ -128,24 +125,20 @@ public class CamundaController {
         return lstProcessDefinition;
     }
 
-    public io.github.eeroom.entity.sfdb.bizdata startProcess(StartProcessParameter startProcessParameter) throws Throwable {
+    public io.github.eeroom.entity.sfdb.bizdata startProcess(BpmdataByUserTask bpmdataByUserTask) {
         //根据业务id获取对应流程的key
         var btp= this.dbContext.dbSet(biztype.class).select()
-                .where(x->x.col(a->a.getid()).eq(startProcessParameter.getBizType()))
+                .where(x->x.col(a->a.getid()).eq(bpmdataByUserTask.getBizType()))
                 .firstOrDefault();
         if(btp==null)
-            throw new IllegalArgumentException("指定的业务类别不存在："+startProcessParameter.getBizType());
-        var map=new HashMap<String,Object>();
-        map.put("bizType",startProcessParameter.getBizType());
-        map.put("createformdatajson",startProcessParameter.getCreateformdatajson());
-
+            throw new IllegalArgumentException("指定的业务类别不存在："+ bpmdataByUserTask.getBizType());
         var processInstance = this.processEngine.getRuntimeService()
-                .startProcessInstanceByKey(btp.getcamundaKey(),map);
+                .startProcessInstanceByKey(btp.getcamundaKey(), bpmdataByUserTask.getFormdata());
         //往主业务表添加一条记录
         io.github.eeroom.entity.sfdb.bizdata biz=new io.github.eeroom.entity.sfdb.bizdata();
-        biz.setbizType(startProcessParameter.getBizType());
+        biz.setbizType(bpmdataByUserTask.getBizType());
         biz.setcreateBy(this.loginUserInfo.getName());
-        biz.setcreateformdatajson(startProcessParameter.getCreateformdatajson());
+        biz.setcreateformdatajson(this.jsonHelper.serializeObject(bpmdataByUserTask.getFormdata()));
         biz.setcreateTime(new java.sql.Timestamp(new Date().getTime()));
         biz.setprocessId(processInstance.getProcessInstanceId());
         this.dbContext.add(biz)
@@ -329,7 +322,7 @@ public class CamundaController {
         return lsttask;
     }
 
-    public  void  complete(CompleteTaskParameter completeTaskParameter) throws Throwable {
+    public  void  complete(BpmdataByNewProcess completeTaskParameter)  {
         //前置校验，当前登录人确实是这个task的处理人
         var task= this.processEngine.getTaskService().createTaskQuery().taskId(completeTaskParameter.getTaskId())
                 .singleResult();
@@ -344,15 +337,16 @@ public class CamundaController {
                 .where(x->x.col(a->a.gettaskstatus()).eq(0));
         this.dbContext.saveChange();
         //map中的键和可能值，流程图和completeTaskParameter要事先约定好，
-        // 这里的约定是，UserTask完成后，如果需要根据完成的结果来决定后续不同的分支走向，就通过result这个参数，参数值的可能情况有：ok,deleget，驳回
-        if(completeTaskParameter.getResult()== UserTaskResult.deleget){
-            this.processEngine.getTaskService().delegateTask(completeTaskParameter.getTaskId(),completeTaskParameter.getDelegetHandler());
+        // 这里的约定是，
+        // 如果UserTask执行结果是修改当前任务的执行人，就在表单数据中包含userTaskResult：delegate和delegetedHandler：新的执行人
+        String userTaskResult="userTaskResult";
+        String delegetedHandler="delegetedHandler";
+        if(completeTaskParameter.getFormdata().containsKey(userTaskResult) &&"delegate".equals(completeTaskParameter.getFormdata().get(userTaskResult))){
+            if(completeTaskParameter.getFormdata().containsKey(delegetedHandler) || completeTaskParameter.getFormdata().get(delegetedHandler).toString().length()<1)
+                throw new IllegalArgumentException("必须指定被委托人");
+            this.processEngine.getTaskService().delegateTask(completeTaskParameter.getTaskId(),completeTaskParameter.getFormdata().get(delegetedHandler).toString());
         }else {
-            var map=new HashMap<String,Object>();
-            map.put("result",completeTaskParameter.getResult());
-            map.put("completeformdatajson",completeTaskParameter.getCompleteformdatajson());
-            this.processEngine.getTaskService()
-                    .complete(completeTaskParameter.getTaskId(),map);
+            this.processEngine.getTaskService().complete(completeTaskParameter.getTaskId(),completeTaskParameter.getFormdata());
         }
     }
 

@@ -14,15 +14,12 @@ import java.sql.Connection;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class SfDbContext extends DbContext implements ApplicationContextAware {
+public class SfDbContext extends DbContext {
     MapProperties configdata;
-    static ApplicationContext rootcontext;
     public SfDbContext(MapProperties configdata){
         this.configdata=configdata;
     }
-    public static SfDbContext newInstance(){
-        return rootcontext.getBean(SfDbContext.class);
-    }
+
     @Override
     protected Connection getConnection() throws Throwable {
 
@@ -35,8 +32,4 @@ public class SfDbContext extends DbContext implements ApplicationContextAware {
         return new ParseSqlContextMysql();
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        rootcontext=applicationContext;
-    }
 }
