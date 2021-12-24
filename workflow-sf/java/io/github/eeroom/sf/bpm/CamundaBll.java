@@ -68,6 +68,18 @@ public class CamundaBll {
             throw new IllegalArgumentException("指定id的task不存在，taskid="+completeTaskParameter.getTaskId());
         if(!this.loginUserInfo.getName().equals(task.getAssignee()))
             throw new IllegalArgumentException("你不是当前任务的处理人！");
+        //map中的键和可能值，流程图和completeTaskParameter要事先约定好，
+        // 这里的约定是，
+        // 如果UserTask执行结果是修改当前任务的执行人，就在表单数据中包含userTaskResult：delegate和delegetedHandler：新的执行人
+        String userTaskResult="userTaskResult";
+        String delegetedHandler="delegetedHandler";
+        if(completeTaskParameter.getFormdata().containsKey(userTaskResult) &&"delegate".equals(completeTaskParameter.getFormdata().get(userTaskResult))){
+            if(completeTaskParameter.getFormdata().containsKey(delegetedHandler) || completeTaskParameter.getFormdata().get(delegetedHandler).toString().length()<1)
+                throw new IllegalArgumentException("必须指定被委托人");
+            this.processEngine.getTaskService().delegateTask(completeTaskParameter.getTaskId(),completeTaskParameter.getFormdata().get(delegetedHandler).toString());
+        }else {
+            this.processEngine.getTaskService().complete(completeTaskParameter.getTaskId(),completeTaskParameter.getFormdata());
+        }
         //更新主业务表子表，把状态置为close
         //一个人任务，多人处理的情况下，当前人记录表单数据，其他人只更新taskstatus
         this.dbContext.edit(bizdatasub.class)
@@ -82,18 +94,5 @@ public class CamundaBll {
                 .where(x->x.col(a->a.gettaskId()).eq(completeTaskParameter.getTaskId()))
                 .where(x->x.col(a->a.gettaskstatus()).eq(0));
         this.dbContext.saveChange();
-        //map中的键和可能值，流程图和completeTaskParameter要事先约定好，
-        // 这里的约定是，
-        // 如果UserTask执行结果是修改当前任务的执行人，就在表单数据中包含userTaskResult：delegate和delegetedHandler：新的执行人
-        String userTaskResult="userTaskResult";
-        String delegetedHandler="delegetedHandler";
-        if(completeTaskParameter.getFormdata().containsKey(userTaskResult) &&"delegate".equals(completeTaskParameter.getFormdata().get(userTaskResult))){
-            if(completeTaskParameter.getFormdata().containsKey(delegetedHandler) || completeTaskParameter.getFormdata().get(delegetedHandler).toString().length()<1)
-                throw new IllegalArgumentException("必须指定被委托人");
-            this.processEngine.getTaskService().delegateTask(completeTaskParameter.getTaskId(),completeTaskParameter.getFormdata().get(delegetedHandler).toString());
-        }else {
-            this.processEngine.getTaskService().complete(completeTaskParameter.getTaskId(),completeTaskParameter.getFormdata());
-        }
-        int aa=44;
     }
 }
