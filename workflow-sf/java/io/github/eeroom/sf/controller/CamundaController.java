@@ -2,10 +2,7 @@ package io.github.eeroom.sf.controller;
 
 import io.github.eeroom.entity.BpmdataByNewProcess;
 import io.github.eeroom.entity.BpmdataByUserTask;
-import io.github.eeroom.sf.HttpPost;
-import io.github.eeroom.sf.JsonHelper;
-import io.github.eeroom.sf.LoginUserInfo;
-import io.github.eeroom.sf.SfDbContext;
+import io.github.eeroom.sf.*;
 import io.github.eeroom.sf.bpm.CamundaBll;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.task.DelegationState;
@@ -39,9 +36,11 @@ public class CamundaController {
 
 
     @HttpPost
-    public boolean deploy(MultipartFile bpmnFile) throws Throwable {
+    @SkipAuthentication
+    public boolean deploy(MultipartFile bpmXml,MultipartFile bpmPng) throws Throwable {
         var dlm = this.processEngine.getRepositoryService().createDeployment()
-                .addZipInputStream(new java.util.zip.ZipInputStream(bpmnFile.getInputStream(), Charset.forName("GBK")))
+                .addInputStream(bpmXml.getOriginalFilename(),bpmXml.getInputStream())
+                .addInputStream(bpmPng.getOriginalFilename(),bpmPng.getInputStream())
                 .deploy();
         return true;
     }

@@ -48,9 +48,9 @@ public class CamundaBll {
         biz.setcreateformdatajson(this.jsonHelper.serializeObject(bpmdataByUserTask.getFormdata()));
         biz.setcreateTime(new java.sql.Timestamp(new Date().getTime()));
         biz.setprocessId(processInstance.getProcessInstanceId());
-        var ptitle= this.processEngine.getRuntimeService().getVariable(processInstance.getProcessInstanceId(),"ptitle");
-        if(ptitle!=null){
-            biz.settitle(ptitle.toString());
+        var title= this.processEngine.getRuntimeService().getVariable(processInstance.getProcessInstanceId(),"bizdataTitle");
+        if(title!=null){
+            biz.settitle(title.toString());
         }
         this.dbContext.add(biz)
                 .setInsertAllCol();

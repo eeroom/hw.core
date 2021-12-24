@@ -70,7 +70,7 @@
     <bpmn:manualTask id="Activity_1ue785o" name="提交申请">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:outputParameter name="ptitle">${sfActions.concat("No.",execution.getProcessInstanceId()," 国内快件")}</camunda:outputParameter>
+          <camunda:outputParameter name="bizdataTitle">${sfActions.concat("No.",execution.getProcessInstanceId()," 国内快件")}</camunda:outputParameter>
           <camunda:outputParameter name="xiayitiaoTaskFlag">qe</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
