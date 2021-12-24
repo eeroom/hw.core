@@ -37,7 +37,9 @@ public class CamundaBll {
             throw new IllegalArgumentException("指定的业务类别不存在："+ bpmdataByUserTask.getBizType());
         var map=new HashMap<String,Object>();
         map.putAll(bpmdataByUserTask.getFormdata());
+        //SfActions必须实现Serializable接口
         SfActions sfActions=new SfActions();
+        //jdk11环境下，  如果camunda的流程参数使用javabean类型，就需要添加这个依赖。tomcat7和2.3版本的有小冲突，启动报错，但不影响使用，这里使用2.2版本，tomcat7启动不报错
         map.put("sfActions",sfActions);
         var processInstance = this.processEngine.getRuntimeService()
                 .startProcessInstanceByKey(btp.getcamundaKey(),map);

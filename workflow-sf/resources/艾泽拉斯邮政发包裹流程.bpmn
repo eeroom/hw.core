@@ -20,7 +20,7 @@
     </bpmn:userTask>
     <bpmn:userTask id="Activity_01og2hz" name="对方付款" camunda:assignee="${thirdpartId}">
       <bpmn:extensionElements>
-        <camunda:taskListener class="${sfActions.syncAssigneeToBizdatasub(task)}" event="assignment" />
+        <camunda:taskListener expression="${sfActions.syncAssigneeToBizdatasub(task)}" event="assignment" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0p53sx0</bpmn:incoming>
       <bpmn:outgoing>Flow_1cpo3tl</bpmn:outgoing>
