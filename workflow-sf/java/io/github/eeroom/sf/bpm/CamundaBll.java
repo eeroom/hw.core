@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Date;
+import java.util.HashMap;
 
 @Component
 @Scope(WebApplicationContext.SCOPE_REQUEST)
@@ -34,8 +35,12 @@ public class CamundaBll {
                 .firstOrDefault();
         if(btp==null)
             throw new IllegalArgumentException("指定的业务类别不存在："+ bpmdataByUserTask.getBizType());
+        var map=new HashMap<String,Object>();
+        map.putAll(bpmdataByUserTask.getFormdata());
+        SfActions sfActions=new SfActions();
+        map.put("sfActions",sfActions);
         var processInstance = this.processEngine.getRuntimeService()
-                .startProcessInstanceByKey(btp.getcamundaKey(), bpmdataByUserTask.getFormdata());
+                .startProcessInstanceByKey(btp.getcamundaKey(),map);
         //往主业务表添加一条记录
         io.github.eeroom.entity.sfdb.bizdata biz=new io.github.eeroom.entity.sfdb.bizdata();
         biz.setbizType(bpmdataByUserTask.getBizType());
@@ -43,6 +48,10 @@ public class CamundaBll {
         biz.setcreateformdatajson(this.jsonHelper.serializeObject(bpmdataByUserTask.getFormdata()));
         biz.setcreateTime(new java.sql.Timestamp(new Date().getTime()));
         biz.setprocessId(processInstance.getProcessInstanceId());
+        var ptitle= this.processEngine.getRuntimeService().getVariable(processInstance.getProcessInstanceId(),"ptitle");
+        if(ptitle!=null){
+            biz.settitle(ptitle.toString());
+        }
         this.dbContext.add(biz)
                 .setInsertAllCol();
         this.dbContext.saveChange();

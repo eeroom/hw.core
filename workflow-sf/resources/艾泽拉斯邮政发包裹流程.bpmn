@@ -4,23 +4,23 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_04rmids</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Activity_1up2c4f" name="酒馆接收包裹" camunda:assignee="${sender}">
+    <bpmn:userTask id="Activity_1up2c4f" name="对方投递包裹" camunda:assignee="${sender}">
       <bpmn:extensionElements>
-        <camunda:taskListener class="io.github.eeroom.sf.bpm.AssigneeHook" event="assignment" />
+        <camunda:taskListener expression="${sfActions.syncAssigneeToBizdatasub(task)}" event="assignment" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_10ljnam</bpmn:incoming>
       <bpmn:outgoing>Flow_0eue2f5</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:userTask id="Activity_0o0opkn" name="过磅" camunda:assignee="guobang">
       <bpmn:extensionElements>
-        <camunda:taskListener class="io.github.eeroom.sf.bpm.AssigneeHook" event="assignment" />
+        <camunda:taskListener expression="${sfActions.syncAssigneeToBizdatasub(task)}" event="assignment" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0eue2f5</bpmn:incoming>
       <bpmn:outgoing>Flow_1q0qzid</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:userTask id="Activity_01og2hz" name="对方付款" camunda:assignee="${thirdpartId}">
       <bpmn:extensionElements>
-        <camunda:taskListener class="io.github.eeroom.sf.bpm.AssigneeHook" event="assignment" />
+        <camunda:taskListener class="${sfActions.syncAssigneeToBizdatasub(task)}" event="assignment" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0p53sx0</bpmn:incoming>
       <bpmn:outgoing>Flow_1cpo3tl</bpmn:outgoing>
@@ -70,13 +70,14 @@
     <bpmn:manualTask id="Activity_1ue785o" name="提交申请">
       <bpmn:extensionElements>
         <camunda:inputOutput>
+          <camunda:outputParameter name="ptitle">${sfActions.concat("No.",execution.getProcessInstanceId()," 国内快件")}</camunda:outputParameter>
           <camunda:outputParameter name="xiayitiaoTaskFlag">qe</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_04rmids</bpmn:incoming>
       <bpmn:outgoing>Flow_10ljnam</bpmn:outgoing>
     </bpmn:manualTask>
-    <bpmn:manualTask id="Activity_0m511ea" name="通知对方过磅结果">
+    <bpmn:manualTask id="Activity_0m511ea" name="通知对方&#10;过磅结果">
       <bpmn:extensionElements>
         <camunda:executionListener class="io.github.eeroom.sf.bpm.KuaidiNoticer" event="end" />
         <camunda:inputOutput>
