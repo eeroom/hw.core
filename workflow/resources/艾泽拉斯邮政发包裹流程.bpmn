@@ -4,10 +4,6 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_04rmids</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:task id="Activity_1ue785o" name="提交申请">
-      <bpmn:incoming>Flow_04rmids</bpmn:incoming>
-      <bpmn:outgoing>Flow_10ljnam</bpmn:outgoing>
-    </bpmn:task>
     <bpmn:userTask id="Activity_1up2c4f" name="酒馆接收包裹" camunda:assignee="${sender}">
       <bpmn:extensionElements>
         <camunda:taskListener class="io.github.eeroom.sf.bpm.AssigneeHook" event="assignment" />
@@ -55,10 +51,10 @@
     <bpmn:sequenceFlow id="Flow_1cpo3tl" sourceRef="Activity_01og2hz" targetRef="Activity_1tafs7y" />
     <bpmn:sequenceFlow id="Flow_143i6mz" sourceRef="Activity_1tafs7y" targetRef="Gateway_0qq137w" />
     <bpmn:sequenceFlow id="Flow_19zpds1" sourceRef="Gateway_0qq137w" targetRef="Activity_10qfxmi">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${taskcount&lt;=0}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${xiayitiaoTaskFlag=="qe"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_03vktrn" sourceRef="Gateway_0qq137w" targetRef="Activity_0d50svq">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${taskcount&gt;0}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${xiayitiaoTaskFlag=="1"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1otoefz" sourceRef="Activity_0d50svq" targetRef="Activity_1tafs7y" />
     <bpmn:sequenceFlow id="Flow_1sl5epj" sourceRef="Activity_10qfxmi" targetRef="Event_1i9xudb" />
@@ -66,19 +62,23 @@
       <bpmn:incoming>Flow_03vktrn</bpmn:incoming>
       <bpmn:outgoing>Flow_1otoefz</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:manualTask id="Activity_1tafs7y" name="生成下一跳任务">
-      <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:inputParameter name="taskcount">0</camunda:inputParameter>
-        </camunda:inputOutput>
-      </bpmn:extensionElements>
+    <bpmn:task id="Activity_1tafs7y" name="生成下一跳任务">
       <bpmn:incoming>Flow_1cpo3tl</bpmn:incoming>
       <bpmn:incoming>Flow_1otoefz</bpmn:incoming>
       <bpmn:outgoing>Flow_143i6mz</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:manualTask id="Activity_1ue785o" name="提交申请">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="xiayitiaoTaskFlag">qe</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_04rmids</bpmn:incoming>
+      <bpmn:outgoing>Flow_10ljnam</bpmn:outgoing>
     </bpmn:manualTask>
     <bpmn:manualTask id="Activity_0m511ea" name="通知对方过磅结果">
       <bpmn:extensionElements>
-        <camunda:executionListener class="io.github.eeroom.sf.bpm.KuaidiNoticer" event="start" />
+        <camunda:executionListener class="io.github.eeroom.sf.bpm.KuaidiNoticer" event="end" />
         <camunda:inputOutput>
           <camunda:inputParameter name="msgkeys">zhongliang</camunda:inputParameter>
           <camunda:inputParameter name="msgtype">guobang</camunda:inputParameter>
@@ -138,9 +138,6 @@
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="372" y="52" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ue785o_di" bpmnElement="Activity_1ue785o">
-        <dc:Bounds x="340" y="150" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_03jj2ug_di" bpmnElement="Activity_1up2c4f">
         <dc:Bounds x="340" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -165,10 +162,13 @@
       <bpmndi:BPMNShape id="Activity_0j2ph0f_di" bpmnElement="Activity_0d50svq">
         <dc:Bounds x="160" y="930" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1dwt52s_di" bpmnElement="Activity_1tafs7y">
+      <bpmndi:BPMNShape id="Activity_0bvo2zm_di" bpmnElement="Activity_1tafs7y">
         <dc:Bounds x="340" y="820" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1s14l7s_di" bpmnElement="Activity_0m511ea">
+      <bpmndi:BPMNShape id="Activity_064d7l8_di" bpmnElement="Activity_1ue785o">
+        <dc:Bounds x="340" y="150" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_09e3jo8_di" bpmnElement="Activity_0m511ea">
         <dc:Bounds x="340" y="550" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
