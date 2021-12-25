@@ -28,6 +28,14 @@ public class NoticeMessage {
         this.processInstanceId = processInstanceId;
     }
 
+    public HashMap<String, Object> getData() {
+        return data;
+    }
+
+    public void setData(HashMap<String, Object> data) {
+        this.data = data;
+    }
+
     HashMap<String,Object> data;
     String processInstanceId;
 
