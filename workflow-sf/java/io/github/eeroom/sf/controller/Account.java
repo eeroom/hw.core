@@ -18,7 +18,7 @@ public class Account {
         var token= com.auth0.jwt.JWT.create()
                 .withIssuer("workflow")
                 .withIssuedAt(new Date())
-                .withClaim("userName",loginInput.getLoginName())
+                .withClaim("userName",loginInput.getAccount())
                 .sign(Algorithm.HMAC256("hw@123456"));
         var apidata=new ApidataWrapper();
         apidata.setCode(HttpServletResponse.SC_OK);
