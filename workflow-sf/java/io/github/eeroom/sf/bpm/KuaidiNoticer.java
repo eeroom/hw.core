@@ -4,6 +4,7 @@ import io.github.eeroom.apiclient.HttpChannelFactory;
 import io.github.eeroom.entity.sf.kuaidi.INoticer;
 import io.github.eeroom.entity.sf.kuaidi.NoticeMessage;
 import io.github.eeroom.entity.sf.kuaidi.EntityByCreate;
+import io.github.eeroom.entity.sf.kuaidi.NoticeMessageType;
 import io.github.eeroom.entity.sfdb.bizdata;
 import io.github.eeroom.sf.JsonHelper;
 import io.github.eeroom.sf.MyObjectFacotry;
@@ -36,7 +37,7 @@ public class KuaidiNoticer implements ExecutionListener {
         for (var key:lstmsgkey){
             data.put(key,delegateExecution.getVariable(key));
         }
-        var msg=new NoticeMessage(pid,(String)delegateExecution.getVariable("msgtype"),data);
+        var msg=new NoticeMessage(pid, NoticeMessageType.valueOf(delegateExecution.getVariable("msgtype").toString()),data);
         var rt= iKuaidiNotice.send(msg);
     }
 }
