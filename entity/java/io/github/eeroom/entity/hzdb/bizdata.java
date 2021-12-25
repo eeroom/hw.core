@@ -1,6 +1,6 @@
 package io.github.eeroom.entity.hzdb;
 
-public class biz {
+public class bizdata {
 
     String processId;
 
@@ -60,6 +60,16 @@ public class biz {
 
     public void setcreateformdatajson(String pValue) {
         this.createformdatajson = pValue;
+    }
+
+    Integer status;
+
+    public Integer getstatus() {
+        return status;
+    }
+
+    public void setstatus(Integer pValue) {
+        this.status = pValue;
     }
 
 }

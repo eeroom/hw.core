@@ -11,13 +11,16 @@ import io.github.eeroom.hz.serialize.JsonConvert;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.task.DelegationState;
 import org.camunda.bpm.engine.task.Task;
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
 
 @RestController
+@Scope(WebApplicationContext.SCOPE_REQUEST)
 public class Camunda {
     org.camunda.bpm.engine.ProcessEngine processEngine;
     CurrentUserInfo currentUserInfo;

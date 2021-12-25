@@ -40,7 +40,7 @@ dictTypeMap["image"]= "Byte[]";
 dictTypeMap["longblob"]= "Byte[]";
 dictTypeMap["blob"]= "Byte[]";
 
-let dbName="workflow-sf"
+let dbName="hz_workflow"
 let cfg = {
     user: 'root',
     password: env.mysql_pwd,
@@ -49,8 +49,8 @@ let cfg = {
 }
 
 let templatestr = fs.readFileSync('./t4-mysql-template.ejs').toString('utf-8');
-let packageName = "io.github.eeroom.entity.sfdb";
-let targetDir = "entity\\java\\io\\github\\eeroom\\entity\\sfdb\\";
+let packageName = "io.github.eeroom.entity.hzdb";
+let targetDir = "entity\\java\\io\\github\\eeroom\\entity\\hzdb\\";
 
 let cnn = mysql.createConnection(cfg)
 

@@ -1,6 +1,6 @@
 package io.github.eeroom.entity.hzdb;
 
-public class bizsub {
+public class bizdatasub {
 
     Integer id;
 
@@ -42,14 +42,14 @@ public class bizsub {
         this.handlerId = pValue;
     }
 
-    Integer result;
+    Integer handlerByMe;
 
-    public Integer getresult() {
-        return result;
+    public Integer gethandlerByMe() {
+        return handlerByMe;
     }
 
-    public void setresult(Integer pValue) {
-        this.result = pValue;
+    public void sethandlerByMe(Integer pValue) {
+        this.handlerByMe = pValue;
     }
 
     String completeformdatajson;
