@@ -2,7 +2,7 @@ package io.github.eeroom.hz.swagger2;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.collect.Lists;
-import io.github.eeroom.hz.MapProperties;
+import io.github.eeroom.hz.ApplicationConfig;
 import io.github.eeroom.hz.MyObjectFacotry;
 import io.github.eeroom.hz.aspnet.HttpGet;
 import net.bytebuddy.description.annotation.AnnotationDescription;
@@ -30,7 +30,7 @@ public class AspNetResolvedMethodParameter extends ResolvedMethodParameter {
             return Lists.newArrayList(lst);
         if(methodParameter.getMethod().getParameters().length!=1)
             return Lists.newArrayList(lst);
-        var appconfig= MyObjectFacotry.getBean(MapProperties.class);
+        var appconfig= MyObjectFacotry.getBean(ApplicationConfig.class);
         if(methodParameter.getContainingClass().getPackageName().indexOf(appconfig.controllerPath)<0)
             return Lists.newArrayList(lst);;
         try {

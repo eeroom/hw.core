@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MapProperties {
+public class ApplicationConfig {
     @Value("${camundaJdbcDriver}")
     public String camundaJdbcDriver;
 

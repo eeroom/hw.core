@@ -1,11 +1,9 @@
 package io.github.eeroom.hz;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.collect.Lists;
 import io.github.eeroom.hz.aspnet.RequestMappingHandler;
 import io.github.eeroom.hz.authen.JwtAuthenticationInterceptor;
 import io.github.eeroom.hz.swagger2.AspNetHandlerMethodResolver;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.util.AntPathMatcher;
@@ -30,7 +28,6 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -104,7 +101,7 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
     }
 
     @Bean
-    public Docket createRestApi(MapProperties appconfig) {
+    public Docket createRestApi(ApplicationConfig appconfig) {
         //启用swagger,添加@EnableSwagger2,添加这个bean
         // springfox-swagger-ui这类类库提供了swagger-ui的入口页面，swagger-ui.html,
         // io.springfox->springfox-swagger2,EnableSwagger2注解会注册其涉及的bean,核心是注册了一个HandlerMapping,HandlerMapping的核心是Swagger2Controller，提供的核心api,/v2/api-docs

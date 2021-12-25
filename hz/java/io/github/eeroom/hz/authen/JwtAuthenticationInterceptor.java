@@ -3,7 +3,7 @@ package io.github.eeroom.hz.authen;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.eeroom.entity.ApidataWrapper;
-import io.github.eeroom.hz.MapProperties;
+import io.github.eeroom.hz.ApplicationConfig;
 import io.github.eeroom.hz.MyObjectFacotry;
 import org.springframework.http.MediaType;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -20,7 +20,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
         if(!(o instanceof HandlerMethod))
             return true;
         var method=(HandlerMethod)o;
-        var appconfig= MyObjectFacotry.getBean(MapProperties.class);
+        var appconfig= MyObjectFacotry.getBean(ApplicationConfig.class);
         if(method.getMethod().getDeclaringClass().getPackageName().indexOf(appconfig.controllerPath)<0)
             return true;
         if(method.getMethodAnnotation(SkipAuthentication.class)!=null)

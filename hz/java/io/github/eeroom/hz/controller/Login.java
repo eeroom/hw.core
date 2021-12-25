@@ -1,21 +1,19 @@
 package io.github.eeroom.hz.controller;
 
-import com.auth0.jwt.algorithms.Algorithm;
 import io.github.eeroom.entity.ApidataWrapper;
 import io.github.eeroom.entity.LoginInput;
-import io.github.eeroom.hz.MapProperties;
+import io.github.eeroom.hz.ApplicationConfig;
 import io.github.eeroom.hz.authen.JwtTokenHelper;
 import io.github.eeroom.hz.authen.SkipAuthentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 
 @RestController
 public class Login {
-    MapProperties appconfig;
-    public Login(MapProperties appconfig){
+    ApplicationConfig appconfig;
+    public Login(ApplicationConfig appconfig){
         this.appconfig=appconfig;
     }
 
