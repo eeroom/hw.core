@@ -1,14 +1,13 @@
 package io.github.eeroom.entity;
 
 public class LoginInput {
-    String loginName;
 
-    public String getLoginName() {
-        return loginName;
+    public String getAccount() {
+        return account;
     }
 
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     public String getPwd() {
@@ -18,6 +17,8 @@ public class LoginInput {
     public void setPwd(String pwd) {
         this.pwd = pwd;
     }
+
+    String account;
 
     String pwd;
 }
