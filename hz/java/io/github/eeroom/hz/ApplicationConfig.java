@@ -66,4 +66,10 @@ public class ApplicationConfig {
     @Value("${swagger2.enable}")
     public Boolean swagger2enable;
 
+    @Value("${kuaidi.mycode}")
+    public String kuaidimycode;
+
+    @Value("${kuaidi.sf.url}")
+    public String kuaidiSfUrl;
+
 }

@@ -5,6 +5,7 @@ import io.github.eeroom.entity.BpmdataByUserTask;
 import io.github.eeroom.entity.sfdb.bizdatasub;
 import io.github.eeroom.entity.sfdb.biztype;
 import io.github.eeroom.hz.MyDbContext;
+import io.github.eeroom.hz.MyObjectFacotry;
 import io.github.eeroom.hz.authen.CurrentUserInfo;
 import io.github.eeroom.hz.serialize.JsonConvert;
 import org.springframework.context.annotation.Scope;
@@ -35,19 +36,23 @@ public class ProcessInstanceHandler {
                 .firstOrDefault();
         if(btp==null)
             throw new IllegalArgumentException("指定的业务类别不存在："+ bpmdataByUserTask.getBizType());
-        var map=new HashMap<String,Object>();
-        map.putAll(bpmdataByUserTask.getFormdata());
-        //SfActions必须实现Serializable接口
+        var formdataOfCreate= this.jsonHelper.serializeObject(bpmdataByUserTask.getFormdata());
+        bpmdataByUserTask.getFormdata().put(MapKeys.formdataOfCreate,formdataOfCreate);
         ListenerHandler listenerHandler=new ListenerHandler();
         //jdk11环境下，  如果camunda的流程参数使用javabean类型，就需要添加这个依赖。tomcat7和2.3版本的有小冲突，启动报错，但不影响使用，这里使用2.2版本，tomcat7启动不报错
-        map.put("listenerHandler",listenerHandler);
+        bpmdataByUserTask.getFormdata().put("listenerHandler",listenerHandler);
+        var handlerKey=btp.getcamundaKey()+"Handler";
+        var handler= MyObjectFacotry.getBeanOrNull(handlerKey);
+        if(handler!=null){//业务流程特有的handler
+            bpmdataByUserTask.getFormdata().put(handlerKey,handler);
+        }
         var processInstance = this.processEngine.getRuntimeService()
-                .startProcessInstanceByKey(btp.getcamundaKey(),map);
+                .startProcessInstanceByKey(btp.getcamundaKey(),bpmdataByUserTask.getFormdata());
         //往主业务表添加一条记录
         io.github.eeroom.entity.sfdb.bizdata biz=new io.github.eeroom.entity.sfdb.bizdata();
         biz.setbizType(bpmdataByUserTask.getBizType());
         biz.setcreateBy(this.currentUserInfo.getName());
-        biz.setcreateformdatajson(this.jsonHelper.serializeObject(bpmdataByUserTask.getFormdata()));
+        biz.setcreateformdatajson(formdataOfCreate);
         biz.setcreateTime(new java.sql.Timestamp(new Date().getTime()));
         biz.setprocessId(processInstance.getProcessInstanceId());
         var title= this.processEngine.getRuntimeService().getVariable(processInstance.getProcessInstanceId(),"bizdataTitle");
@@ -73,24 +78,24 @@ public class ProcessInstanceHandler {
         // 如果UserTask执行结果是修改当前任务的执行人，就在表单数据中包含userTaskResult：delegate和delegetedHandler：新的执行人
         String userTaskResult="userTaskResult";
         String delegetedHandler="delegetedHandler";
+        String formdataOfComplete=this.jsonHelper.serializeObject(completeTaskParameter.getFormdata());
         if(completeTaskParameter.getFormdata().containsKey(userTaskResult) &&"delegate".equals(completeTaskParameter.getFormdata().get(userTaskResult))){
             if(completeTaskParameter.getFormdata().containsKey(delegetedHandler) || completeTaskParameter.getFormdata().get(delegetedHandler).toString().length()<1)
                 throw new IllegalArgumentException("必须指定被委托人");
             this.processEngine.getTaskService().delegateTask(completeTaskParameter.getTaskId(),completeTaskParameter.getFormdata().get(delegetedHandler).toString());
         }else {
+            completeTaskParameter.getFormdata().put(MapKeys.formdataOfComplete,formdataOfComplete);
             this.processEngine.getTaskService().complete(completeTaskParameter.getTaskId(),completeTaskParameter.getFormdata());
         }
         //更新主业务表子表，把状态置为close
         //一个人任务，多人处理的情况下，当前人记录表单数据，其他人只更新taskstatus
         this.dbContext.edit(bizdatasub.class)
-                .setUpdateCol(x->x.getcompleteformdatajson(),this.jsonHelper.serializeObject(completeTaskParameter.getFormdata()))
+                .setUpdateCol(x->x.getcompleteformdatajson(),formdataOfComplete)
                 .setUpdateCol(x->x.getHandlerByMe(),1)
                 .where(x->x.col(a->a.gettaskId()).eq(completeTaskParameter.getTaskId()))
-                .where(x->x.col(a->a.gettaskstatus()).eq(0))
                 .where(x->x.col(a->a.gethandlerId()).eq(this.currentUserInfo.getName()));
         this.dbContext.edit(bizdatasub.class)
                 .setUpdateCol(x->x.gettaskstatus(),1)
-                .setUpdateCol(x->x.getcompleteformdatajson(),this.jsonHelper.serializeObject(completeTaskParameter.getFormdata()))
                 .where(x->x.col(a->a.gettaskId()).eq(completeTaskParameter.getTaskId()))
                 .where(x->x.col(a->a.gettaskstatus()).eq(0));
         this.dbContext.saveChange();
