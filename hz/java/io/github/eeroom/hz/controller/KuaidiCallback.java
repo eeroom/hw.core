@@ -6,6 +6,7 @@ import io.github.eeroom.entity.sf.kuaidi.*;
 import io.github.eeroom.entity.sfdb.bizdata;
 import io.github.eeroom.hz.MyDbContext;
 import io.github.eeroom.hz.MyObjectFacotry;
+import io.github.eeroom.hz.authen.SkipAuthentication;
 import io.github.eeroom.hz.camunda.MapKeys;
 import io.github.eeroom.hz.camunda.ProcessInstanceHandler;
 import io.github.eeroom.hz.serialize.JsonConvert;
@@ -33,6 +34,7 @@ public class KuaidiCallback implements io.github.eeroom.entity.sf.kuaidi.IKuaidi
         throw new RuntimeException("不需要实现");
     }
 
+    @SkipAuthentication
     @Override
     public NoticeResponse notice(NoticeMessage msg) {
         //如果是通知过磅的结果，就推动外发快递的进入领导审批
