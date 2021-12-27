@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-public class Login {
+public class LoginController {
     ApplicationConfig appconfig;
-    public Login(ApplicationConfig appconfig){
+    public LoginController(ApplicationConfig appconfig){
         this.appconfig=appconfig;
     }
 

@@ -12,11 +12,11 @@ import java.util.List;
 
 @RestController
 @Scope(WebApplicationContext.SCOPE_REQUEST)
-public class ProcDefEx {
+public class ProcDefExController {
     CurrentUserInfo currentUserInfo;
 
     MyDbContext dbContext;
-    public ProcDefEx(CurrentUserInfo currentUserInfo, MyDbContext dbContext){
+    public ProcDefExController(CurrentUserInfo currentUserInfo, MyDbContext dbContext){
         this.currentUserInfo =currentUserInfo;
         this.dbContext=dbContext;
     }

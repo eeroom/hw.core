@@ -3,16 +3,15 @@ package io.github.eeroom.gtop.entity.hz;
 import java.util.HashMap;
 
 public class StartProcessInput {
-
-    public String getProcKey() {
-        return procKey;
+    public String getBizName() {
+        return bizName;
     }
 
-    public void setProcKey(String procKey) {
-        this.procKey = procKey;
+    public void setBizName(String bizName) {
+        this.bizName = bizName;
     }
 
-    String procKey;
+    String bizName;
 
 
     public HashMap<String, Object> getFormdata() {

@@ -1,6 +1,7 @@
 package io.github.eeroom.gtop.hz.controller;
 
 import io.github.eeroom.gtop.api.sf.IKuaidiController;
+import io.github.eeroom.gtop.entity.camunda.CompleteTaskInput;
 import io.github.eeroom.gtop.entity.hz.TaskStatus;
 import io.github.eeroom.gtop.entity.hz.db.bizdataex;
 import io.github.eeroom.gtop.entity.hz.db.bizdatasub;
@@ -10,7 +11,6 @@ import io.github.eeroom.gtop.hz.authen.SkipAuthentication;
 import io.github.eeroom.gtop.hz.MyDbContext;
 import io.github.eeroom.gtop.hz.MyObjectFacotry;
 import io.github.eeroom.gtop.hz.camunda.VariableKey;
-import io.github.eeroom.gtop.hz.camunda.ProcessInstanceHandler;
 import io.github.eeroom.gtop.hz.serialize.JsonConvert;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,12 +18,12 @@ import org.springframework.web.context.WebApplicationContext;
 
 @RestController
 @Scope(WebApplicationContext.SCOPE_REQUEST)
-public class KuaidiCallback implements IKuaidiController {
+public class SfCallbackController implements IKuaidiController {
     MyDbContext dbContext;
-    ProcessInstanceHandler processInstanceHandler;
-    public KuaidiCallback(MyDbContext dbContext, ProcessInstanceHandler processInstanceHandler){
+    CamundaController camundaController;
+    public SfCallbackController(MyDbContext dbContext, CamundaController camundaController){
         this.dbContext=dbContext;
-        this.processInstanceHandler=processInstanceHandler;
+        this.camundaController = camundaController;
     }
 
     @Override
@@ -55,7 +55,10 @@ public class KuaidiCallback implements IKuaidiController {
                     .firstOrDefault();
             if(bizdsub==null)
                 throw new RuntimeException(String.format("当前没有改任务需要处理:%s", MyObjectFacotry.getBean(JsonConvert.class).serializeObject(msg)));
-            this.processInstanceHandler.complete(bizdsub.gettaskId(),msg.getData());
+            var cp=new CompleteTaskInput();
+            cp.setTaskId(bizdsub.gettaskId());
+            cp.setFormdata(msg.getData());
+            this.camundaController.complete(cp);
         }
         var rt=new NoticeResponse();
         rt.setCode(200);
