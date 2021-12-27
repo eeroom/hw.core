@@ -62,7 +62,7 @@ public class DbSetEdit<T> extends TableSet<T> {
             var pst=cnn.prepareStatement(sql);
             int pindex=1;
             for (var name:lstName){
-                pst.setObject(pindex++,dict.get(name).invoke(obj,null));
+                pst.setObject(pindex++,dict.get(name).apply(obj));
             }
             for (var pp:context.lstDbParameter){
                 pst.setObject(pindex++,pp.item2);

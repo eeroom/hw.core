@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TableSet<T> {
-    static HashMap<String,HashMap<String,Method>> dictSetMethod=new HashMap<>();
-    static HashMap<String,HashMap<String,Method>> dictGetMethod=new HashMap<>();
+    static HashMap<String,HashMap<String,MyAction2<Object,Object>>> dictSetMethod=new HashMap<>();
+    static HashMap<String,HashMap<String,MyFunction<Object,Object>>> dictGetMethod=new HashMap<>();
 
     Class<T> meta;
     T entityIdentity;
@@ -45,18 +45,65 @@ public class TableSet<T> {
         this.tableAlias=this.tableName;
         if(dictSetMethod.get(meta.getName())!=null)
              return;
-        HashMap<String, Method> dictset=new HashMap<>();
-        HashMap<String,Method> dictget=new HashMap<>();
+        HashMap<String, MyAction2<Object,Object>> dictset=new HashMap<>();
+        HashMap<String,MyFunction<Object,Object>> dictget=new HashMap<>();
         var lstmethod=meta.getDeclaredMethods();
         for (var mt:lstmethod){
+            var pName=mt.getName().substring(3);
             if(mt.getName().startsWith("set")){
-                dictset.put(mt.getName().substring(3),mt);
+                dictset.put(pName,this.createSetHandler(pName,mt));
+
             }else  if(mt.getName().startsWith("get")){
-                dictget.put(mt.getName().substring(3),mt);
+                dictget.put(pName,this.createGetHandler(pName,mt));
             }
         }
         dictSetMethod.put(meta.getName(),dictset);
         dictGetMethod.put(meta.getName(),dictget);
+    }
+
+    private MyAction2< Object, Object> createSetHandler(String pName,Method mt) {
+        var pType=mt.getParameterTypes()[0];
+        if(!pType.isEnum()){
+            return (target,value)-> {
+                if(value==null)
+                    return;
+                try {
+                    mt.invoke(target,value);
+                } catch (Throwable e) {
+                    throw new RuntimeException(String.format("对表%s,属性%s进行赋值发生错误,值为：%s",this.tableName,pName,value.toString()));
+                }
+            };
+        }else {
+            try {
+                var emethode= pType.getMethod("valueOf", String.class);
+                return (target,value)->{
+                    if(value==null)
+                        return;
+                    try {
+                        var evalue=emethode.invoke(null,value.toString());
+                        mt.invoke(target,evalue);
+                    } catch (Throwable e) {
+                        throw new RuntimeException(String.format("对表%s,属性%s进行赋值发生错误,值为：%s",this.tableName,pName,value.toString()));
+                    }
+                };
+            } catch (Throwable e) {
+                throw new RuntimeException(String.format("反射获取枚举的valueOf方法发生错误,表名称%s,字段名称：%s",this.tableName,pName));
+            }
+
+
+        }
+    }
+
+    private MyFunction<Object, Object> createGetHandler(String pName,Method mt) {
+        if(!mt.getReturnType().isEnum()){
+            return target->mt.invoke(target);
+        }
+        return target->{
+            var tmp= mt.invoke(target);
+            if(tmp!=null)
+                return tmp.toString();
+            return tmp;
+        };
     }
 
 

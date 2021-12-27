@@ -46,7 +46,7 @@ public class DbSetAdd<T> extends TableSet<T> {
             pst.clearParameters();
             int index=1;
             for (var pname:lstName){
-                var pValue= dict.get(pname).invoke(obj,null);
+                var pValue= dict.get(pname).apply(obj);
                 pst.setObject(index++,pValue);
             }
             rst+= pst.executeUpdate();

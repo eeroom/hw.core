@@ -132,7 +132,7 @@ public class DbSet<T> extends TableSet<T> {
         var dict=dictSetMethod.get(this.meta.getName());
         for (var snode:this.lstSelectNode){
             var value= resultSet.getObject(snode.nameNick);
-            dict.get(snode.column.colName).invoke(obj,value);
+            dict.get(snode.column.colName).execute(obj,value);
         }
         return  obj;
     }
