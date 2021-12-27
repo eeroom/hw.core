@@ -33,24 +33,24 @@ public class bizdatasub {
         this.taskId = pValue;
     }
 
-    String handlerId;
+    String assignee;
 
-    public String gethandlerId() {
-        return handlerId;
+    public String getassignee() {
+        return assignee;
     }
 
-    public void sethandlerId(String pValue) {
-        this.handlerId = pValue;
+    public void setassignee(String pValue) {
+        this.assignee = pValue;
     }
 
-    Integer handlerByMe;
+    TaskStatus assigneeCompleted;
 
-    public Integer gethandlerByMe() {
-        return handlerByMe;
+    public TaskStatus getassigneeCompleted() {
+        return assigneeCompleted;
     }
 
-    public void sethandlerByMe(Integer pValue) {
-        this.handlerByMe = pValue;
+    public void setassigneeCompleted(TaskStatus pValue) {
+        this.assigneeCompleted = pValue;
     }
 
     String completeformdatajson;
@@ -63,14 +63,14 @@ public class bizdatasub {
         this.completeformdatajson = pValue;
     }
 
-    Integer taskstatus;
+    TaskStatus status;
 
-    public Integer gettaskstatus() {
-        return taskstatus;
+    public TaskStatus getstatus() {
+        return status;
     }
 
-    public void settaskstatus(Integer pValue) {
-        this.taskstatus = pValue;
+    public void setstatus(TaskStatus pValue) {
+        this.status = pValue;
     }
 
 }

@@ -1,28 +1,26 @@
 package io.github.eeroom.gtop.entity.hz.db;
 
 import io.github.eeroom.gtop.entity.hz.*;
-import io.github.eeroom.gtop.entity.hz.BizType;
+public class procdefex {
 
-public class biztypeex {
+    String procdefKey;
 
-    BizType bizType;
-
-    public BizType getbizType() {
-        return bizType;
+    public String getprocdefKey() {
+        return procdefKey;
     }
 
-    public void setbizType(BizType pValue) {
-        this.bizType = pValue;
+    public void setprocdefKey(String pValue) {
+        this.procdefKey = pValue;
     }
 
-    String procdefineKey;
+    String bizName;
 
-    public String getprocdefineKey() {
-        return procdefineKey;
+    public String getbizName() {
+        return bizName;
     }
 
-    public void setprocdefineKey(String pValue) {
-        this.procdefineKey = pValue;
+    public void setbizName(String pValue) {
+        this.bizName = pValue;
     }
 
     String ico;

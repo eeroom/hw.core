@@ -2,7 +2,6 @@ package io.github.eeroom.gtop.hz.controller;
 
 import io.github.eeroom.gtop.entity.hz.StartProcessInput;
 import io.github.eeroom.gtop.entity.camunda.CompleteTaskInput;
-import io.github.eeroom.gtop.entity.hz.db.biztypeex;
 import io.github.eeroom.gtop.entity.hz.db.bizdata;
 import io.github.eeroom.gtop.hz.MyDbContext;
 import io.github.eeroom.gtop.hz.aspnet.HttpPost;
@@ -133,10 +132,7 @@ public class Camunda {
     }
 
     public bizdata startProcess(StartProcessInput startProcessInput) {
-        var btpex= this.dbContext.dbSet(biztypeex.class).select()
-                .where(x->x.col(a->a.getbizType()).eq(startProcessInput.getBizType()))
-                .firstOrDefault();
-        return this.processInstanceHandler.startProcess(btpex,startProcessInput.getFormdata());
+        return this.processInstanceHandler.startProcess(startProcessInput.getProcKey(),startProcessInput.getFormdata());
     }
 
     public List<?> getUserTask(){

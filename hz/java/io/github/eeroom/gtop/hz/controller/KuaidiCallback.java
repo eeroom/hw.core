@@ -1,6 +1,7 @@
 package io.github.eeroom.gtop.hz.controller;
 
 import io.github.eeroom.gtop.api.sf.IKuaidiController;
+import io.github.eeroom.gtop.entity.hz.TaskStatus;
 import io.github.eeroom.gtop.entity.hz.db.bizdataex;
 import io.github.eeroom.gtop.entity.hz.db.bizdatasub;
 import io.github.eeroom.gtop.entity.sf.db.bizdata;
@@ -49,8 +50,8 @@ public class KuaidiCallback implements IKuaidiController {
                 throw new RuntimeException(String.format("没有对应的流程实例,sf流程id:%s",msg.getProcessInstanceId()));
             var bizdsub= this.dbContext.dbSet(bizdatasub.class)
                     .where(x->x.col(a->a.getprocessId()).eq(bizex.getprocessId()))
-                    .where(x->x.col(a->a.gettaskstatus()).eq(0))
-                    .where(x->x.col(a->a.gethandlerId()).eq("sf"))
+                    .where(x->x.col(a->a.getstatus()).eq(TaskStatus.处理中))
+                    .where(x->x.col(a->a.getassignee()).eq("sf"))
                     .firstOrDefault();
             if(bizdsub==null)
                 throw new RuntimeException(String.format("当前没有改任务需要处理:%s", MyObjectFacotry.getBean(JsonConvert.class).serializeObject(msg)));

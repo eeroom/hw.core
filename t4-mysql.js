@@ -49,9 +49,9 @@ let cfg = {
 }
 
 let templatestr = fs.readFileSync('./t4-mysql-template.ejs').toString('utf-8');
-let packageName = "io.github.eeroom.entity.hz.db";
-let targetDir = "entity\\java\\io\\github\\eeroom\\entity\\hz\\db\\";
-let packageImport="io.github.eeroom.entity.hz.*";
+let packageName = "io.github.eeroom.gtop.entity.hz.db";
+let targetDir = "gtop\\java\\io\\github\\eeroom\\gtop\\entity\\hz\\db\\";
+let packageImport="io.github.eeroom.gtop.entity.hz.*";
 
 let cnn = mysql.createConnection(cfg)
 

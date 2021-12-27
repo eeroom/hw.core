@@ -1,5 +1,6 @@
 package io.github.eeroom.gtop.hz.camunda;
 
+import io.github.eeroom.gtop.entity.hz.TaskStatus;
 import io.github.eeroom.gtop.entity.hz.db.bizdata;
 import io.github.eeroom.gtop.entity.hz.db.bizdatasub;
 import io.github.eeroom.gtop.hz.MyDbContext;
@@ -23,15 +24,15 @@ public class ListenerHandler implements Serializable {
         var lstass= delegateTask.getAssignee().split(",");
         var lstbizdatasub= Arrays.stream(lstass).map(x->{
             var tmp=new bizdatasub();
-            tmp.sethandlerId(x);
+            tmp.setassignee(x);
             tmp.setprocessId(processId);
             tmp.settaskId(taskId);
-            tmp.sethandlerByMe(0);
-            tmp.settaskstatus(0);
+            tmp.setassigneeCompleted(TaskStatus.处理中);
+            tmp.setstatus(TaskStatus.处理中);
             return tmp;
         }).collect(Collectors.toList());
         dbcontext.add(lstbizdatasub)
-                .setInsertCol(x-> Columns.of(x.gethandlerId(),x.getprocessId(),x.gettaskId(),x.gethandlerByMe(),x.gettaskstatus()));
+                .setInsertCol(x-> Columns.of(x.getassignee(),x.getprocessId(),x.gettaskId(),x.getassigneeCompleted(),x.getstatus()));
         dbcontext.saveChange();
     }
 

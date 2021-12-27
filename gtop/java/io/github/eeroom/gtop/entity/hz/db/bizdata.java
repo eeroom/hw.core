@@ -1,8 +1,6 @@
 package io.github.eeroom.gtop.entity.hz.db;
 
 import io.github.eeroom.gtop.entity.hz.*;
-import io.github.eeroom.gtop.entity.hz.BizType;
-
 public class bizdata {
 
     String processId;
@@ -13,6 +11,16 @@ public class bizdata {
 
     public void setprocessId(String pValue) {
         this.processId = pValue;
+    }
+
+    String bizName;
+
+    public String getbizName() {
+        return bizName;
+    }
+
+    public void setbizName(String pValue) {
+        this.bizName = pValue;
     }
 
     String title;
@@ -55,24 +63,14 @@ public class bizdata {
         this.createformdatajson = pValue;
     }
 
-    Integer status;
+    BizDataStatus status;
 
-    public Integer getstatus() {
+    public BizDataStatus getstatus() {
         return status;
     }
 
-    public void setstatus(Integer pValue) {
+    public void setstatus(BizDataStatus pValue) {
         this.status = pValue;
-    }
-
-    BizType bizType;
-
-    public BizType getbizType() {
-        return bizType;
-    }
-
-    public void setbizType(BizType pValue) {
-        this.bizType = pValue;
     }
 
 }

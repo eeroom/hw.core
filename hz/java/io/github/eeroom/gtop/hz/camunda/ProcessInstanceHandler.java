@@ -1,8 +1,10 @@
 package io.github.eeroom.gtop.hz.camunda;
 
+import io.github.eeroom.gtop.entity.hz.BizName;
+import io.github.eeroom.gtop.entity.hz.TaskStatus;
 import io.github.eeroom.gtop.entity.hz.db.bizdata;
 import io.github.eeroom.gtop.entity.hz.db.bizdatasub;
-import io.github.eeroom.gtop.entity.hz.db.biztypeex;
+import io.github.eeroom.gtop.entity.hz.db.procdefex;
 import io.github.eeroom.gtop.hz.authen.CurrentUserInfo;
 import io.github.eeroom.gtop.hz.MyDbContext;
 import io.github.eeroom.gtop.hz.MyObjectFacotry;
@@ -28,7 +30,12 @@ public class ProcessInstanceHandler {
         this.jsonHelper=jsonHelper;
     }
 
-    public bizdata startProcess(biztypeex btpex, HashMap<String,Object> formdata) {
+    public bizdata startProcess(String bizName, HashMap<String,Object> formdata) {
+        var procdefex= this.dbContext.dbSet(procdefex.class).select()
+                .where(x->x.col(a->a.getbizName()).eq(bizName))
+                .firstOrDefault();
+        if(procdefex==null)
+            throw new RuntimeException(String.format("指定的bizName没有procDefEx的数据，请配置好procDefEx数据再填写申请单,bizname:%s", bizName));
         var map=new HashMap<String,Object>();
         map.putAll(formdata);
         var formdataOfCreate= this.jsonHelper.serializeObject(formdata);
@@ -36,16 +43,16 @@ public class ProcessInstanceHandler {
         var listenerHandler=new ListenerHandler();
         //jdk11环境下，  如果camunda的流程参数使用javabean类型，就需要添加这个依赖。tomcat7和2.3版本的有小冲突，启动报错，但不影响使用，这里使用2.2版本，tomcat7启动不报错
         map.put(VariableKey.listenerHandler,listenerHandler);
-        var handlerKey=btpex.getprocdefineKey()+"Handler";
+        var handlerKey=procdefex.getprocdefKey()+"Handler";
         if(MyObjectFacotry.containsBean(handlerKey)){
             //流程各自的handler
             map.put(handlerKey,MyObjectFacotry.getBean(handlerKey));
         }
         var processInstance = this.processEngine.getRuntimeService()
-                .startProcessInstanceByKey(btpex.getprocdefineKey(),map);
+                .startProcessInstanceByKey(procdefex.getprocdefKey(),map);
         //往主业务表添加一条记录
         bizdata biz=new bizdata();
-        biz.setbizType(btpex.getbizType());
+        biz.setbizName(procdefex.getbizName());
         biz.setcreateBy(this.currentUserInfo.getAccount());
         biz.setcreateformdatajson(formdataOfCreate);
         biz.setcreateTime(new java.sql.Timestamp(new Date().getTime()));
@@ -89,13 +96,13 @@ public class ProcessInstanceHandler {
         //一个人任务，多人处理的情况下，当前人记录表单数据，其他人只更新taskstatus
         this.dbContext.edit(bizdatasub.class)
                 .setUpdateCol(x->x.getcompleteformdatajson(),formdataOfComplete)
-                .setUpdateCol(x->x.gethandlerByMe(),1)
+                .setUpdateCol(x->x.getassigneeCompleted(), TaskStatus.已完成)
                 .where(x->x.col(a->a.gettaskId()).eq(taskId))
-                .where(x->x.col(a->a.gethandlerId()).eq(this.currentUserInfo.getAccount()));
+                .where(x->x.col(a->a.getassignee()).eq(this.currentUserInfo.getAccount()));
         this.dbContext.edit(bizdatasub.class)
-                .setUpdateCol(x->x.gettaskstatus(),1)
+                .setUpdateCol(x->x.getstatus(),TaskStatus.已完成)
                 .where(x->x.col(a->a.gettaskId()).eq(taskId))
-                .where(x->x.col(a->a.gettaskstatus()).eq(0));
+                .where(x->x.col(a->a.getstatus()).eq(TaskStatus.处理中));
         this.dbContext.saveChange();
     }
 }

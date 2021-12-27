@@ -1,6 +1,6 @@
 package io.github.eeroom.gtop.entity.hz;
 
-public enum BizType {
+public enum BizName {
     外发包裹,
     事假,
     调薪,
