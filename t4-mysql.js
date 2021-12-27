@@ -49,8 +49,9 @@ let cfg = {
 }
 
 let templatestr = fs.readFileSync('./t4-mysql-template.ejs').toString('utf-8');
-let packageName = "io.github.eeroom.entity.hzdb";
-let targetDir = "entity\\java\\io\\github\\eeroom\\entity\\hzdb\\";
+let packageName = "io.github.eeroom.entity.hz.db";
+let targetDir = "entity\\java\\io\\github\\eeroom\\entity\\hz\\db\\";
+let packageImport="io.github.eeroom.entity.hz.*";
 
 let cnn = mysql.createConnection(cfg)
 
@@ -79,9 +80,12 @@ function createBeanByTemplate(tableName, cnn) {
     Promise.all([q1, q2]).then(wrapperdata => {
         wrapperdata[0].forEach(x => {
             x.Comment = wrapperdata[1].find(a => a.Field == x.COLUMN_NAME)?.Comment;
-            x.DATA_TYPE=dictTypeMap[x.DATA_TYPE]||x.DATA_TYPE
+            x.DATA_TYPE=dictTypeMap[x.DATA_TYPE]||x.DATA_TYPE;
+            if(x.Comment.indexOf("枚举:")==0){
+                x.DATA_TYPE=x.Comment.split(":")[1];
+            }
         })
-        let codestr = ejs.render(templatestr, { packageName, tableName, columns: wrapperdata[0] });
+        let codestr = ejs.render(templatestr, { packageImport,packageName, tableName, columns: wrapperdata[0] });
         fs.writeFile(targetDir + tableName + ".java", codestr, () => {
             console.log("ok--" + tableName)
             if (lstTable.length > 0) {
