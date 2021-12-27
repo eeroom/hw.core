@@ -30,7 +30,11 @@ public class DbSetEditSimple<T> extends TableSet<T> {
 
     public <R> DbSetEditSimple<T> setUpdateCol(Function<T,R> exp,R value){
         var col= this.col(exp);
-        lstUpdateCol.add(Tuple.create(col,value));
+        if(value instanceof Enum){
+            lstUpdateCol.add(Tuple.create(col,value.toString()));
+        }else {
+            lstUpdateCol.add(Tuple.create(col,value));
+        }
         return this;
     }
 
