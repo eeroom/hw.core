@@ -14,7 +14,6 @@
     <module>../sf</module>
     <module>../entity</module>
     <module>../hz</module>
-    <module>../nalu</module>
   </modules>
 
   <name>sln</name>
