@@ -2,8 +2,7 @@ package io.github.eeroom.sf.controller;
 
 import com.auth0.jwt.algorithms.Algorithm;
 import io.github.eeroom.entity.ApidataWrapper;
-import io.github.eeroom.entity.LoginInput;
-import io.github.eeroom.sf.HttpPost;
+import io.github.eeroom.entity.authen.LoginInput;
 import io.github.eeroom.sf.SkipAuthentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

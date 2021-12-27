@@ -1,5 +1,6 @@
-package io.github.eeroom.entity.hzdb;
+package io.github.eeroom.entity.hz.db;
 
+import io.github.eeroom.entity.hz.*;
 public class dict {
 
     Integer id;

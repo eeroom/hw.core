@@ -1,5 +1,7 @@
 package io.github.eeroom.entity;
 
+import io.github.eeroom.entity.hz.BizType;
+
 public class ApidataWrapper {
     public ApidataWrapper(){
         this.code= 200;
@@ -38,6 +40,7 @@ public class ApidataWrapper {
 
     public void setTag(Object tag) {
         this.tag = tag;
+
     }
 
     Object data;

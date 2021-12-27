@@ -1,7 +1,7 @@
 package io.github.eeroom.hz.controller;
 
 import io.github.eeroom.entity.ApidataWrapper;
-import io.github.eeroom.entity.LoginInput;
+import io.github.eeroom.entity.authen.LoginInput;
 import io.github.eeroom.hz.ApplicationConfig;
 import io.github.eeroom.hz.authen.JwtTokenHelper;
 import io.github.eeroom.hz.authen.SkipAuthentication;

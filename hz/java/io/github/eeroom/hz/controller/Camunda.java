@@ -1,7 +1,9 @@
 package io.github.eeroom.hz.controller;
 
-import io.github.eeroom.entity.BpmdataByNewProcess;
-import io.github.eeroom.entity.BpmdataByUserTask;
+import io.github.eeroom.entity.hz.StartProcessInput;
+import io.github.eeroom.entity.camunda.CompleteTaskInput;
+import io.github.eeroom.entity.hz.db.biztypeex;
+import io.github.eeroom.entity.hz.db.bizdata;
 import io.github.eeroom.hz.MyDbContext;
 import io.github.eeroom.hz.aspnet.HttpPost;
 import io.github.eeroom.hz.authen.CurrentUserInfo;
@@ -130,8 +132,11 @@ public class Camunda {
         return lstProcessDefinition;
     }
 
-    public io.github.eeroom.entity.sfdb.bizdata startProcess(BpmdataByNewProcess bpmdataByUserTask) {
-        return this.processInstanceHandler.startProcess(bpmdataByUserTask);
+    public bizdata startProcess(StartProcessInput startProcessInput) {
+        var btpex= this.dbContext.dbSet(biztypeex.class).select()
+                .where(x->x.col(a->a.getbizType()).eq(startProcessInput.getBizType()))
+                .firstOrDefault();
+        return this.processInstanceHandler.startProcess(btpex,startProcessInput.getFormdata());
     }
 
     public List<?> getUserTask(){
@@ -309,7 +314,7 @@ public class Camunda {
         return lsttask;
     }
 
-    public  void  complete(BpmdataByUserTask completeTaskParameter)  {
-        this.processInstanceHandler.complete(completeTaskParameter);
+    public  void  complete(CompleteTaskInput completeTaskInput)  {
+        this.processInstanceHandler.complete(completeTaskInput.getTaskId(),completeTaskInput.getFormdata());
     }
 }

@@ -1,8 +1,9 @@
-package io.github.eeroom.entity;
+package io.github.eeroom.entity.sf;
+
 
 import java.util.HashMap;
 
-public class BpmdataByNewProcess {
+public class StartProcessInput {
     public int getBizType() {
         return bizType;
     }
@@ -10,7 +11,6 @@ public class BpmdataByNewProcess {
     public void setBizType(int bizType) {
         this.bizType = bizType;
     }
-
 
     int bizType;
 

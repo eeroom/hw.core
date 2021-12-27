@@ -1,12 +1,10 @@
 package io.github.eeroom.sf.bpm;
 
-import io.github.eeroom.entity.sfdb.bizdata;
+import io.github.eeroom.entity.sf.db.bizdata;
 import io.github.eeroom.sf.MyObjectFacotry;
 import io.github.eeroom.sf.SfDbContext;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.ExecutionListener;
-import org.camunda.bpm.engine.delegate.TaskListener;
 
 public class BizdataStatusSetter implements ExecutionListener {
     @Override

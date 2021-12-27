@@ -1,7 +1,7 @@
 package io.github.eeroom.hz.camunda;
 
-import io.github.eeroom.entity.sfdb.bizdata;
-import io.github.eeroom.entity.sfdb.bizdatasub;
+import io.github.eeroom.entity.hz.db.bizdata;
+import io.github.eeroom.entity.hz.db.bizdatasub;
 import io.github.eeroom.hz.MyDbContext;
 import io.github.eeroom.hz.MyObjectFacotry;
 import io.github.eeroom.nalu.Columns;
@@ -26,12 +26,12 @@ public class ListenerHandler implements Serializable {
             tmp.sethandlerId(x);
             tmp.setprocessId(processId);
             tmp.settaskId(taskId);
-            tmp.setHandlerByMe(0);
+            tmp.sethandlerByMe(0);
             tmp.settaskstatus(0);
             return tmp;
         }).collect(Collectors.toList());
         dbcontext.add(lstbizdatasub)
-                .setInsertCol(x-> Columns.of(x.gethandlerId(),x.getprocessId(),x.gettaskId(),x.getHandlerByMe(),x.gettaskstatus()));
+                .setInsertCol(x-> Columns.of(x.gethandlerId(),x.getprocessId(),x.gettaskId(),x.gethandlerByMe(),x.gettaskstatus()));
         dbcontext.saveChange();
     }
 
@@ -50,7 +50,7 @@ public class ListenerHandler implements Serializable {
         var bizdatastatus=delegateExecution.getVariable("bizdatastatus");
         var value= Integer.valueOf(bizdatastatus.toString());
         dbcontext.edit(bizdata.class)
-                .setUpdateCol(x->x.getStatus(),value)
+                .setUpdateCol(x->x.getstatus(),value)
                 .where(x->x.col(a->a.getprocessId()).eq(bizd.getprocessId()));
         dbcontext.saveChange();
     }

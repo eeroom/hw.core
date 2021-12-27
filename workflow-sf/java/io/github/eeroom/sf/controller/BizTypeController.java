@@ -1,6 +1,7 @@
 package io.github.eeroom.sf.controller;
 
-import io.github.eeroom.entity.sfdb.*;
+import io.github.eeroom.entity.sf.db.biztype;
+import io.github.eeroom.entity.sf.db.*;
 import io.github.eeroom.nalu.Columns;
 import io.github.eeroom.sf.LoginUserInfo;
 import io.github.eeroom.sf.SfDbContext;

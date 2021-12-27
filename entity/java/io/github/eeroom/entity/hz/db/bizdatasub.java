@@ -1,5 +1,6 @@
-package io.github.eeroom.entity.sfdb;
+package io.github.eeroom.entity.hz.db;
 
+import io.github.eeroom.entity.hz.*;
 public class bizdatasub {
 
     Integer id;
@@ -42,17 +43,15 @@ public class bizdatasub {
         this.handlerId = pValue;
     }
 
-    public Integer getHandlerByMe() {
+    Integer handlerByMe;
+
+    public Integer gethandlerByMe() {
         return handlerByMe;
     }
 
-    public void setHandlerByMe(Integer handlerByMe) {
-        this.handlerByMe = handlerByMe;
+    public void sethandlerByMe(Integer pValue) {
+        this.handlerByMe = pValue;
     }
-
-    Integer handlerByMe;
-
-
 
     String completeformdatajson;
 

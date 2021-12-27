@@ -1,8 +1,8 @@
-package io.github.eeroom.entity;
+package io.github.eeroom.entity.camunda;
 
 import java.util.HashMap;
 
-public class BpmdataByUserTask {
+public class CompleteTaskInput {
     public String getTaskId() {
         return taskId;
     }

@@ -1,9 +1,10 @@
 package io.github.eeroom.sf.bpm;
 
-import io.github.eeroom.entity.BpmdataByNewProcess;
-import io.github.eeroom.entity.BpmdataByUserTask;
-import io.github.eeroom.entity.sfdb.bizdatasub;
-import io.github.eeroom.entity.sfdb.biztype;
+import io.github.eeroom.entity.sf.StartProcessInput;
+import io.github.eeroom.entity.camunda.CompleteTaskInput;
+import io.github.eeroom.entity.sf.db.bizdata;
+import io.github.eeroom.entity.sf.db.bizdatasub;
+import io.github.eeroom.entity.sf.db.biztype;
 import io.github.eeroom.sf.JsonHelper;
 import io.github.eeroom.sf.LoginUserInfo;
 import io.github.eeroom.sf.SfDbContext;
@@ -28,10 +29,10 @@ public class CamundaBll {
         this.jsonHelper=jsonHelper;
     }
 
-    public io.github.eeroom.entity.sfdb.bizdata startProcess(BpmdataByNewProcess bpmdataByUserTask) {
+    public bizdata startProcess(StartProcessInput bpmdataByUserTask) {
         //根据业务id获取对应流程的key
         var btp= this.dbContext.dbSet(biztype.class).select()
-                .where(x->x.col(a->a.getid()).eq(bpmdataByUserTask.getBizType()))
+                .where(x->x.col(a->a.getid()).eq(0))
                 .firstOrDefault();
         if(btp==null)
             throw new IllegalArgumentException("指定的业务类别不存在："+ bpmdataByUserTask.getBizType());
@@ -44,8 +45,8 @@ public class CamundaBll {
         var processInstance = this.processEngine.getRuntimeService()
                 .startProcessInstanceByKey(btp.getcamundaKey(),map);
         //往主业务表添加一条记录
-        io.github.eeroom.entity.sfdb.bizdata biz=new io.github.eeroom.entity.sfdb.bizdata();
-        biz.setbizType(bpmdataByUserTask.getBizType());
+        bizdata biz=new bizdata();
+        biz.setbizType(0);
         biz.setcreateBy(this.loginUserInfo.getName());
         biz.setcreateformdatajson(this.jsonHelper.serializeObject(bpmdataByUserTask.getFormdata()));
         biz.setcreateTime(new java.sql.Timestamp(new Date().getTime()));
@@ -60,7 +61,7 @@ public class CamundaBll {
         return biz;
     }
 
-    public  void  complete(BpmdataByUserTask completeTaskParameter)  {
+    public  void  complete(CompleteTaskInput completeTaskParameter)  {
         //前置校验，当前登录人确实是这个task的处理人
         var task= this.processEngine.getTaskService().createTaskQuery().taskId(completeTaskParameter.getTaskId())
                 .singleResult();

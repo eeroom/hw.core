@@ -1,7 +1,7 @@
 package io.github.eeroom.sf.bpm;
 
-import io.github.eeroom.entity.sfdb.bizdata;
-import io.github.eeroom.entity.sfdb.bizdatasub;
+import io.github.eeroom.entity.sf.db.bizdata;
+import io.github.eeroom.entity.sf.db.bizdatasub;
 import io.github.eeroom.nalu.Columns;
 import io.github.eeroom.sf.MyObjectFacotry;
 import io.github.eeroom.sf.SfDbContext;

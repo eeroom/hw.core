@@ -1,9 +1,8 @@
 package io.github.eeroom.hz.camunda;
 
-import io.github.eeroom.entity.BpmdataByNewProcess;
-import io.github.eeroom.entity.BpmdataByUserTask;
-import io.github.eeroom.entity.sfdb.bizdatasub;
-import io.github.eeroom.entity.sfdb.biztype;
+import io.github.eeroom.entity.hz.db.bizdata;
+import io.github.eeroom.entity.hz.db.bizdatasub;
+import io.github.eeroom.entity.hz.db.biztypeex;
 import io.github.eeroom.hz.MyDbContext;
 import io.github.eeroom.hz.MyObjectFacotry;
 import io.github.eeroom.hz.authen.CurrentUserInfo;
@@ -29,33 +28,29 @@ public class ProcessInstanceHandler {
         this.jsonHelper=jsonHelper;
     }
 
-    public io.github.eeroom.entity.sfdb.bizdata startProcess(BpmdataByNewProcess bpmdataByUserTask) {
-        //根据业务id获取对应流程的key
-        var btp= this.dbContext.dbSet(biztype.class).select()
-                .where(x->x.col(a->a.getid()).eq(bpmdataByUserTask.getBizType()))
-                .firstOrDefault();
-        if(btp==null)
-            throw new IllegalArgumentException("指定的业务类别不存在："+ bpmdataByUserTask.getBizType());
-        var formdataOfCreate= this.jsonHelper.serializeObject(bpmdataByUserTask.getFormdata());
-        bpmdataByUserTask.getFormdata().put(MapKeys.formdataOfCreate,formdataOfCreate);
-        ListenerHandler listenerHandler=new ListenerHandler();
+    public bizdata startProcess(biztypeex btpex, HashMap<String,Object> formdata) {
+        var map=new HashMap<String,Object>();
+        map.putAll(formdata);
+        var formdataOfCreate= this.jsonHelper.serializeObject(formdata);
+        map.put(VariableKey.formdataOfCreate,formdataOfCreate);
+        var listenerHandler=new ListenerHandler();
         //jdk11环境下，  如果camunda的流程参数使用javabean类型，就需要添加这个依赖。tomcat7和2.3版本的有小冲突，启动报错，但不影响使用，这里使用2.2版本，tomcat7启动不报错
-        bpmdataByUserTask.getFormdata().put("listenerHandler",listenerHandler);
-        var handlerKey=btp.getcamundaKey()+"Handler";
-        var handler= MyObjectFacotry.getBeanOrNull(handlerKey);
-        if(handler!=null){//业务流程特有的handler
-            bpmdataByUserTask.getFormdata().put(handlerKey,handler);
+        map.put(VariableKey.listenerHandler,listenerHandler);
+        var handlerKey=btpex.getprocdefineKey()+"Handler";
+        if(MyObjectFacotry.containsBean(handlerKey)){
+            //流程各自的handler
+            map.put(handlerKey,MyObjectFacotry.getBean(handlerKey));
         }
         var processInstance = this.processEngine.getRuntimeService()
-                .startProcessInstanceByKey(btp.getcamundaKey(),bpmdataByUserTask.getFormdata());
+                .startProcessInstanceByKey(btpex.getprocdefineKey(),map);
         //往主业务表添加一条记录
-        io.github.eeroom.entity.sfdb.bizdata biz=new io.github.eeroom.entity.sfdb.bizdata();
-        biz.setbizType(bpmdataByUserTask.getBizType());
-        biz.setcreateBy(this.currentUserInfo.getName());
+        bizdata biz=new bizdata();
+        biz.setbizType(btpex.getbizType());
+        biz.setcreateBy(this.currentUserInfo.getAccount());
         biz.setcreateformdatajson(formdataOfCreate);
         biz.setcreateTime(new java.sql.Timestamp(new Date().getTime()));
         biz.setprocessId(processInstance.getProcessInstanceId());
-        var title= this.processEngine.getRuntimeService().getVariable(processInstance.getProcessInstanceId(),"bizdataTitle");
+        var title= this.processEngine.getRuntimeService().getVariable(processInstance.getProcessInstanceId(),VariableKey.bizdataTitle);
         if(title!=null){
             biz.settitle(title.toString());
         }
@@ -65,38 +60,41 @@ public class ProcessInstanceHandler {
         return biz;
     }
 
-    public  void  complete(BpmdataByUserTask completeTaskParameter)  {
+    public  void  complete(String taskId,HashMap<String,Object> formdata)  {
         //前置校验，当前登录人确实是这个task的处理人
-        var task= this.processEngine.getTaskService().createTaskQuery().taskId(completeTaskParameter.getTaskId())
+        var task= this.processEngine.getTaskService().createTaskQuery().taskId(taskId)
                 .singleResult();
         if(task==null)
-            throw new IllegalArgumentException("指定id的task不存在，taskid="+completeTaskParameter.getTaskId());
+            throw new IllegalArgumentException("指定id的task不存在，taskid="+taskId);
         if(!this.currentUserInfo.getName().equals(task.getAssignee()))
             throw new IllegalArgumentException("你不是当前任务的处理人！");
         //map中的键和可能值，流程图和completeTaskParameter要事先约定好，
         // 这里的约定是，
-        // 如果UserTask执行结果是修改当前任务的执行人，就在表单数据中包含userTaskResult：delegate和delegetedHandler：新的执行人
-        String userTaskResult="userTaskResult";
+        // 如果UserTask执行结果是修改当前任务的执行人，就在表单数据中包含completeResult：delegate和delegetedHandler：新的执行人
+        String completeResult="completeResult";
         String delegetedHandler="delegetedHandler";
-        String formdataOfComplete=this.jsonHelper.serializeObject(completeTaskParameter.getFormdata());
-        if(completeTaskParameter.getFormdata().containsKey(userTaskResult) &&"delegate".equals(completeTaskParameter.getFormdata().get(userTaskResult))){
-            if(completeTaskParameter.getFormdata().containsKey(delegetedHandler) || completeTaskParameter.getFormdata().get(delegetedHandler).toString().length()<1)
+        String formdataOfComplete=this.jsonHelper.serializeObject(formdata);
+        if(formdata.containsKey(completeResult) &&"delegate".equals(formdata.get(completeResult))){
+            if(!formdata.containsKey(delegetedHandler))
                 throw new IllegalArgumentException("必须指定被委托人");
-            this.processEngine.getTaskService().delegateTask(completeTaskParameter.getTaskId(),completeTaskParameter.getFormdata().get(delegetedHandler).toString());
+            var tmpHanlder= formdata.get(delegetedHandler);
+            if(tmpHanlder==null || tmpHanlder.toString().length()<1)
+                throw new IllegalArgumentException("必须指定被委托人");
+            this.processEngine.getTaskService().delegateTask(taskId,tmpHanlder.toString());
         }else {
-            completeTaskParameter.getFormdata().put(MapKeys.formdataOfComplete,formdataOfComplete);
-            this.processEngine.getTaskService().complete(completeTaskParameter.getTaskId(),completeTaskParameter.getFormdata());
+            formdata.put(VariableKey.formdataOfComplete,formdataOfComplete);
+            this.processEngine.getTaskService().complete(taskId,formdata);
         }
         //更新主业务表子表，把状态置为close
         //一个人任务，多人处理的情况下，当前人记录表单数据，其他人只更新taskstatus
         this.dbContext.edit(bizdatasub.class)
                 .setUpdateCol(x->x.getcompleteformdatajson(),formdataOfComplete)
-                .setUpdateCol(x->x.getHandlerByMe(),1)
-                .where(x->x.col(a->a.gettaskId()).eq(completeTaskParameter.getTaskId()))
-                .where(x->x.col(a->a.gethandlerId()).eq(this.currentUserInfo.getName()));
+                .setUpdateCol(x->x.gethandlerByMe(),1)
+                .where(x->x.col(a->a.gettaskId()).eq(taskId))
+                .where(x->x.col(a->a.gethandlerId()).eq(this.currentUserInfo.getAccount()));
         this.dbContext.edit(bizdatasub.class)
                 .setUpdateCol(x->x.gettaskstatus(),1)
-                .where(x->x.col(a->a.gettaskId()).eq(completeTaskParameter.getTaskId()))
+                .where(x->x.col(a->a.gettaskId()).eq(taskId))
                 .where(x->x.col(a->a.gettaskstatus()).eq(0));
         this.dbContext.saveChange();
     }

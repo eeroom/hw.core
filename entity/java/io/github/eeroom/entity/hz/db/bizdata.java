@@ -1,5 +1,6 @@
-package io.github.eeroom.entity.hzdb;
+package io.github.eeroom.entity.hz.db;
 
+import io.github.eeroom.entity.hz.*;
 public class bizdata {
 
     String processId;
@@ -10,16 +11,6 @@ public class bizdata {
 
     public void setprocessId(String pValue) {
         this.processId = pValue;
-    }
-
-    Integer bizType;
-
-    public Integer getbizType() {
-        return bizType;
-    }
-
-    public void setbizType(Integer pValue) {
-        this.bizType = pValue;
     }
 
     String title;
@@ -70,6 +61,16 @@ public class bizdata {
 
     public void setstatus(Integer pValue) {
         this.status = pValue;
+    }
+
+    BizType bizType;
+
+    public BizType getbizType() {
+        return bizType;
+    }
+
+    public void setbizType(BizType pValue) {
+        this.bizType = pValue;
     }
 
 }

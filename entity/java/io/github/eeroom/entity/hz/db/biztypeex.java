@@ -1,35 +1,26 @@
-package io.github.eeroom.entity.sfdb;
+package io.github.eeroom.entity.hz.db;
 
-public class biztype {
+import io.github.eeroom.entity.hz.*;
+public class biztypeex {
 
-    Integer id;
+    BizType bizType;
 
-    public Integer getid() {
-        return id;
+    public BizType getbizType() {
+        return bizType;
     }
 
-    public void setid(Integer pValue) {
-        this.id = pValue;
+    public void setbizType(BizType pValue) {
+        this.bizType = pValue;
     }
 
-    String camundaKey;
+    String procdefineKey;
 
-    public String getcamundaKey() {
-        return camundaKey;
+    public String getprocdefineKey() {
+        return procdefineKey;
     }
 
-    public void setcamundaKey(String pValue) {
-        this.camundaKey = pValue;
-    }
-
-    String name;
-
-    public String getname() {
-        return name;
-    }
-
-    public void setname(String pValue) {
-        this.name = pValue;
+    public void setprocdefineKey(String pValue) {
+        this.procdefineKey = pValue;
     }
 
     String ico;

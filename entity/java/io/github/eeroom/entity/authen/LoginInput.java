@@ -1,4 +1,4 @@
-package io.github.eeroom.entity;
+package io.github.eeroom.entity.authen;
 
 public class LoginInput {
 

@@ -17,9 +17,17 @@ public class MyObjectFacotry implements ApplicationContextAware {
         return rootcontext.getBean(meta);
     }
 
+    public static   Object getBean(String beanName){
+        return rootcontext.getBean(beanName);
+    }
+
     public static  Object getBeanOrNull(String beanName){
         if(!rootcontext.containsBean(beanName))
             return null;
         return rootcontext.getBean(beanName);
+    }
+
+    public static boolean containsBean(String beanName){
+        return rootcontext.containsBean(beanName);
     }
 }

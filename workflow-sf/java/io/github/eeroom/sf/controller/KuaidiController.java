@@ -1,11 +1,11 @@
 package io.github.eeroom.sf.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.github.eeroom.entity.BpmdataByNewProcess;
-import io.github.eeroom.entity.BpmdataByUserTask;
+import io.github.eeroom.entity.sf.StartProcessInput;
+import io.github.eeroom.entity.camunda.CompleteTaskInput;
 import io.github.eeroom.entity.sf.kuaidi.EntityByPaymoney;
-import io.github.eeroom.entity.sfdb.bizdata;
-import io.github.eeroom.entity.sfdb.bizdatasub;
+import io.github.eeroom.entity.sf.db.bizdata;
+import io.github.eeroom.entity.sf.db.bizdatasub;
 import io.github.eeroom.sf.JsonHelper;
 import io.github.eeroom.sf.LoginUserInfo;
 import io.github.eeroom.sf.SfDbContext;
@@ -32,14 +32,14 @@ public class KuaidiController {
     }
 
     @SkipAuthentication
-    public io.github.eeroom.entity.sfdb.bizdata newTransfer(io.github.eeroom.entity.sf.kuaidi.EntityByCreate entity){
-        BpmdataByNewProcess bpmdataByNewProcess=new BpmdataByNewProcess();
-        bpmdataByNewProcess.setBizType(1);
+    public bizdata newTransfer(io.github.eeroom.entity.sf.kuaidi.EntityByCreate entity){
+        StartProcessInput startProcessInput =new StartProcessInput();
+        startProcessInput.setBizType(1);
         var jsonstr=this.jsonHelper.serializeObject(entity);
         var formdata=this.jsonHelper.deSerializeObject(jsonstr, new TypeReference<HashMap<String,Object>>() {});
-        bpmdataByNewProcess.setFormdata(formdata);
+        startProcessInput.setFormdata(formdata);
         this.loginUserInfo.setName(entity.getThirdpartId());
-        return bll.startProcess(bpmdataByNewProcess);
+        return bll.startProcess(startProcessInput);
     }
 
     @SkipAuthentication
@@ -63,10 +63,10 @@ public class KuaidiController {
             throw new RuntimeException("此流程的对方付款环节已关闭或者不存在,id:"+entity.getProcessInstanceId());
         var jsonstr=this.jsonHelper.serializeObject(entity);
         var formdata=this.jsonHelper.deSerializeObject(jsonstr, new TypeReference<HashMap<String,Object>>() {});
-        BpmdataByUserTask bpmdataByUserTask=new BpmdataByUserTask();
-        bpmdataByUserTask.setTaskId(bizdatasub.gettaskId());
-        bpmdataByUserTask.setFormdata(formdata);
+        CompleteTaskInput completeTaskInput =new CompleteTaskInput();
+        completeTaskInput.setTaskId(bizdatasub.gettaskId());
+        completeTaskInput.setFormdata(formdata);
         this.loginUserInfo.setName(entity.getThirdpartId());
-        bll.complete(bpmdataByUserTask);
+        bll.complete(completeTaskInput);
     }
 }

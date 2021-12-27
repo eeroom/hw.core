@@ -1,4 +1,4 @@
-package io.github.eeroom.entity.hzdb;
+package io.github.eeroom.entity.sf.db;
 
 public class biztype {
 

@@ -1,4 +1,4 @@
-package io.github.eeroom.entity.sfdb;
+package io.github.eeroom.entity.sf.db;
 
 public class jijiancustomer {
 

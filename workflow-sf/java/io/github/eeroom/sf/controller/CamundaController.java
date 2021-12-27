@@ -1,7 +1,8 @@
 package io.github.eeroom.sf.controller;
 
-import io.github.eeroom.entity.BpmdataByNewProcess;
-import io.github.eeroom.entity.BpmdataByUserTask;
+import io.github.eeroom.entity.sf.StartProcessInput;
+import io.github.eeroom.entity.camunda.CompleteTaskInput;
+import io.github.eeroom.entity.sf.db.bizdata;
 import io.github.eeroom.sf.*;
 import io.github.eeroom.sf.bpm.CamundaBll;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
@@ -11,10 +12,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
-import java.nio.charset.Charset;
+
 import java.util.Date;
 import java.util.List;
-import io.github.eeroom.entity.sfdb.*;
+
 @RestController
 @Scope(WebApplicationContext.SCOPE_REQUEST)
 public class CamundaController {
@@ -128,7 +129,7 @@ public class CamundaController {
         return lstProcessDefinition;
     }
 
-    public io.github.eeroom.entity.sfdb.bizdata startProcess(BpmdataByNewProcess bpmdataByUserTask) {
+    public bizdata startProcess(StartProcessInput bpmdataByUserTask) {
         return this.bll.startProcess(bpmdataByUserTask);
     }
 
@@ -307,7 +308,7 @@ public class CamundaController {
         return lsttask;
     }
 
-    public  void  complete(BpmdataByUserTask completeTaskParameter)  {
+    public  void  complete(CompleteTaskInput completeTaskParameter)  {
         this.bll.complete(completeTaskParameter);
     }
 

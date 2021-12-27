@@ -1,9 +1,6 @@
 package io.github.eeroom.sf.controller;
 
-import io.github.eeroom.entity.sfdb.biztype;
-import io.github.eeroom.entity.sfdb.jijiancustomer;
-import io.github.eeroom.nalu.Columns;
-import io.github.eeroom.sf.LoginUserInfo;
+import io.github.eeroom.entity.sf.db.jijiancustomer;
 import io.github.eeroom.sf.SfDbContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RestController;

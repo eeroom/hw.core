@@ -1,14 +1,12 @@
 package io.github.eeroom.sf.bpm;
 
-import io.github.eeroom.entity.sfdb.bizdatasub;
+import io.github.eeroom.entity.sf.db.bizdatasub;
 import io.github.eeroom.nalu.Columns;
 import io.github.eeroom.sf.MyObjectFacotry;
 import io.github.eeroom.sf.SfDbContext;
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.TaskListener;
-import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 

@@ -1,7 +1,9 @@
 package io.github.eeroom.entity.sf.kuaidi;
 
+import io.github.eeroom.entity.sf.db.bizdata;
+
 public interface IKuaidiController {
-    public io.github.eeroom.entity.sfdb.bizdata newTransfer(io.github.eeroom.entity.sf.kuaidi.EntityByCreate entity);
+    public bizdata newTransfer(io.github.eeroom.entity.sf.kuaidi.EntityByCreate entity);
 
     public void completePaymoney(EntityByPaymoney entity);
 
