@@ -36,7 +36,7 @@
     </bpmn:task>
     <bpmn:endEvent id="Event_1i9xudb">
       <bpmn:extensionElements>
-        <camunda:executionListener class="io.github.eeroom.sf.bpm.BizdataStatusSetter" event="end" />
+        <camunda:executionListener class="BizdataStatusSetter" event="end" />
         <camunda:inputOutput>
           <camunda:inputParameter name="bizdatastatus">1</camunda:inputParameter>
         </camunda:inputOutput>
@@ -79,7 +79,7 @@
     </bpmn:manualTask>
     <bpmn:manualTask id="Activity_0m511ea" name="通知对方&#10;过磅结果">
       <bpmn:extensionElements>
-        <camunda:executionListener class="io.github.eeroom.sf.bpm.KuaidiNoticer" event="end" />
+        <camunda:executionListener class="KuaidiNoticer" event="end" />
         <camunda:inputOutput>
           <camunda:inputParameter name="msgkeys">zhongliang</camunda:inputParameter>
           <camunda:inputParameter name="msgtype">guobang</camunda:inputParameter>

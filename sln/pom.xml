@@ -12,7 +12,7 @@
     <module>../sln-ui</module>
     <module>../sln-model</module>
     <module>../sf</module>
-    <module>../entity</module>
+    <module>../gtop</module>
     <module>../hz</module>
   </modules>
 
