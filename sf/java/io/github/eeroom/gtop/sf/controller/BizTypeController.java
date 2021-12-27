@@ -1,8 +1,8 @@
 package io.github.eeroom.gtop.sf.controller;
 
 import io.github.eeroom.gtop.entity.sf.db.biztype;
-import io.github.eeroom.gtop.sf.LoginUserInfo;
-import io.github.eeroom.gtop.sf.SfDbContext;
+import io.github.eeroom.gtop.sf.authen.CurrentUserInfo;
+import io.github.eeroom.gtop.sf.MyDbContext;
 import io.github.eeroom.nalu.Columns;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,11 +13,11 @@ import java.util.List;
 @RestController
 @Scope(WebApplicationContext.SCOPE_REQUEST)
 public class BizTypeController {
-    LoginUserInfo loginUserInfo;
+    CurrentUserInfo currentUserInfo;
 
-    SfDbContext dbContext;
-    public BizTypeController(LoginUserInfo loginUserInfo, SfDbContext dbContext){
-        this.loginUserInfo=loginUserInfo;
+    MyDbContext dbContext;
+    public BizTypeController(CurrentUserInfo currentUserInfo, MyDbContext dbContext){
+        this.currentUserInfo = currentUserInfo;
         this.dbContext=dbContext;
     }
 

@@ -4,8 +4,11 @@ import io.github.eeroom.gtop.entity.sf.StartProcessInput;
 import io.github.eeroom.gtop.entity.camunda.CompleteTaskInput;
 import io.github.eeroom.gtop.entity.sf.db.bizdata;
 import io.github.eeroom.gtop.sf.*;
-import io.github.eeroom.gtop.sf.*;
-import io.github.eeroom.gtop.sf.bpm.CamundaBll;
+import io.github.eeroom.gtop.sf.aspnet.HttpPost;
+import io.github.eeroom.gtop.sf.authen.CurrentUserInfo;
+import io.github.eeroom.gtop.sf.authen.SkipAuthentication;
+import io.github.eeroom.gtop.sf.camunda.ProcessInstanceHandler;
+import io.github.eeroom.gtop.sf.serialize.JsonConvert;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.task.DelegationState;
 import org.camunda.bpm.engine.task.Task;
@@ -22,17 +25,17 @@ import java.util.List;
 public class CamundaController {
     org.camunda.bpm.engine.ProcessEngine processEngine;
 
-    LoginUserInfo loginUserInfo;
+    CurrentUserInfo currentUserInfo;
 
-    SfDbContext dbContext;
-    JsonHelper jsonHelper;
-    CamundaBll bll;
-    public CamundaController(org.camunda.bpm.engine.ProcessEngine processEngine, LoginUserInfo loginUserInfo, SfDbContext dbContext,
-                             JsonHelper jsonHelper, CamundaBll bll){
+    MyDbContext dbContext;
+    JsonConvert jsonConvert;
+    ProcessInstanceHandler bll;
+    public CamundaController(org.camunda.bpm.engine.ProcessEngine processEngine, CurrentUserInfo currentUserInfo, MyDbContext dbContext,
+                             JsonConvert jsonConvert, ProcessInstanceHandler bll){
         this.processEngine=processEngine;
-        this.loginUserInfo=loginUserInfo;
+        this.currentUserInfo = currentUserInfo;
         this.dbContext=dbContext;
-        this.jsonHelper=jsonHelper;
+        this.jsonConvert = jsonConvert;
         this.bll=bll;
     }
 
@@ -136,7 +139,7 @@ public class CamundaController {
 
     public List<?> getUserTask(){
         var lsttask= this.processEngine.getTaskService().createTaskQuery()
-                .taskAssignee(this.loginUserInfo.getName())
+                .taskAssignee(this.currentUserInfo.getName())
                 .list()
                 .stream()
                 .map(x->new Task() {

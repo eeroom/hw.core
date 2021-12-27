@@ -3,7 +3,7 @@ package io.github.eeroom.gtop.sf.controller;
 import com.auth0.jwt.algorithms.Algorithm;
 import io.github.eeroom.gtop.entity.ApidataWrapper;
 import io.github.eeroom.gtop.entity.authen.LoginInput;
-import io.github.eeroom.gtop.sf.SkipAuthentication;
+import io.github.eeroom.gtop.sf.authen.SkipAuthentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 

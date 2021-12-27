@@ -1,10 +1,10 @@
-package io.github.eeroom.gtop.sf;
+package io.github.eeroom.gtop.sf.cors;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class CORSFilter implements Filter {
+public class AllowAnyOriginFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 

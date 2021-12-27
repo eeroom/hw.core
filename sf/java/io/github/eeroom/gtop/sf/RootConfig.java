@@ -21,18 +21,18 @@ public class RootConfig {
 
     /**
      * ProcessEngineConfiguration是定义在camunda类库中类，我们想让spring容器管理其实例，只能使用这个方式定义bean,没法使用@component标注
-     * @param mapProperties
+     * @param appConfig
      * @return
      */
     @Bean
-    public org.camunda.bpm.engine.ProcessEngineConfiguration processEngineConfiguration(MapProperties mapProperties){
+    public org.camunda.bpm.engine.ProcessEngineConfiguration processEngineConfiguration(AppConfig appConfig){
         var cfg=org.camunda.bpm.engine.ProcessEngineConfiguration.createStandaloneProcessEngineConfiguration();
-        cfg.setJdbcDriver(mapProperties.camundaJdbcDriver);
-        cfg.setJdbcUrl(mapProperties.camundaJdbcUrl);
-        cfg.setJdbcUsername(mapProperties.camundaJdbcUsername);
-        cfg.setJdbcPassword(mapProperties.camundaJdbcPwd);
-        cfg.setDatabaseType(mapProperties.camundaDatabaseType);
-        cfg.setDatabaseSchemaUpdate(mapProperties.camundaDatabaseSchemaUpdate);
+        cfg.setJdbcDriver(appConfig.camundaJdbcDriver);
+        cfg.setJdbcUrl(appConfig.camundaJdbcUrl);
+        cfg.setJdbcUsername(appConfig.camundaJdbcUsername);
+        cfg.setJdbcPassword(appConfig.camundaJdbcPwd);
+        cfg.setDatabaseType(appConfig.camundaDatabaseType);
+        cfg.setDatabaseSchemaUpdate(appConfig.camundaDatabaseSchemaUpdate);
         return cfg;
     }
 

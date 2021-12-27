@@ -1,5 +1,6 @@
 package io.github.eeroom.gtop.sf;
 
+import io.github.eeroom.gtop.sf.cors.AllowAnyOriginFilter;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -55,7 +56,7 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
         super.onStartup(servletContext);
         //对应web.xml文件的Filter部分
         //后续在contextInitialized中再利用容器读取配置文件数据对filter进行配置
-        var corscfg=servletContext.addFilter("CORSFilter",CORSFilter.class);
+        var corscfg=servletContext.addFilter("CORSFilter", AllowAnyOriginFilter.class);
         corscfg.addMappingForUrlPatterns(null,false,"/*");
     }
 
@@ -115,7 +116,7 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
         public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
             //基于springcontext的事件体系，在ContextRefreshedEvent事件的回调方法中，利用容器读取配置信息然后配置servlet的上传功能，配置filter的初始参数
             var contextRoot=(AnnotationConfigWebApplicationContext)contextRefreshedEvent.getApplicationContext();
-            var mapProperties= contextRoot.getBean(MapProperties.class);
+            var mapProperties= contextRoot.getBean(AppConfig.class);
             //配置上传功能
             App.this.registration.setMultipartConfig(new MultipartConfigElement(mapProperties.uploadtmpdir,mapProperties.maxUploadSize,mapProperties.maxUploadSize,mapProperties.maxInMemorySize));
             //配置filter

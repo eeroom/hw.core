@@ -1,4 +1,4 @@
-package io.github.eeroom.gtop.sf;
+package io.github.eeroom.gtop.sf.authen;
 
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AuthenticationHandlerInterceptor implements HandlerInterceptor {
+public class JwtAuthenticationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         if(!(o instanceof HandlerMethod))
@@ -34,7 +34,7 @@ public class AuthenticationHandlerInterceptor implements HandlerInterceptor {
         if(userName==null ||userName.length()<=0)
             return this.needLogin(httpServletResponse);
         var context= WebApplicationContextUtils.getWebApplicationContext(httpServletRequest.getServletContext());
-        var loginUserInfo=context.getBean(LoginUserInfo.class);
+        var loginUserInfo=context.getBean(CurrentUserInfo.class);
         loginUserInfo.setName(userName);
         return true;
     }

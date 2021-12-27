@@ -1,4 +1,4 @@
-package io.github.eeroom.gtop.sf;
+package io.github.eeroom.gtop.sf.aspnet;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,7 +1,7 @@
 package io.github.eeroom.gtop.sf.controller;
 
 import io.github.eeroom.gtop.entity.sf.db.jijiancustomer;
-import io.github.eeroom.gtop.sf.SfDbContext;
+import io.github.eeroom.gtop.sf.MyDbContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
@@ -11,8 +11,8 @@ import java.util.List;
 @RestController
 @Scope(WebApplicationContext.SCOPE_REQUEST)
 public class JijiancustomerController {
-    SfDbContext dbContext;
-    public JijiancustomerController( SfDbContext dbContext){
+    MyDbContext dbContext;
+    public JijiancustomerController( MyDbContext dbContext){
         this.dbContext=dbContext;
     }
 

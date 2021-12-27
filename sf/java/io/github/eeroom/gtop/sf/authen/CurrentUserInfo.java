@@ -1,4 +1,4 @@
-package io.github.eeroom.gtop.sf;
+package io.github.eeroom.gtop.sf.authen;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -6,7 +6,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @Scope(WebApplicationContext.SCOPE_REQUEST)
 @Component
-public class LoginUserInfo {
+public class CurrentUserInfo {
     String id;
 
     public String getId() {

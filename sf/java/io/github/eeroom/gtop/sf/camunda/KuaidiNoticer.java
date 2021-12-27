@@ -1,4 +1,4 @@
-package io.github.eeroom.gtop.sf.bpm;
+package io.github.eeroom.gtop.sf.camunda;
 
 import io.github.eeroom.apiclient.HttpChannelFactory;
 import io.github.eeroom.gtop.entity.sf.db.jijiancustomer;
@@ -6,7 +6,7 @@ import io.github.eeroom.gtop.api.sf.INoticer;
 import io.github.eeroom.gtop.entity.sf.kuaidi.NoticeMessage;
 import io.github.eeroom.gtop.entity.sf.kuaidi.NoticeMessageType;
 import io.github.eeroom.gtop.sf.MyObjectFacotry;
-import io.github.eeroom.gtop.sf.SfDbContext;
+import io.github.eeroom.gtop.sf.MyDbContext;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.ExecutionListener;
 
@@ -16,7 +16,7 @@ public class KuaidiNoticer implements ExecutionListener {
     @Override
     public void notify(DelegateExecution delegateExecution) throws Exception {
         var pid= delegateExecution.getProcessInstanceId();
-        var dbcontext= MyObjectFacotry.getBean(SfDbContext.class);
+        var dbcontext= MyObjectFacotry.getBean(MyDbContext.class);
         var thirdpartId=delegateExecution.getVariable("thirdpartId").toString();
         var thridpart= dbcontext.dbSet(jijiancustomer.class)
                 .select()

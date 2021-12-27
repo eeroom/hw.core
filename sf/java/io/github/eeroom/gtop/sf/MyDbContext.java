@@ -11,9 +11,9 @@ import java.sql.Connection;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class SfDbContext extends DbContext {
-    MapProperties configdata;
-    public SfDbContext(MapProperties configdata){
+public class MyDbContext extends DbContext {
+    AppConfig configdata;
+    public MyDbContext(AppConfig configdata){
         this.configdata=configdata;
     }
 

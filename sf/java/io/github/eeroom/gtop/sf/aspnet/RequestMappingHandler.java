@@ -1,4 +1,4 @@
-package io.github.eeroom.gtop.sf;
+package io.github.eeroom.gtop.sf.aspnet;
 
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.MediaType;
@@ -8,9 +8,9 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-public class AspNetRequestMappingHandler extends org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping {
+public class RequestMappingHandler extends org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping {
 
-    public AspNetRequestMappingHandler(){
+    public RequestMappingHandler(){
         //org.springframework.web.servlet.DispatcherServlet在initHandlerMappings中会对所有的handlerMapping排序，
         //这里保证RequestMappingHandlerMappingAspNet排第一个，
         //因为RequestMappingHandlerMapping加了Component,会被初始化到dispather，并且是第一个

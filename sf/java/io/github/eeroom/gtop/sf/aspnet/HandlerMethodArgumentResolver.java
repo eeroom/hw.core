@@ -1,4 +1,4 @@
-package io.github.eeroom.gtop.sf;
+package io.github.eeroom.gtop.sf.aspnet;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -28,7 +28,7 @@ import java.util.Optional;
  * 如果是让webconfig的容器扫这个bean,就可以直接添加@Component注解，不用在webconfig利用@bean来定义这个bean
  */
 //@Component
-public class AspNetHandlerMethodArgumentResolver implements org.springframework.web.method.support.HandlerMethodArgumentResolver,org.springframework.context.ApplicationContextAware {
+public class HandlerMethodArgumentResolver implements org.springframework.web.method.support.HandlerMethodArgumentResolver,org.springframework.context.ApplicationContextAware {
     RequestMappingHandlerAdapter adapter;
     ModelAttributeMethodProcessor parsewwwformdata;
     RequestResponseBodyMethodProcessor parsejson;

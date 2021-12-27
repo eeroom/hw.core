@@ -2,7 +2,7 @@ package io.github.eeroom.gtop.sf.swagger2;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.collect.Lists;
-import io.github.eeroom.gtop.sf.HttpGet;
+import io.github.eeroom.gtop.sf.aspnet.HttpGet;
 import net.bytebuddy.description.annotation.AnnotationDescription;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.annotation.RequestBody;

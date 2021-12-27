@@ -1,4 +1,4 @@
-package io.github.eeroom.gtop.sf;
+package io.github.eeroom.gtop.sf.serialize;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-public class JsonHelper {
+public class JsonConvert {
     com.fasterxml.jackson.databind.ObjectMapper objectMapper;
 
-    public JsonHelper(){
+    public JsonConvert(){
         this.objectMapper=new ObjectMapper();
         //反序列的时候，如果json中有额外的字段，class没有与其对应的属性，默认报错，这样配置就不会报错，
         //这个配置对于调用第三方接口特别重要，接口可能增加某个字段数据，但我们不需要用，也就没有修改代码

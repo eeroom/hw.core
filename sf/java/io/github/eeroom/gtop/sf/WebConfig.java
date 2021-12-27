@@ -2,12 +2,14 @@ package io.github.eeroom.gtop.sf;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.collect.Lists;
+import io.github.eeroom.gtop.sf.aspnet.HandlerMethodArgumentResolver;
+import io.github.eeroom.gtop.sf.aspnet.RequestMappingHandler;
+import io.github.eeroom.gtop.sf.authen.JwtAuthenticationInterceptor;
 import io.github.eeroom.gtop.sf.swagger2.AspNetHandlerMethodResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
@@ -74,7 +76,7 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
 //        return new StandardServletMultipartResolver();
 //    }
     protected RequestMappingHandlerMapping createRequestMappingHandlerMapping() {
-        var aspNetRequestMappingHandler= new AspNetRequestMappingHandler();
+        var aspNetRequestMappingHandler= new RequestMappingHandler();
         //这个设置为true,查找所有控制器的时候会检测父容器
         aspNetRequestMappingHandler.setDetectHandlerMethodsInAncestorContexts(true);
         return aspNetRequestMappingHandler;
@@ -88,17 +90,17 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
      * @return
      */
     @Bean
-    public AspNetHandlerMethodArgumentResolver aspNetHandlerMethodArgumentResolver(){
-        return new AspNetHandlerMethodArgumentResolver();
+    public HandlerMethodArgumentResolver aspNetHandlerMethodArgumentResolver(){
+        return new HandlerMethodArgumentResolver();
     }
 
     @Autowired
-    AspNetHandlerMethodArgumentResolver aspNetHandlerMethodArgumentResolver;
+    HandlerMethodArgumentResolver handlerMethodArgumentResolver;
 
     @Override
-    protected void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+    protected void addArgumentResolvers(List<org.springframework.web.method.support.HandlerMethodArgumentResolver> argumentResolvers) {
         //支持asp.net风格的参数模型绑定；根据请求的context-type,自定使用json方式或者表单方式进行模型绑定，不需要额外对参数设置特性）
-        argumentResolvers.add(this.aspNetHandlerMethodArgumentResolver);
+        argumentResolvers.add(this.handlerMethodArgumentResolver);
     }
 
     @Bean
@@ -166,6 +168,6 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
 
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AuthenticationHandlerInterceptor());
+        registry.addInterceptor(new JwtAuthenticationInterceptor());
     }
 }
