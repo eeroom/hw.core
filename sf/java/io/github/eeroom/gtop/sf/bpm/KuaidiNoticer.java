@@ -2,7 +2,7 @@ package io.github.eeroom.gtop.sf.bpm;
 
 import io.github.eeroom.apiclient.HttpChannelFactory;
 import io.github.eeroom.gtop.entity.sf.db.jijiancustomer;
-import io.github.eeroom.gtop.entity.sf.kuaidi.INoticer;
+import io.github.eeroom.gtop.api.sf.INoticer;
 import io.github.eeroom.gtop.entity.sf.kuaidi.NoticeMessage;
 import io.github.eeroom.gtop.entity.sf.kuaidi.NoticeMessageType;
 import io.github.eeroom.gtop.sf.MyObjectFacotry;

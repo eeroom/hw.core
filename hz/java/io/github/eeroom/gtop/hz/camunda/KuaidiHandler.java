@@ -2,7 +2,7 @@ package io.github.eeroom.gtop.hz.camunda;
 
 import io.github.eeroom.gtop.entity.hz.db.bizdataex;
 import io.github.eeroom.gtop.entity.sf.kuaidi.EntityByPaymoney;
-import io.github.eeroom.gtop.entity.sf.kuaidi.IKuaidiController;
+import io.github.eeroom.gtop.api.sf.IKuaidiController;
 import io.github.eeroom.gtop.entity.sf.kuaidi.EntityByCreate;
 import io.github.eeroom.gtop.hz.ApplicationConfig;
 import io.github.eeroom.gtop.hz.MyDbContext;
