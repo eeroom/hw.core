@@ -2,7 +2,7 @@ package io.github.eeroom.gtop.hz.camunda;
 
 import io.github.eeroom.gtop.entity.hz.db.bizdataex;
 import io.github.eeroom.gtop.entity.sf.kuaidi.EntityByPaymoney;
-import io.github.eeroom.gtop.api.sf.IKuaidiController;
+import io.github.eeroom.gtop.api.sf.kuaidi.IKuaidiController;
 import io.github.eeroom.gtop.entity.sf.kuaidi.EntityByCreate;
 import io.github.eeroom.gtop.hz.ApplicationConfig;
 import io.github.eeroom.gtop.hz.MyDbContext;
@@ -22,8 +22,8 @@ public class KuaidiHandler  implements Serializable {
                 var formdata= MyObjectFacotry.getBean(JsonConvert.class).deSerializeObject(formdatastr, EntityByCreate.class);
                 var config=MyObjectFacotry.getBean(ApplicationConfig.class);
                 formdata.setThirdpartId(config.kuaidimycode);
-                var kc= io.github.eeroom.apiclient.HttpChannelFactory.createChannel(config.kuaidiSfUrl, IKuaidiController.class);
-                var rt= kc.newTransfer(formdata);
+                var sfkuaidiHandler= io.github.eeroom.apiclient.HttpChannelFactory.createChannel(config.kuaidiSfUrl, IKuaidiController.class);
+                var rt= sfkuaidiHandler.create(formdata);
                 //保存数据,
                 // 这里不进行savechange,由统一的添加bizdata的地方进行savechange
                 var bizdex=new bizdataex();
@@ -36,22 +36,22 @@ public class KuaidiHandler  implements Serializable {
 
         public void completePaymoney(DelegateExecution delegateExecution){
                 var dbcontext=MyObjectFacotry.getBean(MyDbContext.class);
-                var lstex= dbcontext.dbSet(bizdataex.class).select()
+                var lstbizdataex= dbcontext.dbSet(bizdataex.class).select()
                         .where(x->x.col(a->a.getprocessId()).eq(delegateExecution.getProcessInstanceId()))
                         .where(x->x.col(a->a.geteKey()).eq(VariableKey.processInstanceIdBySf))
                         .toList();
-                if(lstex.size()<1)
+                if(lstbizdataex.size()<1)
                         throw new RuntimeException(String.format("没有找到该流程在sf系统对应的快递流程id,本流程id：%s",delegateExecution.getProcessInstanceId()));
-                if (lstex.size()>1)
+                if (lstbizdataex.size()>1)
                         throw new RuntimeException(String.format("该流程在sf系统对应的快递流程id存在多个,本流程id：%s,sf流程id:%s",
                                 delegateExecution.getProcessInstanceId(),
-                                MyObjectFacotry.getBean(JsonConvert.class).serializeObject(lstex)));
+                                MyObjectFacotry.getBean(JsonConvert.class).serializeObject(lstbizdataex)));
                 var config=MyObjectFacotry.getBean(ApplicationConfig.class);
-                var kc= io.github.eeroom.apiclient.HttpChannelFactory.createChannel(config.kuaidiSfUrl, IKuaidiController.class);
                 var formdatastr= delegateExecution.getVariable(VariableKey.formdataOfComplete).toString();
                 var payentity= MyObjectFacotry.getBean(JsonConvert.class).deSerializeObject(formdatastr,EntityByPaymoney.class);
-                payentity.setProcessInstanceId(lstex.get(0).geteValue());//这个值非常关键，hz系统的表单提交数据不涉及sf系统的流程实例id
+                payentity.setProcessInstanceId(lstbizdataex.get(0).geteValue());//这个值非常关键，hz系统的表单提交数据不涉及sf系统的流程实例id
                 payentity.setThirdpartId(config.kuaidimycode);
-                kc.completePaymoney(payentity);
+                var sfkuaidiHandler= io.github.eeroom.apiclient.HttpChannelFactory.createChannel(config.kuaidiSfUrl, IKuaidiController.class);
+                sfkuaidiHandler.paymoney(payentity);
         }
 }

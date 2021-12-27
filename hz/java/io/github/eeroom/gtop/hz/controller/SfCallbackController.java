@@ -1,12 +1,12 @@
 package io.github.eeroom.gtop.hz.controller;
 
-import io.github.eeroom.gtop.api.sf.IKuaidiController;
 import io.github.eeroom.gtop.entity.camunda.CompleteTaskInput;
 import io.github.eeroom.gtop.entity.hz.TaskStatus;
 import io.github.eeroom.gtop.entity.hz.db.bizdataex;
 import io.github.eeroom.gtop.entity.hz.db.bizdatasub;
 import io.github.eeroom.gtop.entity.sf.db.bizdata;
 import io.github.eeroom.gtop.entity.sf.kuaidi.*;
+import io.github.eeroom.gtop.hz.authen.CurrentUserInfo;
 import io.github.eeroom.gtop.hz.authen.SkipAuthentication;
 import io.github.eeroom.gtop.hz.MyDbContext;
 import io.github.eeroom.gtop.hz.MyObjectFacotry;
@@ -18,29 +18,21 @@ import org.springframework.web.context.WebApplicationContext;
 
 @RestController
 @Scope(WebApplicationContext.SCOPE_REQUEST)
-public class SfCallbackController implements IKuaidiController {
+public class SfCallbackController implements io.github.eeroom.gtop.api.sf.kuaidi.IKuaidiCallback {
     MyDbContext dbContext;
     CamundaController camundaController;
-    public SfCallbackController(MyDbContext dbContext, CamundaController camundaController){
+    CurrentUserInfo currentUserInfo;
+    public SfCallbackController(MyDbContext dbContext, CamundaController camundaController, CurrentUserInfo currentUserInfo){
         this.dbContext=dbContext;
         this.camundaController = camundaController;
-    }
-
-    @Override
-    public bizdata newTransfer(EntityByCreate entity) {
-        throw new RuntimeException("不需要实现");
-    }
-
-    @Override
-    public void completePaymoney(EntityByPaymoney entity) {
-        throw new RuntimeException("不需要实现");
+        this.currentUserInfo=currentUserInfo;
     }
 
     @SkipAuthentication
     @Override
-    public NoticeResponse notice(NoticeMessage msg) {
+    public FeedResponse feed(FeedMessage msg) {
         //如果是通知过磅的结果，就推动外发快递的进入领导审批
-        if(msg.getType().equals(NoticeMessageType.过磅)){
+        if(msg.getType().equals(FeedType.过磅)){
             //把对应的hz的流程实例找出来，找到当前的task,完成这个task
             var bizex= this.dbContext.dbSet(bizdataex.class)
                     .where(x->x.col(a->a.geteKey()).eq(VariableKey.processInstanceIdBySf))
@@ -58,9 +50,10 @@ public class SfCallbackController implements IKuaidiController {
             var cp=new CompleteTaskInput();
             cp.setTaskId(bizdsub.gettaskId());
             cp.setFormdata(msg.getData());
+            this.currentUserInfo.setAccount(bizdsub.getassignee());
             this.camundaController.complete(cp);
         }
-        var rt=new NoticeResponse();
+        var rt=new FeedResponse();
         rt.setCode(200);
         return rt;
     }

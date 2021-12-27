@@ -2,20 +2,20 @@ package io.github.eeroom.gtop.entity.sf.kuaidi;
 
 import java.util.HashMap;
 
-public class NoticeMessage {
-    public NoticeMessage(String processInstanceId, NoticeMessageType type, HashMap<String,Object> data){
+public class FeedMessage {
+    public FeedMessage(String processInstanceId, FeedType type, HashMap<String,Object> data){
         this.type=type;
         this.data=data;
         this.processInstanceId=processInstanceId;
     }
 
-    NoticeMessageType type;
+    FeedType type;
 
-    public NoticeMessageType getType() {
+    public FeedType getType() {
         return type;
     }
 
-    public void setType(NoticeMessageType type) {
+    public void setType(FeedType type) {
         this.type = type;
     }
 

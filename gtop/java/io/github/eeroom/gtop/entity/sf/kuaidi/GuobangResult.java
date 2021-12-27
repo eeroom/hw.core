@@ -1,6 +1,6 @@
 package io.github.eeroom.gtop.entity.sf.kuaidi;
 
-public class CheckResult {
+public class GuobangResult {
     public int getZhongliang() {
         return zhongliang;
     }

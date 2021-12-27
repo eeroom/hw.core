@@ -1,6 +1,6 @@
 package io.github.eeroom.gtop.entity.sf.kuaidi;
 
-public class NoticeResponse {
+public class FeedResponse {
     int code;
 
     public int getCode() {

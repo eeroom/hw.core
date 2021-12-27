@@ -2,9 +2,9 @@ package io.github.eeroom.gtop.sf.camunda;
 
 import io.github.eeroom.apiclient.HttpChannelFactory;
 import io.github.eeroom.gtop.entity.sf.db.jijiancustomer;
-import io.github.eeroom.gtop.api.sf.INoticer;
-import io.github.eeroom.gtop.entity.sf.kuaidi.NoticeMessage;
-import io.github.eeroom.gtop.entity.sf.kuaidi.NoticeMessageType;
+import io.github.eeroom.gtop.api.sf.kuaidi.IKuaidiCallback;
+import io.github.eeroom.gtop.entity.sf.kuaidi.FeedMessage;
+import io.github.eeroom.gtop.entity.sf.kuaidi.FeedType;
 import io.github.eeroom.gtop.sf.MyObjectFacotry;
 import io.github.eeroom.gtop.sf.MyDbContext;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -24,7 +24,7 @@ public class KuaidiNoticer implements ExecutionListener {
                 .firstOrDefault();
         if(thridpart==null)
             throw new RuntimeException("指定的第三方不存在，info:"+thirdpartId);
-        var iKuaidiNotice= HttpChannelFactory.createChannel(thridpart.getcallbackurl(), INoticer.class);
+        var iKuaidiNotice= HttpChannelFactory.createChannel(thridpart.getcallbackurl(), IKuaidiCallback.class);
         //确定要发送的信息，流程图上指定
         var msgkeys= (String)delegateExecution.getVariable("msgkeys");
         var lstmsgkey=msgkeys.split(",");
@@ -32,7 +32,7 @@ public class KuaidiNoticer implements ExecutionListener {
         for (var key:lstmsgkey){
             data.put(key,delegateExecution.getVariable(key));
         }
-        var msg=new NoticeMessage(pid, NoticeMessageType.valueOf(delegateExecution.getVariable("msgtype").toString()),data);
-        var rt= iKuaidiNotice.send(msg);
+        var msg=new FeedMessage(pid, FeedType.valueOf(delegateExecution.getVariable("msgtype").toString()),data);
+        var rt= iKuaidiNotice.feed(msg);
     }
 }
