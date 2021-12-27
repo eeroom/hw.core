@@ -11,8 +11,10 @@
   <modules>
     <module>../sln-ui</module>
     <module>../sln-model</module>
-    <module>../workflow-sf</module>
+    <module>../sf</module>
     <module>../entity</module>
+    <module>../hz</module>
+    <module>../nalu</module>
   </modules>
 
   <name>sln</name>
