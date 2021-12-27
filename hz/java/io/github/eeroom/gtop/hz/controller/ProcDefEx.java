@@ -28,6 +28,7 @@ public class ProcDefEx {
                 .firstOrDefault();
         if(tmp!=null)
             throw new RuntimeException("指定的流程名称已经存在："+entity.getbizName());
+        //这里还需要增加对procedefkey的校验,必须是存在的key
         this.dbContext.add(entity)
                 .setInsertCol(x-> Columns.of(x.getapproveformId(),x.getprocdefKey(),x.getcreateformId(),x.getico(),x.getbizName()));
         this.dbContext.saveChange();
