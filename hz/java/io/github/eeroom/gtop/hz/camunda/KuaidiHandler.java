@@ -2,7 +2,7 @@ package io.github.eeroom.gtop.hz.camunda;
 
 import io.github.eeroom.gtop.entity.hz.db.bizdataex;
 import io.github.eeroom.gtop.entity.sf.kuaidi.EntityByPaymoney;
-import io.github.eeroom.gtop.api.sf.kuaidi.IKuaidiController;
+import io.github.eeroom.gtop.api.sf.kuaidi.IGuoneiKuaidiController;
 import io.github.eeroom.gtop.entity.sf.kuaidi.EntityByCreate;
 import io.github.eeroom.gtop.hz.ApplicationConfig;
 import io.github.eeroom.gtop.hz.MyDbContext;
@@ -22,7 +22,7 @@ public class KuaidiHandler  implements Serializable {
                 var formdata= MyObjectFacotry.getBean(JsonConvert.class).deSerializeObject(formdatastr, EntityByCreate.class);
                 var config=MyObjectFacotry.getBean(ApplicationConfig.class);
                 formdata.setThirdpartId(config.kuaidimycode);
-                var sfkuaidiHandler= io.github.eeroom.apiclient.HttpChannelFactory.createChannel(config.kuaidiSfUrl, IKuaidiController.class);
+                var sfkuaidiHandler= io.github.eeroom.apiclient.HttpChannelFactory.createChannel(config.kuaidiSfUrl, IGuoneiKuaidiController.class);
                 var rt= sfkuaidiHandler.create(formdata);
                 //保存数据,
                 // 这里不进行savechange,由统一的添加bizdata的地方进行savechange
@@ -51,7 +51,7 @@ public class KuaidiHandler  implements Serializable {
                 var payentity= MyObjectFacotry.getBean(JsonConvert.class).deSerializeObject(formdatastr,EntityByPaymoney.class);
                 payentity.setProcessInstanceId(lstbizdataex.get(0).geteValue());//这个值非常关键，hz系统的表单提交数据不涉及sf系统的流程实例id
                 payentity.setThirdpartId(config.kuaidimycode);
-                var sfkuaidiHandler= io.github.eeroom.apiclient.HttpChannelFactory.createChannel(config.kuaidiSfUrl, IKuaidiController.class);
+                var sfkuaidiHandler= io.github.eeroom.apiclient.HttpChannelFactory.createChannel(config.kuaidiSfUrl, IGuoneiKuaidiController.class);
                 sfkuaidiHandler.paymoney(payentity);
         }
 }

@@ -145,9 +145,8 @@ public class CamundaController {
         map.putAll(startProcessInput.getFormdata());
         var formdataOfCreate= this.jsonConvert.serializeObject(startProcessInput.getFormdata());
         map.put(VariableKey.formdataOfCreate,formdataOfCreate);
-        var listenerHandler=new ListenerHandler();
         //jdk11环境下，  如果camunda的流程参数使用javabean类型，就需要添加这个依赖。tomcat7和2.3版本的有小冲突，启动报错，但不影响使用，这里使用2.2版本，tomcat7启动不报错
-        map.put(VariableKey.listenerHandler,listenerHandler);
+        map.put(VariableKey.listenerHandler,MyObjectFacotry.getBean(ListenerHandler.class));
         var handlerKey=procdefex.getprocdefKey()+"Handler";
         if(MyObjectFacotry.containsBean(handlerKey)){
             //流程各自的handler

@@ -6,21 +6,21 @@
     </bpmn:startEvent>
     <bpmn:userTask id="Activity_1up2c4f" name="对方投递包裹" camunda:assignee="${sender}">
       <bpmn:extensionElements>
-        <camunda:taskListener expression="${sfActions.syncAssigneeToBizdatasub(task)}" event="assignment" />
+        <camunda:taskListener expression="${listenerHandler.syncAssigneeToBizdatasub(task)}" event="assignment" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_10ljnam</bpmn:incoming>
       <bpmn:outgoing>Flow_0eue2f5</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:userTask id="Activity_0o0opkn" name="过磅" camunda:assignee="guobang">
       <bpmn:extensionElements>
-        <camunda:taskListener expression="${sfActions.syncAssigneeToBizdatasub(task)}" event="assignment" />
+        <camunda:taskListener expression="${listenerHandler.syncAssigneeToBizdatasub(task)}" event="assignment" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0eue2f5</bpmn:incoming>
       <bpmn:outgoing>Flow_1q0qzid</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:userTask id="Activity_01og2hz" name="对方付款" camunda:assignee="${thirdpartId}">
       <bpmn:extensionElements>
-        <camunda:taskListener expression="${sfActions.syncAssigneeToBizdatasub(task)}" event="assignment" />
+        <camunda:taskListener expression="${listenerHandler.syncAssigneeToBizdatasub(task)}" event="assignment" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0p53sx0</bpmn:incoming>
       <bpmn:outgoing>Flow_1cpo3tl</bpmn:outgoing>
@@ -36,7 +36,7 @@
     </bpmn:task>
     <bpmn:endEvent id="Event_1i9xudb">
       <bpmn:extensionElements>
-        <camunda:executionListener class="BizdataStatusSetter" event="end" />
+        <camunda:executionListener expression="${listenerHandler.updateBizdataStatus(task,&#34;已结束&#34;)}" event="end" />
         <camunda:inputOutput>
           <camunda:inputParameter name="bizdatastatus">1</camunda:inputParameter>
         </camunda:inputOutput>
@@ -70,7 +70,7 @@
     <bpmn:manualTask id="Activity_1ue785o" name="提交申请">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:outputParameter name="bizdataTitle">${sfActions.concat("No.",execution.getProcessInstanceId()," 国内快件")}</camunda:outputParameter>
+          <camunda:outputParameter name="bizdataTitle">${listenerHandler.concat("No.",execution.getProcessInstanceId()," 国内快递")}</camunda:outputParameter>
           <camunda:outputParameter name="xiayitiaoTaskFlag">qe</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
@@ -79,7 +79,7 @@
     </bpmn:manualTask>
     <bpmn:manualTask id="Activity_0m511ea" name="通知对方&#10;过磅结果">
       <bpmn:extensionElements>
-        <camunda:executionListener class="KuaidiNoticer" event="end" />
+        <camunda:executionListener expression="${GuoneiKuaidiHandler.feed(execution)}" event="end" />
         <camunda:inputOutput>
           <camunda:inputParameter name="msgkeys">zhongliang</camunda:inputParameter>
           <camunda:inputParameter name="msgtype">guobang</camunda:inputParameter>

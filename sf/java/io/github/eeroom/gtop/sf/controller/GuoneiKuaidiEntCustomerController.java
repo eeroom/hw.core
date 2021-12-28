@@ -10,9 +10,9 @@ import java.util.List;
 
 @RestController
 @Scope(WebApplicationContext.SCOPE_REQUEST)
-public class KuaidiEntCustomerController {
+public class GuoneiKuaidiEntCustomerController {
     MyDbContext dbContext;
-    public KuaidiEntCustomerController(MyDbContext dbContext){
+    public GuoneiKuaidiEntCustomerController(MyDbContext dbContext){
         this.dbContext=dbContext;
     }
 

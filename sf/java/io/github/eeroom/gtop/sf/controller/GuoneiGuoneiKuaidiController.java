@@ -1,7 +1,7 @@
 package io.github.eeroom.gtop.sf.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.github.eeroom.gtop.api.sf.kuaidi.IKuaidiController;
+import io.github.eeroom.gtop.api.sf.kuaidi.IGuoneiKuaidiController;
 import io.github.eeroom.gtop.entity.TaskStatus;
 import io.github.eeroom.gtop.entity.camunda.CompleteTaskInput;
 import io.github.eeroom.gtop.entity.camunda.StartProcessInput;
@@ -22,12 +22,12 @@ import java.util.HashMap;
 
 @RestController
 @Scope(WebApplicationContext.SCOPE_REQUEST)
-public class KuaidiController implements IKuaidiController {
+public class GuoneiGuoneiKuaidiController implements IGuoneiKuaidiController {
     JsonConvert jsonConvert;
     MyDbContext dbContext;
     CurrentUserInfo currentUserInfo;
     CamundaController camundaController;
-    public KuaidiController(CamundaController camundaController, JsonConvert jsonConvert, MyDbContext dbContext, CurrentUserInfo currentUserInfo){
+    public GuoneiGuoneiKuaidiController(CamundaController camundaController, JsonConvert jsonConvert, MyDbContext dbContext, CurrentUserInfo currentUserInfo){
         this.camundaController=camundaController;
         this.jsonConvert = jsonConvert;
         this.dbContext=dbContext;
@@ -42,7 +42,7 @@ public class KuaidiController implements IKuaidiController {
         var jsonstr=this.jsonConvert.serializeObject(entity);
         var formdata=this.jsonConvert.deSerializeObject(jsonstr, new TypeReference<HashMap<String,Object>>() {});
         startProcessInput.setFormdata(formdata);
-        this.currentUserInfo.setName(entity.getThirdpartId());
+        this.currentUserInfo.setAccount(entity.getThirdpartId());
         return camundaController.startProcess(startProcessInput);
     }
 
@@ -71,7 +71,7 @@ public class KuaidiController implements IKuaidiController {
         CompleteTaskInput completeTaskInput =new CompleteTaskInput();
         completeTaskInput.setTaskId(bizdatasub.gettaskId());
         completeTaskInput.setFormdata(formdata);
-        this.currentUserInfo.setName(entityByPaymoney.getThirdpartId());
+        this.currentUserInfo.setAccount(entityByPaymoney.getThirdpartId());
         this.camundaController.complete(completeTaskInput);
     }
 }

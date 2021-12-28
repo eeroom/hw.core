@@ -2,7 +2,7 @@ package io.github.eeroom.gtop.sf.camunda;
 
 import io.github.eeroom.apiclient.HttpChannelFactory;
 import io.github.eeroom.gtop.entity.sf.db.kuaidientcustomer;
-import io.github.eeroom.gtop.api.sf.kuaidi.IKuaidiCallback;
+import io.github.eeroom.gtop.api.sf.kuaidi.IGuoneiKuaidiCallback;
 import io.github.eeroom.gtop.entity.sf.kuaidi.FeedMessage;
 import io.github.eeroom.gtop.entity.sf.kuaidi.FeedType;
 import io.github.eeroom.gtop.sf.MyObjectFacotry;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 /**
  * 被KuaidiHandler取代
  */
-public class KuaidiFeeder implements ExecutionListener {
+public class GuoneiKuaidiFeeder implements ExecutionListener {
     @Override
     public void notify(DelegateExecution delegateExecution) throws Exception {
         var pid= delegateExecution.getProcessInstanceId();
@@ -27,7 +27,7 @@ public class KuaidiFeeder implements ExecutionListener {
                 .firstOrDefault();
         if(thridpart==null)
             throw new RuntimeException("指定的第三方不存在，info:"+thirdpartId);
-        var iKuaidiNotice= HttpChannelFactory.createChannel(thridpart.getfeedbackurl(), IKuaidiCallback.class);
+        var iKuaidiNotice= HttpChannelFactory.createChannel(thridpart.getfeedbackurl(), IGuoneiKuaidiCallback.class);
         //确定要发送的信息，流程图上指定
         var msgkeys= (String)delegateExecution.getVariable("msgkeys");
         var lstmsgkey=msgkeys.split(",");

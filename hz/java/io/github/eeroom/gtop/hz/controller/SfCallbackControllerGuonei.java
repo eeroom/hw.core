@@ -1,5 +1,6 @@
 package io.github.eeroom.gtop.hz.controller;
 
+import io.github.eeroom.gtop.api.sf.kuaidi.IGuoneiKuaidiCallback;
 import io.github.eeroom.gtop.entity.camunda.CompleteTaskInput;
 import io.github.eeroom.gtop.entity.TaskStatus;
 import io.github.eeroom.gtop.entity.hz.db.bizdataex;
@@ -17,11 +18,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 @RestController
 @Scope(WebApplicationContext.SCOPE_REQUEST)
-public class SfCallbackController implements io.github.eeroom.gtop.api.sf.kuaidi.IKuaidiCallback {
+public class SfCallbackControllerGuonei implements IGuoneiKuaidiCallback {
     MyDbContext dbContext;
     CamundaController camundaController;
     CurrentUserInfo currentUserInfo;
-    public SfCallbackController(MyDbContext dbContext, CamundaController camundaController, CurrentUserInfo currentUserInfo){
+    public SfCallbackControllerGuonei(MyDbContext dbContext, CamundaController camundaController, CurrentUserInfo currentUserInfo){
         this.dbContext=dbContext;
         this.camundaController = camundaController;
         this.currentUserInfo=currentUserInfo;

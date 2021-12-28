@@ -1,22 +1,28 @@
 package io.github.eeroom.gtop.sf.camunda;
 
 import io.github.eeroom.apiclient.HttpChannelFactory;
-import io.github.eeroom.gtop.api.sf.kuaidi.IKuaidiCallback;
+import io.github.eeroom.gtop.api.sf.kuaidi.IGuoneiKuaidiCallback;
 import io.github.eeroom.gtop.entity.sf.db.kuaidientcustomer;
 import io.github.eeroom.gtop.entity.sf.kuaidi.FeedMessage;
 import io.github.eeroom.gtop.entity.sf.kuaidi.FeedType;
 import io.github.eeroom.gtop.sf.MyDbContext;
 import io.github.eeroom.gtop.sf.MyObjectFacotry;
-import io.github.eeroom.gtop.sf.controller.KuaidiEntCustomerController;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * 可以取代KuaidiFeeder
+ * bean的名称约定：流程图的key+Handler,
+ * 弊端：流程图的key和这个bean名称强绑定
+ * 问题不大
  */
-public class KuaidiHandler  implements Serializable {
+@Component
+@Qualifier("GuoneiKuaidiHandler")
+public class GuoneiKuaidiHandler implements Serializable {
 
     public void feed(DelegateExecution delegateExecution) {
         var pid= delegateExecution.getProcessInstanceId();
@@ -36,7 +42,7 @@ public class KuaidiHandler  implements Serializable {
             data.put(key,delegateExecution.getVariable(key));
         }
         var msg=new FeedMessage(pid, FeedType.valueOf(delegateExecution.getVariable("msgtype").toString()),data);
-        var thirdpartCallbackHandler= HttpChannelFactory.createChannel(thridpart.getfeedbackurl(), IKuaidiCallback.class);
+        var thirdpartCallbackHandler= HttpChannelFactory.createChannel(thridpart.getfeedbackurl(), IGuoneiKuaidiCallback.class);
         var rt= thirdpartCallbackHandler.waitmsg(msg);
     }
 }
