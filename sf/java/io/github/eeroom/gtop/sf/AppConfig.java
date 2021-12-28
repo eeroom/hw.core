@@ -6,36 +6,64 @@ import org.springframework.stereotype.Component;
 @Component
 public class AppConfig {
     @Value("${camundaJdbcDriver}")
-    String camundaJdbcDriver;
+    public String camundaJdbcDriver;
 
     @Value("${camundaJdbcUrl}")
-    String camundaJdbcUrl;
+    public String camundaJdbcUrl;
 
     @Value("${camundaJdbcUsername}")
-    String camundaJdbcUsername;
+    public String camundaJdbcUsername;
 
     @Value("${camundaJdbcPwd}")
-    String camundaJdbcPwd;
+    public String camundaJdbcPwd;
 
     @Value("${camundaDatabaseType}")
-    String camundaDatabaseType;
+    public String camundaDatabaseType;
 
     @Value("${camundaDatabaseSchemaUpdate}")
-    String camundaDatabaseSchemaUpdate;
+    public String camundaDatabaseSchemaUpdate;
 
     @Value("${upload.tmpdir}")
-    String uploadtmpdir;
+    public String uploadtmpdir;
     @Value("${upload.maxUploadSize}")
-    int maxUploadSize;
+    public int maxUploadSize;
     @Value("${upload.maxInMemorySize}")
-    int maxInMemorySize;
+    public int maxInMemorySize;
 
-    @Value("${db.sf.driver}")
-    String dbsfdriver;
-    @Value("${db.sf.url}")
-    String dbsfurl;
-    @Value("${db.sf.username}")
-    String dbsfusername;
-    @Value("${db.sf.pwd}")
-    String dbsfpwd;
+    @Value("${db.driver.n1}")
+    public String dbdrivern1;
+    @Value("${db.url.n1}")
+    public String dburln1;
+    @Value("${db.username.n1}")
+    public String dbusernamen1;
+    @Value("${db.pwd.n1}")
+    public String dbpwdn1;
+
+    @Value("${controller.path}")
+    public String controllerPath;
+
+    @Value("${authen.jwt.header}")
+    public String authenJwtHeader;
+
+    @Value("${authen.jwt.secret}")
+    public String authenJwtSecret;
+
+    @Value("${authen.jwt.issuer}")
+    public String authenJwtIssuer;
+
+    @Value("${swagger2.title}")
+    public String swagger2title;
+
+    @Value("${swagger2.description}")
+    public String swagger2description;
+
+    @Value("${swagger2.termsOfServiceUrl}")
+    public String swagger2termsOfServiceUrl;
+
+    @Value("${swagger2.version}")
+    public String swagger2version;
+
+    @Value("${swagger2.enable}")
+    public Boolean swagger2enable;
+
 }

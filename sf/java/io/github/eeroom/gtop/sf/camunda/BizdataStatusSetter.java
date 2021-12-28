@@ -1,5 +1,6 @@
 package io.github.eeroom.gtop.sf.camunda;
 
+import io.github.eeroom.gtop.entity.BizDataStatus;
 import io.github.eeroom.gtop.entity.sf.db.bizdata;
 import io.github.eeroom.gtop.sf.MyDbContext;
 import io.github.eeroom.gtop.sf.MyObjectFacotry;
@@ -17,9 +18,9 @@ public class BizdataStatusSetter implements ExecutionListener {
         if(bizd==null)
             throw new RuntimeException("没有找到对应的bizdata,processId:"+pid);
         var bizdatastatus=delegateExecution.getVariable("bizdatastatus");
-        var value= Integer.valueOf(bizdatastatus.toString());
+        var value= BizDataStatus.valueOf(bizdatastatus.toString());
         dbcontext.edit(bizdata.class)
-                .setUpdateCol(x->x.getStatus(),value)
+                .setUpdateCol(x->x.getstatus(),value)
                 .where(x->x.col(a->a.getprocessId()).eq(bizd.getprocessId()));
         dbcontext.saveChange();
     }

@@ -1,6 +1,7 @@
 package io.github.eeroom.gtop.entity.hz.db;
 
-import io.github.eeroom.gtop.entity.hz.*;
+import io.github.eeroom.gtop.entity.BizDataStatus;
+
 public class bizdata {
 
     String processId;

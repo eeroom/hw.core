@@ -2,6 +2,8 @@ package io.github.eeroom.gtop.sf.swagger2;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.collect.Lists;
+import io.github.eeroom.gtop.sf.AppConfig;
+import io.github.eeroom.gtop.sf.MyObjectFacotry;
 import io.github.eeroom.gtop.sf.aspnet.HttpGet;
 import net.bytebuddy.description.annotation.AnnotationDescription;
 import org.springframework.core.MethodParameter;
@@ -28,16 +30,17 @@ public class AspNetResolvedMethodParameter extends ResolvedMethodParameter {
             return Lists.newArrayList(lst);
         if(methodParameter.getMethod().getParameters().length!=1)
             return Lists.newArrayList(lst);
-        if(methodParameter.getContainingClass().getPackageName().indexOf("io.github.eeroom.sf.controller")<0)
+        var appconfig= MyObjectFacotry.getBean(AppConfig.class);
+        if(methodParameter.getContainingClass().getPackageName().indexOf(appconfig.controllerPath)<0)
             return Lists.newArrayList(lst);;
-        RequestBody tmp= null;
         try {
-            tmp = AnnotationDescription.AnnotationInvocationHandler.of(AspNetResolvedMethodParameter.class.getClassLoader(), RequestBody.class,new HashMap<>());
+            var tmp = AnnotationDescription.AnnotationInvocationHandler.of(AspNetResolvedMethodParameter.class.getClassLoader(), RequestBody.class,new HashMap<>());
+            return Lists.newArrayList(tmp);
         } catch (ClassNotFoundException e) {
-            System.out.println("AspNetResolvedMethodParameter执行出错");
-            e.printStackTrace();
+            throw new RuntimeException(String.format("AspNetResolvedMethodParameter执行出错:%s%s",
+                    methodParameter.getMethod().getDeclaringClass().getName(),
+                    methodParameter.getMethod().getName()));
         }
-        return Lists.newArrayList(tmp);
     }
 
     public AspNetResolvedMethodParameter(String paramName, MethodParameter methodParameter, ResolvedType parameterType) {

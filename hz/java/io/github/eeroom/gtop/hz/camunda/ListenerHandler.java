@@ -1,6 +1,6 @@
 package io.github.eeroom.gtop.hz.camunda;
 
-import io.github.eeroom.gtop.entity.hz.TaskStatus;
+import io.github.eeroom.gtop.entity.TaskStatus;
 import io.github.eeroom.gtop.entity.hz.db.bizdata;
 import io.github.eeroom.gtop.entity.hz.db.bizdatasub;
 import io.github.eeroom.gtop.hz.MyDbContext;

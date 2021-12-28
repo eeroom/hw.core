@@ -1,4 +1,4 @@
-package io.github.eeroom.gtop.entity.hz;
+package io.github.eeroom.gtop.entity.camunda;
 
 import java.util.HashMap;
 

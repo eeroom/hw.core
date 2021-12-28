@@ -1,5 +1,6 @@
 package io.github.eeroom.gtop.entity.sf.db;
 
+import io.github.eeroom.gtop.entity.*;
 public class dict {
 
     Integer id;

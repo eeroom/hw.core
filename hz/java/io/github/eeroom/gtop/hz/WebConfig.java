@@ -97,7 +97,7 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
     @Override
     protected void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         //支持asp.net风格的参数模型绑定；根据请求的context-type,自定使用json方式或者表单方式进行模型绑定，不需要额外对参数设置特性）
-        argumentResolvers.add(this.getApplicationContext().getBean(HandlerMethodArgumentResolver.class));
+        argumentResolvers.add(this.getApplicationContext().getBean(io.github.eeroom.gtop.hz.aspnet.HandlerMethodArgumentResolver.class));
     }
 
     @Bean

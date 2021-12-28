@@ -1,5 +1,6 @@
 package io.github.eeroom.gtop.sf.camunda;
 
+import io.github.eeroom.gtop.entity.TaskStatus;
 import io.github.eeroom.gtop.entity.sf.db.bizdatasub;
 import io.github.eeroom.gtop.sf.MyObjectFacotry;
 import io.github.eeroom.gtop.sf.MyDbContext;
@@ -19,15 +20,15 @@ public class AssigneeHook implements TaskListener {
         var lstass= delegateTask.getAssignee().split(",");
         var lstbizdatasub= Arrays.stream(lstass).map(x->{
             var tmp=new bizdatasub();
-            tmp.sethandlerId(x);
+            tmp.setassignee(x);
             tmp.setprocessId(processId);
             tmp.settaskId(taskId);
-            tmp.setHandlerByMe(0);
-            tmp.settaskstatus(0);
+            tmp.setassigneeCompleted(TaskStatus.处理中);
+            tmp.setstatus(TaskStatus.处理中);
             return tmp;
         }).collect(Collectors.toList());
         dbcontext.add(lstbizdatasub)
-                .setInsertCol(x-> Columns.of(x.gethandlerId(),x.getprocessId(),x.gettaskId(),x.getHandlerByMe(),x.gettaskstatus()));
+                .setInsertCol(x-> Columns.of(x.getassignee(),x.getprocessId(),x.gettaskId(),x.getassigneeCompleted(),x.getstatus()));
         dbcontext.saveChange();
     }
 }

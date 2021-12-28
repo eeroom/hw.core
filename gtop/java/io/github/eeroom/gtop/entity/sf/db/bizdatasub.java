@@ -1,5 +1,6 @@
 package io.github.eeroom.gtop.entity.sf.db;
 
+import io.github.eeroom.gtop.entity.*;
 public class bizdatasub {
 
     Integer id;
@@ -32,27 +33,25 @@ public class bizdatasub {
         this.taskId = pValue;
     }
 
-    String handlerId;
+    String assignee;
 
-    public String gethandlerId() {
-        return handlerId;
+    public String getassignee() {
+        return assignee;
     }
 
-    public void sethandlerId(String pValue) {
-        this.handlerId = pValue;
+    public void setassignee(String pValue) {
+        this.assignee = pValue;
     }
 
-    public Integer getHandlerByMe() {
-        return handlerByMe;
+    TaskStatus assigneeCompleted;
+
+    public TaskStatus getassigneeCompleted() {
+        return assigneeCompleted;
     }
 
-    public void setHandlerByMe(Integer handlerByMe) {
-        this.handlerByMe = handlerByMe;
+    public void setassigneeCompleted(TaskStatus pValue) {
+        this.assigneeCompleted = pValue;
     }
-
-    Integer handlerByMe;
-
-
 
     String completeformdatajson;
 
@@ -64,14 +63,14 @@ public class bizdatasub {
         this.completeformdatajson = pValue;
     }
 
-    Integer taskstatus;
+    TaskStatus status;
 
-    public Integer gettaskstatus() {
-        return taskstatus;
+    public TaskStatus getstatus() {
+        return status;
     }
 
-    public void settaskstatus(Integer pValue) {
-        this.taskstatus = pValue;
+    public void setstatus(TaskStatus pValue) {
+        this.status = pValue;
     }
 
 }

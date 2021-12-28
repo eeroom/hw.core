@@ -1,11 +1,10 @@
 package io.github.eeroom.gtop.hz.controller;
 
-import io.github.eeroom.gtop.entity.hz.StartProcessInput;
+import io.github.eeroom.gtop.entity.camunda.StartProcessInput;
 import io.github.eeroom.gtop.entity.camunda.CompleteTaskInput;
-import io.github.eeroom.gtop.entity.hz.TaskStatus;
+import io.github.eeroom.gtop.entity.TaskStatus;
 import io.github.eeroom.gtop.entity.hz.db.bizdata;
 import io.github.eeroom.gtop.entity.hz.db.bizdatasub;
-import io.github.eeroom.gtop.entity.hz.db.procdefex;
 import io.github.eeroom.gtop.hz.MyDbContext;
 import io.github.eeroom.gtop.hz.MyObjectFacotry;
 import io.github.eeroom.gtop.hz.aspnet.HttpPost;

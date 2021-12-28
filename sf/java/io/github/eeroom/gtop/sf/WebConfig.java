@@ -31,6 +31,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 这个容器只扫描控制器的bean,
@@ -94,65 +96,55 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
         return new HandlerMethodArgumentResolver();
     }
 
-    @Autowired
-    HandlerMethodArgumentResolver handlerMethodArgumentResolver;
 
     @Override
     protected void addArgumentResolvers(List<org.springframework.web.method.support.HandlerMethodArgumentResolver> argumentResolvers) {
         //支持asp.net风格的参数模型绑定；根据请求的context-type,自定使用json方式或者表单方式进行模型绑定，不需要额外对参数设置特性）
-        argumentResolvers.add(this.handlerMethodArgumentResolver);
+        argumentResolvers.add(this.getApplicationContext().getBean(HandlerMethodArgumentResolver.class));
     }
 
     @Bean
-    public Docket createRestApi() {
+    public Docket createRestApi(AppConfig appconfig) {
         //启用swagger,添加@EnableSwagger2,添加这个bean
         // springfox-swagger-ui这类类库提供了swagger-ui的入口页面，swagger-ui.html,
         // io.springfox->springfox-swagger2,EnableSwagger2注解会注册其涉及的bean,核心是注册了一个HandlerMapping,HandlerMapping的核心是Swagger2Controller，提供的核心api,/v2/api-docs
         var apiInfo= new ApiInfoBuilder()
-                .title("azeroth-api")
-                .description("swagger-bootstrap-ui")
-                .termsOfServiceUrl("http://localhost:8121/")
+                .title(appconfig.swagger2title)
+                .description(appconfig.swagger2description)
+                .termsOfServiceUrl(appconfig.swagger2termsOfServiceUrl)
                 .version("1.0")
                 .build();
-
         var docket= new Docket(DocumentationType.SWAGGER_2)
-                .enable(true)
+                .enable(appconfig.swagger2enable)
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("io.github.eeroom"))
+                .apis(RequestHandlerSelectors.basePackage(appconfig.controllerPath))
                 .paths(PathSelectors.any())
                 .build();
-        //配置各个方法的请求头设置（非全局），Access-Token是请求头名称
-        String authenHeaderName="Access-Token";
+        //jwt非全局配置,各个方法的请求头设置
         var ticketPar=new ParameterBuilder();
-        var tokenParameter =ticketPar.name(authenHeaderName)//请求头名称
+        var tokenParameter =ticketPar.name(appconfig.authenJwtHeader)//请求头名称
                 .description("jwt")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header")
-                .defaultValue("3333333333")
+                .defaultValue("defaultValue")
                 .required(false)
                 .build();
         var lstp=new ArrayList<Parameter>();
         lstp.add(tokenParameter);
-        //每个方法的参数列表都会多这个参数
         //docket.globalOperationParameters(lstp);
 
-        //配置各个方法的请求头设置（全局），Access-Token是请求头名称
-        var lstAuthenticationScop=new AuthorizationScope[1];
-
-        lstAuthenticationScop[0]=new AuthorizationScope("global","全局jwt");
-        var sr=new SecurityReference(authenHeaderName,lstAuthenticationScop);
-        var sr2=new SecurityReference("Authorization",lstAuthenticationScop);
-        var lstSr= Lists.newArrayList(sr,sr2);
-        var sc= SecurityContext.builder()
-                .securityReferences(lstSr)
+        //jwt全局配置
+        var srf= SecurityReference.builder()
+                .reference(appconfig.authenJwtHeader)
+                .scopes(Stream.of(new AuthorizationScope("global","全局jwt")).toArray(AuthorizationScope[]::new))
+                .build();
+        var scontext=SecurityContext.builder()
+                .securityReferences(Stream.of(srf).collect(Collectors.toList()))
                 .forPaths(PathSelectors.any())
                 .build();
-        var apiKey=new ApiKey(authenHeaderName,authenHeaderName,"header");
-        var apiKey2=new ApiKey("Authorization","Authorization","header");
-        docket.securityContexts(Lists.newArrayList(sc))
-                .securitySchemes(Lists.newArrayList(apiKey,apiKey2));
-
+        docket.securityContexts(Stream.of(scontext).collect(Collectors.toList()))
+                .securitySchemes(Stream.of(new ApiKey(appconfig.authenJwtHeader,appconfig.authenJwtHeader,"header")).collect(Collectors.toList()));
         return docket;
     }
 

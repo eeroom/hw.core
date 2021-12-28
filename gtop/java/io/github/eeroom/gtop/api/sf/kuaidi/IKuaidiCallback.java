@@ -5,5 +5,5 @@ import io.github.eeroom.gtop.entity.sf.kuaidi.FeedResponse;
 
 public interface IKuaidiCallback {
 
-    public FeedResponse feed(FeedMessage msg);
+    public FeedResponse waitmsg(FeedMessage msg);
 }

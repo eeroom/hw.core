@@ -4,6 +4,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.eeroom.gtop.entity.ApidataWrapper;
+import io.github.eeroom.gtop.sf.AppConfig;
+import io.github.eeroom.gtop.sf.MyObjectFacotry;
 import org.springframework.http.MediaType;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.method.HandlerMethod;
@@ -19,23 +21,23 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
         if(!(o instanceof HandlerMethod))
             return true;
         var method=(HandlerMethod)o;
-        if(method.getMethod().getDeclaringClass().getPackageName().indexOf("sf.controller")<0)
+        var appconfig= MyObjectFacotry.getBean(AppConfig.class);
+        if(method.getMethod().getDeclaringClass().getPackageName().indexOf(appconfig.controllerPath)<0)
             return true;
         if(method.getMethodAnnotation(SkipAuthentication.class)!=null)
             return true;
-        var jwtstring= httpServletRequest.getHeader("Authorization");
+        var jwtstring= httpServletRequest.getHeader(appconfig.authenJwtHeader);
         if(jwtstring==null || jwtstring.length()<=0)
-            return this.needLogin(httpServletResponse);
-        var jwtVerifier= com.auth0.jwt.JWT.require(Algorithm.HMAC256("hw@123456"))
-                .withIssuer("workflow")
-                .build();
-        var jwtDecode= jwtVerifier.verify(jwtstring);
-        var userName= jwtDecode.getClaim("userName").asString();
-        if(userName==null ||userName.length()<=0)
-            return this.needLogin(httpServletResponse);
+            return this.processInvalidToken(httpServletResponse);
+        var account= JwtTokenHelper.decode(jwtstring);
+        if(account==null ||account.length()<=0)
+            return this.processInvalidToken(httpServletResponse);
         var context= WebApplicationContextUtils.getWebApplicationContext(httpServletRequest.getServletContext());
-        var loginUserInfo=context.getBean(CurrentUserInfo.class);
-        loginUserInfo.setName(userName);
+        var currentUserInfo=context.getBean(CurrentUserInfo.class);
+        currentUserInfo.setAccount(account);
+        //需要根据account完善用户信息，比如从数据库取数据
+        currentUserInfo.setName(account);
+        currentUserInfo.setId(account);
         return true;
     }
 
@@ -49,7 +51,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
 
     }
 
-    private boolean needLogin(HttpServletResponse httpServletResponse) throws Exception {
+    private boolean processInvalidToken(HttpServletResponse httpServletResponse) throws Exception {
         var apiresult=new ApidataWrapper();
         apiresult.setCode(HttpServletResponse.SC_UNAUTHORIZED);
         apiresult.setMessage("未登陆或者登陆已过期");

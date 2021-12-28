@@ -1,35 +1,26 @@
 package io.github.eeroom.gtop.entity.sf.db;
 
-public class biztype {
+import io.github.eeroom.gtop.entity.*;
+public class procdefex {
 
-    Integer id;
+    String procdefKey;
 
-    public Integer getid() {
-        return id;
+    public String getprocdefKey() {
+        return procdefKey;
     }
 
-    public void setid(Integer pValue) {
-        this.id = pValue;
+    public void setprocdefKey(String pValue) {
+        this.procdefKey = pValue;
     }
 
-    String camundaKey;
+    String bizName;
 
-    public String getcamundaKey() {
-        return camundaKey;
+    public String getbizName() {
+        return bizName;
     }
 
-    public void setcamundaKey(String pValue) {
-        this.camundaKey = pValue;
-    }
-
-    String name;
-
-    public String getname() {
-        return name;
-    }
-
-    public void setname(String pValue) {
-        this.name = pValue;
+    public void setbizName(String pValue) {
+        this.bizName = pValue;
     }
 
     String ico;

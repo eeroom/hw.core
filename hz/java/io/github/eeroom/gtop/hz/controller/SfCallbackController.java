@@ -1,10 +1,9 @@
 package io.github.eeroom.gtop.hz.controller;
 
 import io.github.eeroom.gtop.entity.camunda.CompleteTaskInput;
-import io.github.eeroom.gtop.entity.hz.TaskStatus;
+import io.github.eeroom.gtop.entity.TaskStatus;
 import io.github.eeroom.gtop.entity.hz.db.bizdataex;
 import io.github.eeroom.gtop.entity.hz.db.bizdatasub;
-import io.github.eeroom.gtop.entity.sf.db.bizdata;
 import io.github.eeroom.gtop.entity.sf.kuaidi.*;
 import io.github.eeroom.gtop.hz.authen.CurrentUserInfo;
 import io.github.eeroom.gtop.hz.authen.SkipAuthentication;
@@ -30,7 +29,7 @@ public class SfCallbackController implements io.github.eeroom.gtop.api.sf.kuaidi
 
     @SkipAuthentication
     @Override
-    public FeedResponse feed(FeedMessage msg) {
+    public FeedResponse waitmsg(FeedMessage msg) {
         //如果是通知过磅的结果，就推动外发快递的进入领导审批
         if(msg.getType().equals(FeedType.过磅)){
             //把对应的hz的流程实例找出来，找到当前的task,完成这个task

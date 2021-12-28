@@ -1,5 +1,6 @@
 package io.github.eeroom.gtop.entity.sf.db;
 
+import io.github.eeroom.gtop.entity.*;
 public class bizdata {
 
     String processId;
@@ -12,14 +13,14 @@ public class bizdata {
         this.processId = pValue;
     }
 
-    Integer bizType;
+    String bizName;
 
-    public Integer getbizType() {
-        return bizType;
+    public String getbizName() {
+        return bizName;
     }
 
-    public void setbizType(Integer pValue) {
-        this.bizType = pValue;
+    public void setbizName(String pValue) {
+        this.bizName = pValue;
     }
 
     String title;
@@ -62,15 +63,14 @@ public class bizdata {
         this.createformdatajson = pValue;
     }
 
+    BizDataStatus status;
 
-    public int getStatus() {
+    public BizDataStatus getstatus() {
         return status;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setstatus(BizDataStatus pValue) {
+        this.status = pValue;
     }
-
-    int status;
 
 }

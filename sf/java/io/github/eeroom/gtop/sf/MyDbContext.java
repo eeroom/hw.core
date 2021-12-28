@@ -20,7 +20,7 @@ public class MyDbContext extends DbContext {
     @Override
     protected Connection getConnection() throws Throwable {
 
-        var cnn= java.sql.DriverManager.getConnection(this.configdata.dbsfurl,this.configdata.dbsfusername,this.configdata.dbsfpwd);
+        var cnn= java.sql.DriverManager.getConnection(this.configdata.dburln1,this.configdata.dbusernamen1,this.configdata.dbpwdn1);
         return cnn;
     }
 

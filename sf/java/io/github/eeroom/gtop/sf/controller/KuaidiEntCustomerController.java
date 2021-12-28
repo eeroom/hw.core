@@ -1,6 +1,6 @@
 package io.github.eeroom.gtop.sf.controller;
 
-import io.github.eeroom.gtop.entity.sf.db.jijiancustomer;
+import io.github.eeroom.gtop.entity.sf.db.kuaidientcustomer;
 import io.github.eeroom.gtop.sf.MyDbContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,14 +10,14 @@ import java.util.List;
 
 @RestController
 @Scope(WebApplicationContext.SCOPE_REQUEST)
-public class JijiancustomerController {
+public class KuaidiEntCustomerController {
     MyDbContext dbContext;
-    public JijiancustomerController( MyDbContext dbContext){
+    public KuaidiEntCustomerController(MyDbContext dbContext){
         this.dbContext=dbContext;
     }
 
-    public jijiancustomer add(jijiancustomer entity) throws Throwable {
-        var tmp= this.dbContext.dbSet(jijiancustomer.class)
+    public kuaidientcustomer add(kuaidientcustomer entity) throws Throwable {
+        var tmp= this.dbContext.dbSet(kuaidientcustomer.class)
                 .select()
                 .where(x->x.col(a->a.getname()).eq(entity.getname()))
                 .firstOrDefault();
@@ -28,12 +28,12 @@ public class JijiancustomerController {
         return entity;
     }
 
-    public List<jijiancustomer> getEntities() throws Throwable {
-        return this.dbContext.dbSet(jijiancustomer.class).select().toList();
+    public List<kuaidientcustomer> getEntities() throws Throwable {
+        return this.dbContext.dbSet(kuaidientcustomer.class).select().toList();
     }
 
-    public jijiancustomer delete(jijiancustomer entity) throws Throwable {
-        this.dbContext.delete(jijiancustomer.class)
+    public kuaidientcustomer delete(kuaidientcustomer entity) throws Throwable {
+        this.dbContext.delete(kuaidientcustomer.class)
                 .where(x->x.col(a->a.getid()).eq(entity.getid()));
         this.dbContext.saveChange();
         return entity;
