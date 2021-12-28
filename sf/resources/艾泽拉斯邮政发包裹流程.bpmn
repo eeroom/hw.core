@@ -82,7 +82,7 @@
         <camunda:executionListener expression="${GuoneiKuaidiHandler.feed(execution)}" event="end" />
         <camunda:inputOutput>
           <camunda:inputParameter name="msgkeys">zhongliang</camunda:inputParameter>
-          <camunda:inputParameter name="msgtype">guobang</camunda:inputParameter>
+          <camunda:inputParameter name="msgtype">过磅</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1q0qzid</bpmn:incoming>

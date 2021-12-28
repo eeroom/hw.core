@@ -148,9 +148,10 @@ public class CamundaController {
         //jdk11环境下，  如果camunda的流程参数使用javabean类型，就需要添加这个依赖。tomcat7和2.3版本的有小冲突，启动报错，但不影响使用，这里使用2.2版本，tomcat7启动不报错
         map.put(VariableKey.listenerHandler,MyObjectFacotry.getBean(ListenerHandler.class));
         var handlerKey=procdefex.getprocdefKey()+"Handler";
-        if(MyObjectFacotry.containsBean(handlerKey)){
+        var bizHandler=MyObjectFacotry.getBeanIgnorCase(handlerKey);
+        if(bizHandler!=null){
             //流程各自的handler
-            map.put(handlerKey,MyObjectFacotry.getBean(handlerKey));
+            map.put(handlerKey,bizHandler);
         }
         var processInstance = this.processEngine.getRuntimeService()
                 .startProcessInstanceByKey(procdefex.getprocdefKey(),map);

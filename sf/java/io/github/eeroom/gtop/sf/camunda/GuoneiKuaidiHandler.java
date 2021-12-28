@@ -21,7 +21,6 @@ import java.util.HashMap;
  * 问题不大
  */
 @Component
-@Qualifier("GuoneiKuaidiHandler")
 public class GuoneiKuaidiHandler implements Serializable {
 
     public void feed(DelegateExecution delegateExecution) {
