@@ -22,12 +22,12 @@ import java.util.HashMap;
 
 @RestController
 @Scope(WebApplicationContext.SCOPE_REQUEST)
-public class GuoneiGuoneiKuaidiController implements IGuoneiKuaidiController {
+public class GuoneiKuaidiController implements IGuoneiKuaidiController {
     JsonConvert jsonConvert;
     MyDbContext dbContext;
     CurrentUserInfo currentUserInfo;
     CamundaController camundaController;
-    public GuoneiGuoneiKuaidiController(CamundaController camundaController, JsonConvert jsonConvert, MyDbContext dbContext, CurrentUserInfo currentUserInfo){
+    public GuoneiKuaidiController(CamundaController camundaController, JsonConvert jsonConvert, MyDbContext dbContext, CurrentUserInfo currentUserInfo){
         this.camundaController=camundaController;
         this.jsonConvert = jsonConvert;
         this.dbContext=dbContext;
