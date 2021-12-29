@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 import java.io.Serializable;
 
 @Component
-public class KuaidiHandler  implements Serializable {
-        public void newTransfer(DelegateExecution delegateExecution){
+public class KuaidiHandler extends ListenerHandler  implements Serializable {
+        public void createKuaidi(DelegateExecution delegateExecution){
                 //读取表单数据，组织sf那边需要的参数格式，调用sf的接口
                 var formdatastr= delegateExecution.getVariable(VariableKey.formdataOfCreate).toString();
                 var formdata= MyObjectFacotry.getBean(JsonConvert.class).deSerializeObject(formdatastr, EntityByCreate.class);
@@ -28,30 +28,27 @@ public class KuaidiHandler  implements Serializable {
                 // 这里不进行savechange,由统一的添加bizdata的地方进行savechange
                 var bizdex=new bizdataex();
                 bizdex.setprocessId(delegateExecution.getProcessInstanceId());
-                bizdex.seteKey(VariableKey.processInstanceIdBySf);
+                bizdex.seteKey(VariableKey.processInstanceIdOfSf);
                 bizdex.seteValue(rt.getprocessId());
                 var dbcontext=MyObjectFacotry.getBean(MyDbContext.class);
                 dbcontext.add(bizdex).setInsertCol(x-> Columns.of(x.geteKey(),x.geteValue(),x.getprocessId()));
+                delegateExecution.setVariable(VariableKey.sf,VariableKey.sf);
         }
 
-        public void completePaymoney(DelegateExecution delegateExecution){
+        public void payKuaidi(DelegateExecution delegateExecution){
                 var dbcontext=MyObjectFacotry.getBean(MyDbContext.class);
-                var lstbizdataex= dbcontext.dbSet(bizdataex.class).select()
+                var bizdataex= dbcontext.dbSet(bizdataex.class).select()
                         .where(x->x.col(a->a.getprocessId()).eq(delegateExecution.getProcessInstanceId()))
-                        .where(x->x.col(a->a.geteKey()).eq(VariableKey.processInstanceIdBySf))
-                        .toList();
-                if(lstbizdataex.size()<1)
+                        .where(x->x.col(a->a.geteKey()).eq(VariableKey.processInstanceIdOfSf))
+                        .firstOrDefault();
+                if(bizdataex==null)
                         throw new RuntimeException(String.format("没有找到该流程在sf系统对应的快递流程id,本流程id：%s",delegateExecution.getProcessInstanceId()));
-                if (lstbizdataex.size()>1)
-                        throw new RuntimeException(String.format("该流程在sf系统对应的快递流程id存在多个,本流程id：%s,sf流程id:%s",
-                                delegateExecution.getProcessInstanceId(),
-                                MyObjectFacotry.getBean(JsonConvert.class).serializeObject(lstbizdataex)));
-                var config=MyObjectFacotry.getBean(AppConfig.class);
+                var appConfig=MyObjectFacotry.getBean(AppConfig.class);
                 var formdatastr= delegateExecution.getVariable(VariableKey.formdataOfComplete).toString();
                 var payentity= MyObjectFacotry.getBean(JsonConvert.class).deSerializeObject(formdatastr,EntityByPaymoney.class);
-                payentity.setProcessInstanceId(lstbizdataex.get(0).geteValue());//这个值非常关键，hz系统的表单提交数据不涉及sf系统的流程实例id
-                payentity.setThirdpartId(config.kuaidimycode);
-                var sfkuaidiHandler= io.github.eeroom.apiclient.HttpChannelFactory.createChannel(config.kuaidiSfUrl, IGuoneiKuaidiController.class);
+                payentity.setProcessInstanceId(bizdataex.geteValue());//这个值非常关键，hz系统的表单提交数据不涉及sf系统的流程实例id
+                payentity.setCustomerId(appConfig.kuaidimycode);
+                var sfkuaidiHandler= io.github.eeroom.apiclient.HttpChannelFactory.createChannel(appConfig.kuaidiSfUrl, IGuoneiKuaidiController.class);
                 sfkuaidiHandler.paymoney(payentity);
         }
 }

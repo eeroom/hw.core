@@ -32,12 +32,12 @@ public class SfCallbackController implements IGuoneiKuaidiCallback {
 
     @SkipAuthentication
     @Override
-    public FeedResponse waitmsg(FeedMessage msg) {
+    public FeedResponse execute(FeedMessage msg) {
         //如果是通知过磅的结果，就推动外发快递的进入领导审批
         if(msg.getType().equals(FeedType.过磅)){
             //把对应的hz的流程实例找出来，找到当前的task,完成这个task
             var bizex= this.dbContext.dbSet(bizdataex.class)
-                    .where(x->x.col(a->a.geteKey()).eq(VariableKey.processInstanceIdBySf))
+                    .where(x->x.col(a->a.geteKey()).eq(VariableKey.processInstanceIdOfSf))
                     .where(x->x.col(a->a.geteValue()).eq(msg.getProcessInstanceId()))
                     .firstOrDefault();
             if(bizex==null)
@@ -45,7 +45,7 @@ public class SfCallbackController implements IGuoneiKuaidiCallback {
             var bizdsub= this.dbContext.dbSet(bizdatasub.class)
                     .where(x->x.col(a->a.getprocessId()).eq(bizex.getprocessId()))
                     .where(x->x.col(a->a.getstatus()).eq(TaskStatus.处理中))
-                    .where(x->x.col(a->a.getassignee()).eq("sf"))
+                    .where(x->x.col(a->a.getassignee()).eq(VariableKey.sf))
                     .firstOrDefault();
             if(bizdsub==null)
                 throw new RuntimeException(String.format("当前没有改任务需要处理:%s", MyObjectFacotry.getBean(JsonConvert.class).serializeObject(msg)));

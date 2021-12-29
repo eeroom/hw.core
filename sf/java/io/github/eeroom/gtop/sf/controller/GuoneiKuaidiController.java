@@ -68,13 +68,13 @@ public class GuoneiKuaidiController implements IGuoneiKuaidiController {
                 .where(x->x.col(a->a.getprocessId()).eq(entityByPaymoney.getProcessInstanceId()))
                 .firstOrDefault();
         var entityByCreate= this.jsonConvert.deSerializeObject(bizdata.getcreateformdatajson(), EntityByCreate.class);
-        if(!entityByCreate.getCustomerId().equals(entityByPaymoney.getThirdpartId()))
+        if(!entityByCreate.getCustomerId().equals(entityByPaymoney.getCustomerId()))
             throw new RuntimeException("只能支付自己名下的快递");
         //这种场景下，对方系统只能提供流程单号，
         //需要我们自己反推找出taskid,
         var bizdatasub= this.dbContext.dbSet(bizdatasub.class).select()
                 .where(x->x.col(a->a.getprocessId()).eq(entityByPaymoney.getProcessInstanceId()))
-                .where(x->x.col(a->a.getassignee()).eq(entityByPaymoney.getThirdpartId()))
+                .where(x->x.col(a->a.getassignee()).eq(entityByPaymoney.getCustomerId()))
                 .where(x->x.col(a->a.getstatus()).eq(TaskStatus.处理中))
                 .firstOrDefault();
         if(bizdatasub==null)
@@ -84,7 +84,7 @@ public class GuoneiKuaidiController implements IGuoneiKuaidiController {
         CompleteTaskInput completeTaskInput =new CompleteTaskInput();
         completeTaskInput.setTaskId(bizdatasub.gettaskId());
         completeTaskInput.setFormdata(formdata);
-        this.currentUserInfo.setAccount(entityByPaymoney.getThirdpartId());
+        this.currentUserInfo.setAccount(entityByPaymoney.getCustomerId());
         this.camundaController.complete(completeTaskInput);
     }
 }

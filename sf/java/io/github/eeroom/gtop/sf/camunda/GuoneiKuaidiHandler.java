@@ -10,7 +10,6 @@ import io.github.eeroom.gtop.sf.MyDbContext;
 import io.github.eeroom.gtop.sf.MyObjectFacotry;
 import io.github.eeroom.gtop.sf.serialize.JsonConvert;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -43,6 +42,6 @@ public class GuoneiKuaidiHandler extends ListenerHandler implements Serializable
         }
         var msg=new FeedMessage(pid, FeedType.valueOf(feedtype),map);
         var guoneiKuaidiCallback= HttpChannelFactory.createChannel(customer.getfeedbackurl(), IGuoneiKuaidiCallback.class);
-        var rt= guoneiKuaidiCallback.waitmsg(msg);
+        var rt= guoneiKuaidiCallback.execute(msg);
     }
 }

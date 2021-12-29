@@ -11,14 +11,6 @@ public class EntityByPaymoney {
         this.processInstanceId = processInstanceId;
     }
 
-    public String getThirdpartId() {
-        return thirdpartId;
-    }
-
-    public void setThirdpartId(String thirdpartId) {
-        this.thirdpartId = thirdpartId;
-    }
-
     public Integer getMoneyCount() {
         return moneyCount;
     }
@@ -35,7 +27,16 @@ public class EntityByPaymoney {
         this.payType = payType;
     }
 
-    String thirdpartId;
     Integer moneyCount;
     String payType;
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    String customerId;
 }
