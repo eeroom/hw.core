@@ -9,8 +9,6 @@
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <modules>
-    <module>../sln-ui</module>
-    <module>../sln-model</module>
     <module>../sf</module>
     <module>../gtop</module>
     <module>../hz</module>
