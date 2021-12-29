@@ -4,7 +4,7 @@ import io.github.eeroom.gtop.entity.hz.db.bizdataex;
 import io.github.eeroom.gtop.entity.sf.kuaidi.EntityByPaymoney;
 import io.github.eeroom.gtop.api.sf.kuaidi.IGuoneiKuaidiController;
 import io.github.eeroom.gtop.entity.sf.kuaidi.EntityByCreate;
-import io.github.eeroom.gtop.hz.ApplicationConfig;
+import io.github.eeroom.gtop.hz.AppConfig;
 import io.github.eeroom.gtop.hz.MyDbContext;
 import io.github.eeroom.gtop.hz.MyObjectFacotry;
 import io.github.eeroom.gtop.hz.serialize.JsonConvert;
@@ -20,7 +20,7 @@ public class KuaidiHandler  implements Serializable {
                 //读取表单数据，组织sf那边需要的参数格式，调用sf的接口
                 var formdatastr= delegateExecution.getVariable(VariableKey.formdataOfCreate).toString();
                 var formdata= MyObjectFacotry.getBean(JsonConvert.class).deSerializeObject(formdatastr, EntityByCreate.class);
-                var config=MyObjectFacotry.getBean(ApplicationConfig.class);
+                var config=MyObjectFacotry.getBean(AppConfig.class);
                 formdata.setCustomerId(config.kuaidimycode);
                 var sfkuaidiHandler= io.github.eeroom.apiclient.HttpChannelFactory.createChannel(config.kuaidiSfUrl, IGuoneiKuaidiController.class);
                 var rt= sfkuaidiHandler.create(formdata);
@@ -46,7 +46,7 @@ public class KuaidiHandler  implements Serializable {
                         throw new RuntimeException(String.format("该流程在sf系统对应的快递流程id存在多个,本流程id：%s,sf流程id:%s",
                                 delegateExecution.getProcessInstanceId(),
                                 MyObjectFacotry.getBean(JsonConvert.class).serializeObject(lstbizdataex)));
-                var config=MyObjectFacotry.getBean(ApplicationConfig.class);
+                var config=MyObjectFacotry.getBean(AppConfig.class);
                 var formdatastr= delegateExecution.getVariable(VariableKey.formdataOfComplete).toString();
                 var payentity= MyObjectFacotry.getBean(JsonConvert.class).deSerializeObject(formdatastr,EntityByPaymoney.class);
                 payentity.setProcessInstanceId(lstbizdataex.get(0).geteValue());//这个值非常关键，hz系统的表单提交数据不涉及sf系统的流程实例id

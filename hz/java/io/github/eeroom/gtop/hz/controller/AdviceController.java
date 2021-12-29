@@ -1,7 +1,7 @@
 package io.github.eeroom.gtop.hz.controller;
 
 import io.github.eeroom.gtop.entity.ApidataWrapper;
-import io.github.eeroom.gtop.hz.ApplicationConfig;
+import io.github.eeroom.gtop.hz.AppConfig;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,15 +17,15 @@ import javax.servlet.http.HttpServletResponse;
 
 @ControllerAdvice
 public class AdviceController implements ResponseBodyAdvice<Object> {
-    ApplicationConfig applicationConfig;
-    public AdviceController(ApplicationConfig applicationConfig){
-        this.applicationConfig=applicationConfig;
+    AppConfig appConfig;
+    public AdviceController(AppConfig appConfig){
+        this.appConfig = appConfig;
     }
     @Override
     public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
         if(!org.springframework.http.converter.json.MappingJackson2HttpMessageConverter.class.isAssignableFrom(aClass))
             return false;
-        if(methodParameter.getMethod().getDeclaringClass().getPackageName().indexOf(this.applicationConfig.controllerPath)<0)
+        if(methodParameter.getMethod().getDeclaringClass().getPackageName().indexOf(this.appConfig.controllerPath)<0)
             return false;
         return true;
     }

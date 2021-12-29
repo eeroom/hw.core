@@ -25,7 +25,7 @@ public class RootConfig {
      * @return
      */
     @Bean
-    public org.camunda.bpm.engine.ProcessEngineConfiguration processEngineConfiguration(ApplicationConfig config){
+    public org.camunda.bpm.engine.ProcessEngineConfiguration processEngineConfiguration(AppConfig config){
         var cfg=org.camunda.bpm.engine.ProcessEngineConfiguration.createStandaloneProcessEngineConfiguration();
         cfg.setJdbcDriver(config.camundaJdbcDriver);
         cfg.setJdbcUrl(config.camundaJdbcUrl);

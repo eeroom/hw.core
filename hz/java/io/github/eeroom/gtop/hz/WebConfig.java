@@ -101,7 +101,7 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
     }
 
     @Bean
-    public Docket createRestApi(ApplicationConfig appconfig) {
+    public Docket createRestApi(AppConfig appconfig) {
         //启用swagger,添加@EnableSwagger2,添加这个bean
         // springfox-swagger-ui这类类库提供了swagger-ui的入口页面，swagger-ui.html,
         // io.springfox->springfox-swagger2,EnableSwagger2注解会注册其涉及的bean,核心是注册了一个HandlerMapping,HandlerMapping的核心是Swagger2Controller，提供的核心api,/v2/api-docs

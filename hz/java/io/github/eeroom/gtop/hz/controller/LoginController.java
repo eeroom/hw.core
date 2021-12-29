@@ -2,7 +2,7 @@ package io.github.eeroom.gtop.hz.controller;
 
 import io.github.eeroom.gtop.entity.ApidataWrapper;
 import io.github.eeroom.gtop.entity.authen.LoginInput;
-import io.github.eeroom.gtop.hz.ApplicationConfig;
+import io.github.eeroom.gtop.hz.AppConfig;
 import io.github.eeroom.gtop.hz.authen.JwtTokenHelper;
 import io.github.eeroom.gtop.hz.authen.SkipAuthentication;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class LoginController {
-    ApplicationConfig appconfig;
-    public LoginController(ApplicationConfig appconfig){
+    AppConfig appconfig;
+    public LoginController(AppConfig appconfig){
         this.appconfig=appconfig;
     }
 

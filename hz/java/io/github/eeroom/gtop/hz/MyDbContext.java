@@ -12,8 +12,8 @@ import java.sql.Connection;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class MyDbContext extends DbContext {
-    ApplicationConfig config;
-    public MyDbContext(ApplicationConfig config){
+    AppConfig config;
+    public MyDbContext(AppConfig config){
         this.config=config;
     }
 

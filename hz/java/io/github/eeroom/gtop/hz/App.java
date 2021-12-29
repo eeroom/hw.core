@@ -116,7 +116,7 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
         public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
             //基于springcontext的事件体系，在ContextRefreshedEvent事件的回调方法中，利用容器读取配置信息然后配置servlet的上传功能，配置filter的初始参数
             var contextRoot=(AnnotationConfigWebApplicationContext)contextRefreshedEvent.getApplicationContext();
-            var applicationConfig= contextRoot.getBean(ApplicationConfig.class);
+            var applicationConfig= contextRoot.getBean(AppConfig.class);
             //配置上传功能
             App.this.registration.setMultipartConfig(new MultipartConfigElement(applicationConfig.uploadtmpdir,applicationConfig.maxUploadSize,applicationConfig.maxUploadSize,applicationConfig.maxInMemorySize));
             //配置filter
