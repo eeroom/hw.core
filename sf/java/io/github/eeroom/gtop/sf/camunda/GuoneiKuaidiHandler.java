@@ -17,10 +17,10 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 /**
- * 可以取代KuaidiFeeder
- * bean的名称约定：流程图的key+Handler,
- * 弊端：流程图的key和这个bean名称强绑定
- * 问题不大
+ * 约定：往各个流程实例注入handler的时候，
+ * 如果存在命名为[流程图key+Handler]的Handler类型，那么listenerHandler就会注入[流程图key+Handler]类型的实例
+ * 否则，直接注入ListenerHandler的实例
+ * 所定义的Handler需要标注为@Component注册到springcontext容器
  */
 @Component
 public class GuoneiKuaidiHandler extends ListenerHandler implements Serializable {
