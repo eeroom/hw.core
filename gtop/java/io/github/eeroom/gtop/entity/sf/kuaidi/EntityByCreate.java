@@ -1,7 +1,15 @@
 package io.github.eeroom.gtop.entity.sf.kuaidi;
 
 public class EntityByCreate {
-    String thirdpartId;
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    String customerId;
     String sender;
     String reciver;
     int senderCityId;
@@ -38,14 +46,7 @@ public class EntityByCreate {
     public void setReciveCityId(int reciveCityId) {
         this.reciveCityId = reciveCityId;
     }
-
-    public String getThirdpartId() {
-        return thirdpartId;
-    }
-
-    public void setThirdpartId(String thirdpartId) {
-        this.thirdpartId = thirdpartId;
-    }
+    
 
 
 }

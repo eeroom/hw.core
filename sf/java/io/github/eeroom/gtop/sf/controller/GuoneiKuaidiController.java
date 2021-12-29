@@ -7,6 +7,7 @@ import io.github.eeroom.gtop.entity.camunda.CompleteTaskInput;
 import io.github.eeroom.gtop.entity.camunda.StartProcessInput;
 import io.github.eeroom.gtop.entity.sf.ApiAlias;
 import io.github.eeroom.gtop.entity.sf.db.bizapicfg;
+import io.github.eeroom.gtop.entity.sf.db.kuaidientcustomer;
 import io.github.eeroom.gtop.entity.sf.kuaidi.EntityByPaymoney;
 import io.github.eeroom.gtop.entity.sf.db.bizdata;
 import io.github.eeroom.gtop.entity.sf.db.bizdatasub;
@@ -38,17 +39,23 @@ public class GuoneiKuaidiController implements IGuoneiKuaidiController {
     @SkipAuthentication
     @Override
     public bizdata create(EntityByCreate entity) {
-        var apicfg= this.dbContext.dbSet(bizapicfg.class)
-                .where(x->x.col(a->a.getapi()).eq(ApiAlias.国内快递))
+        var apicfg= this.dbContext.dbSet(bizapicfg.class).select()
+                .where(x->x.col(a->a.getapi()).eq(ApiAlias.GuoneiKuaidi))
                 .firstOrDefault();
         if(apicfg==null)
-            throw new RuntimeException(String.format("没有找到bizapicfg的数据,请联系管理员配置，api:%s",ApiAlias.国内快递.name()));
+            throw new RuntimeException(String.format("没有找到bizapicfg的数据,请联系管理员配置，api:%s",ApiAlias.GuoneiKuaidi.name()));
+        //校验第三方，是否存在，是否有权限等等
+        var customer= this.dbContext.dbSet(kuaidientcustomer.class).select()
+                .where(x->x.col(a->a.getid()).eq(entity.getCustomerId()))
+                .firstOrDefault();
+        if(customer==null)
+            throw new RuntimeException(String.format("指定的客户id不存在，id:%s",entity.getCustomerId()));
         var startProcessInput =new StartProcessInput();
         startProcessInput.setProcdefKey(apicfg.getprocdefKey());
         var jsonstr=this.jsonConvert.serializeObject(entity);
         var formdata=this.jsonConvert.deSerializeObject(jsonstr, new TypeReference<HashMap<String,Object>>() {});
         startProcessInput.setFormdata(formdata);
-        this.currentUserInfo.setAccount(entity.getThirdpartId());
+        this.currentUserInfo.setAccount(entity.getCustomerId());
         return camundaController.startProcess(startProcessInput);
     }
 
@@ -61,7 +68,7 @@ public class GuoneiKuaidiController implements IGuoneiKuaidiController {
                 .where(x->x.col(a->a.getprocessId()).eq(entityByPaymoney.getProcessInstanceId()))
                 .firstOrDefault();
         var entityByCreate= this.jsonConvert.deSerializeObject(bizdata.getcreateformdatajson(), EntityByCreate.class);
-        if(!entityByCreate.getThirdpartId().equals(entityByPaymoney.getThirdpartId()))
+        if(!entityByCreate.getCustomerId().equals(entityByPaymoney.getThirdpartId()))
             throw new RuntimeException("只能支付自己名下的快递");
         //这种场景下，对方系统只能提供流程单号，
         //需要我们自己反推找出taskid,

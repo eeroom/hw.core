@@ -21,7 +21,7 @@ public class KuaidiHandler  implements Serializable {
                 var formdatastr= delegateExecution.getVariable(VariableKey.formdataOfCreate).toString();
                 var formdata= MyObjectFacotry.getBean(JsonConvert.class).deSerializeObject(formdatastr, EntityByCreate.class);
                 var config=MyObjectFacotry.getBean(ApplicationConfig.class);
-                formdata.setThirdpartId(config.kuaidimycode);
+                formdata.setCustomerId(config.kuaidimycode);
                 var sfkuaidiHandler= io.github.eeroom.apiclient.HttpChannelFactory.createChannel(config.kuaidiSfUrl, IGuoneiKuaidiController.class);
                 var rt= sfkuaidiHandler.create(formdata);
                 //保存数据,
