@@ -136,10 +136,10 @@ public class CamundaController {
 
     public bizdata startProcess(StartProcessInput startProcessInput) {
         var procdefex= this.dbContext.dbSet(io.github.eeroom.gtop.entity.hz.db.procdefex.class).select()
-                .where(x->x.col(a->a.getbizName()).eq(startProcessInput.getBizName()))
+                .where(x->x.col(a->a.getprocdefKey()).eq(startProcessInput.getProcdefKey()))
                 .firstOrDefault();
         if(procdefex==null)
-            throw new RuntimeException(String.format("指定的bizName没有procDefEx的数据，请配置好procDefEx数据再填写申请单,bizname:%s", startProcessInput.getBizName()));
+            throw new RuntimeException(String.format("指定的prodefKey没有procdefEx的数据，请配置好procdefEx数据再填写申请单,prodefKey:%s", startProcessInput.getProcdefKey()));
         var map=new HashMap<String,Object>();
         map.putAll(startProcessInput.getFormdata());
         var formdataOfCreate= this.jsonConvert.serializeObject(startProcessInput.getFormdata());

@@ -3,15 +3,16 @@ package io.github.eeroom.gtop.entity.camunda;
 import java.util.HashMap;
 
 public class StartProcessInput {
-    public String getBizName() {
-        return bizName;
+
+    public String getProcdefKey() {
+        return procdefKey;
     }
 
-    public void setBizName(String bizName) {
-        this.bizName = bizName;
+    public void setProcdefKey(String procdefKey) {
+        this.procdefKey = procdefKey;
     }
 
-    String bizName;
+    String procdefKey;
 
 
     public HashMap<String, Object> getFormdata() {
