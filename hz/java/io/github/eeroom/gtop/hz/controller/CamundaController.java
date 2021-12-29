@@ -1,6 +1,7 @@
 package io.github.eeroom.gtop.hz.controller;
 
 import io.github.eeroom.gtop.entity.BizDataStatus;
+import io.github.eeroom.gtop.entity.camunda.CompleteType;
 import io.github.eeroom.gtop.entity.camunda.StartProcessInput;
 import io.github.eeroom.gtop.entity.camunda.CompleteTaskInput;
 import io.github.eeroom.gtop.entity.TaskStatus;
@@ -364,16 +365,12 @@ public class CamundaController {
             throw new RuntimeException("你不是当前任务的处理人！");
         //map中的键和可能值，流程图和completeTaskParameter要事先约定好，
         // 这里的约定是，
-        // 如果UserTask执行结果是修改当前任务的执行人，就在表单数据中包含completeResult：delegate和delegetedHandler：新的执行人
-        String completeResult="completeResult";
-        String delegetedHandler="delegetedHandler";
         var formdata=completeTaskInput.getFormdata();
         String formdataOfComplete=this.jsonConvert.serializeObject(formdata);
-        if("delegate".equals(formdata.getOrDefault(completeResult,""))){
-            var delegetedHandlerValue= formdata.getOrDefault(delegetedHandler,"");
-            if(delegetedHandlerValue==null || delegetedHandlerValue.toString().length()<1)
-                throw new RuntimeException("必须指定被委托人");
-            this.processEngine.getTaskService().delegateTask(completeTaskInput.getTaskId(),delegetedHandlerValue.toString());
+        if(completeTaskInput.getCompleteType()== CompleteType.delegate){
+            if(completeTaskInput.getDelegateAssignee()==null || completeTaskInput.getDelegateAssignee().length()<1)
+                throw new RuntimeException("必须指定新的处理者");
+            this.processEngine.getTaskService().delegateTask(completeTaskInput.getTaskId(),completeTaskInput.getDelegateAssignee());
         }else {
             formdata.put(VariableKey.formdataOfComplete,formdataOfComplete);
             this.processEngine.getTaskService().complete(completeTaskInput.getTaskId(),formdata);

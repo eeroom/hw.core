@@ -21,4 +21,23 @@ public class CompleteTaskInput {
 
     String taskId;
     HashMap<String,Object> formdata;
+    CompleteType completeType;
+
+    public CompleteType getCompleteType() {
+        return completeType;
+    }
+
+    public void setCompleteType(CompleteType completeType) {
+        this.completeType = completeType;
+    }
+
+    public String getDelegateAssignee() {
+        return delegateAssignee;
+    }
+
+    public void setDelegateAssignee(String delegateAssignee) {
+        this.delegateAssignee = delegateAssignee;
+    }
+
+    String delegateAssignee;
 }
