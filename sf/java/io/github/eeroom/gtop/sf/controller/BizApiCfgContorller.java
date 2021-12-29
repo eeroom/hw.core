@@ -1,6 +1,5 @@
 package io.github.eeroom.gtop.sf.controller;
 
-import io.github.eeroom.gtop.entity.hz.db.procdefex;
 import io.github.eeroom.gtop.entity.sf.db.bizapicfg;
 import io.github.eeroom.gtop.sf.MyDbContext;
 import io.github.eeroom.gtop.sf.authen.CurrentUserInfo;

@@ -21,13 +21,7 @@ public class MyObjectFacotry implements ApplicationContextAware {
         return rootcontext.getBean(beanName);
     }
 
-    public static  Object getBeanOrNull(String beanName){
-        if(!rootcontext.containsBean(beanName))
-            return null;
-        return rootcontext.getBean(beanName);
-    }
-
-    public static boolean containsBean(String beanName){
-        return rootcontext.containsBean(beanName);
+    public static String[] getBeanNamesForType(Class<?> meta){
+        return rootcontext.getBeanNamesForType(meta);
     }
 }

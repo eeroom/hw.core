@@ -5,7 +5,9 @@ import io.github.eeroom.gtop.entity.camunda.CompleteTaskInput;
 import io.github.eeroom.gtop.entity.TaskStatus;
 import io.github.eeroom.gtop.entity.hz.db.bizdataex;
 import io.github.eeroom.gtop.entity.hz.db.bizdatasub;
-import io.github.eeroom.gtop.entity.sf.kuaidi.*;
+import io.github.eeroom.gtop.entity.sf.kuaidi.FeedMessage;
+import io.github.eeroom.gtop.entity.sf.kuaidi.FeedResponse;
+import io.github.eeroom.gtop.entity.sf.kuaidi.FeedType;
 import io.github.eeroom.gtop.hz.authen.CurrentUserInfo;
 import io.github.eeroom.gtop.hz.authen.SkipAuthentication;
 import io.github.eeroom.gtop.hz.MyDbContext;
@@ -18,11 +20,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 @RestController
 @Scope(WebApplicationContext.SCOPE_REQUEST)
-public class SfCallbackControllerGuonei implements IGuoneiKuaidiCallback {
+public class SfCallbackController implements IGuoneiKuaidiCallback {
     MyDbContext dbContext;
     CamundaController camundaController;
     CurrentUserInfo currentUserInfo;
-    public SfCallbackControllerGuonei(MyDbContext dbContext, CamundaController camundaController, CurrentUserInfo currentUserInfo){
+    public SfCallbackController(MyDbContext dbContext, CamundaController camundaController, CurrentUserInfo currentUserInfo){
         this.dbContext=dbContext;
         this.camundaController = camundaController;
         this.currentUserInfo=currentUserInfo;

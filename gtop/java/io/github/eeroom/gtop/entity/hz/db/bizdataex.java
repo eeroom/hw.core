@@ -1,6 +1,9 @@
 package io.github.eeroom.gtop.entity.hz.db;
 
-import io.github.eeroom.gtop.entity.hz.*;
+
+ import io.github.eeroom.gtop.entity.*;
+ import io.github.eeroom.gtop.entity.hz.*;
+
 public class bizdataex {
 
     Integer id;

@@ -6,11 +6,12 @@ import io.github.eeroom.nalu.ParseSqlContextMysql;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.sql.Connection;
 
 @Component
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Scope(WebApplicationContext.SCOPE_REQUEST)
 public class MyDbContext extends DbContext {
     AppConfig config;
     public MyDbContext(AppConfig config){

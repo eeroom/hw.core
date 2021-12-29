@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -144,24 +145,28 @@ public class CamundaController {
         map.putAll(startProcessInput.getFormdata());
         var formdataOfCreate= this.jsonConvert.serializeObject(startProcessInput.getFormdata());
         map.put(VariableKey.formdataOfCreate,formdataOfCreate);
-        var listenerHandler=new ListenerHandler();
         //jdk11环境下，  如果camunda的流程参数使用javabean类型，就需要添加这个依赖。tomcat7和2.3版本的有小冲突，启动报错，但不影响使用，这里使用2.2版本，tomcat7启动不报错
+        var handlerName=procdefex.getprocdefKey()+"Handler";
+        var lstbeanName= MyObjectFacotry.getBeanNamesForType(ListenerHandler.class);
+        var handlerBeanName= Arrays.stream(lstbeanName).filter(x->x.equalsIgnoreCase(handlerName)).findFirst();
+        var listenerHandler=handlerBeanName.isPresent()?MyObjectFacotry.getBean(handlerBeanName.get()):MyObjectFacotry.getBean(VariableKey.listenerHandler);
         map.put(VariableKey.listenerHandler,listenerHandler);
-        var handlerKey=procdefex.getprocdefKey()+"Handler";
-        if(MyObjectFacotry.containsBean(handlerKey)){
-            //流程各自的handler
-            map.put(handlerKey,MyObjectFacotry.getBean(handlerKey));
-        }
         var processInstance = this.processEngine.getRuntimeService()
                 .startProcessInstanceByKey(procdefex.getprocdefKey(),map);
         //往主业务表添加一条记录
         bizdata biz=new bizdata();
-        biz.setbizName(procdefex.getbizName());
+        biz.setbizType(procdefex.getbizType());
         biz.setcreateBy(this.currentUserInfo.getAccount());
         biz.setcreateformdatajson(formdataOfCreate);
         biz.setcreateTime(new java.sql.Timestamp(new Date().getTime()));
         biz.setprocessId(processInstance.getProcessInstanceId());
-        var title= this.processEngine.getRuntimeService().getVariable(processInstance.getProcessInstanceId(),VariableKey.bizdataTitle);
+        biz.setcompleteformComponetName(procdefex.getcompleteformComponetName());
+        biz.setcreateformComponentName(procdefex.getcreateformComponentName());
+        biz.setico(procdefex.getico());
+        var title=startProcessInput.getFormdata().getOrDefault(VariableKey.bizdataTitle,"");
+        if("".equals(title)){
+            title= this.processEngine.getRuntimeService().getVariable(processInstance.getProcessInstanceId(),VariableKey.bizdataTitle);
+        }
         if(title!=null){
             biz.settitle(title.toString());
         }
@@ -351,9 +356,9 @@ public class CamundaController {
         var task= this.processEngine.getTaskService().createTaskQuery().taskId(completeTaskInput.getTaskId())
                 .singleResult();
         if(task==null)
-            throw new IllegalArgumentException("指定id的task不存在，taskid="+completeTaskInput.getTaskId());
-        if(!this.currentUserInfo.getName().equals(task.getAssignee()))
-            throw new IllegalArgumentException("你不是当前任务的处理人！");
+            throw new RuntimeException("指定id的task不存在，taskid="+completeTaskInput.getTaskId());
+        if(this.currentUserInfo.getAccount()==null||!this.currentUserInfo.getAccount().equals(task.getAssignee()))
+            throw new RuntimeException("你不是当前任务的处理人！");
         //map中的键和可能值，流程图和completeTaskParameter要事先约定好，
         // 这里的约定是，
         // 如果UserTask执行结果是修改当前任务的执行人，就在表单数据中包含completeResult：delegate和delegetedHandler：新的执行人
@@ -361,13 +366,11 @@ public class CamundaController {
         String delegetedHandler="delegetedHandler";
         var formdata=completeTaskInput.getFormdata();
         String formdataOfComplete=this.jsonConvert.serializeObject(formdata);
-        if(formdata.containsKey(completeResult) &&"delegate".equals(formdata.get(completeResult))){
-            if(!formdata.containsKey(delegetedHandler))
-                throw new IllegalArgumentException("必须指定被委托人");
-            var tmpHanlder= formdata.get(delegetedHandler);
-            if(tmpHanlder==null || tmpHanlder.toString().length()<1)
-                throw new IllegalArgumentException("必须指定被委托人");
-            this.processEngine.getTaskService().delegateTask(completeTaskInput.getTaskId(),tmpHanlder.toString());
+        if("delegate".equals(formdata.getOrDefault(completeResult,""))){
+            var delegetedHandlerValue= formdata.getOrDefault(delegetedHandler,"");
+            if(delegetedHandlerValue==null || delegetedHandlerValue.toString().length()<1)
+                throw new RuntimeException("必须指定被委托人");
+            this.processEngine.getTaskService().delegateTask(completeTaskInput.getTaskId(),delegetedHandlerValue.toString());
         }else {
             formdata.put(VariableKey.formdataOfComplete,formdataOfComplete);
             this.processEngine.getTaskService().complete(completeTaskInput.getTaskId(),formdata);

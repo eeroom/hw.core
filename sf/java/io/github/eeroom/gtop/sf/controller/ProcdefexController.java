@@ -1,6 +1,6 @@
 package io.github.eeroom.gtop.sf.controller;
 
-import io.github.eeroom.gtop.entity.hz.db.procdefex;
+import io.github.eeroom.gtop.entity.sf.db.procdefex;
 import io.github.eeroom.gtop.sf.authen.CurrentUserInfo;
 import io.github.eeroom.gtop.sf.MyDbContext;
 import io.github.eeroom.nalu.Columns;
@@ -24,13 +24,12 @@ public class ProcdefexController {
     public procdefex add(procdefex entity) throws Throwable {
         var tmp= this.dbContext.dbSet(procdefex.class)
                 .select()
-                .where(x->x.col(a->a.getbizName()).eq(entity.getbizName()))
+                .where(x->x.col(a->a.getprocdefKey()).eq(entity.getprocdefKey()))
                 .firstOrDefault();
         if(tmp!=null)
-            throw new RuntimeException("指定的流程名称已经存在："+entity.getbizName());
+            throw new RuntimeException("指定的procdefKey已经存在："+entity.getprocdefKey());
         //这里还需要增加对procedefkey的校验,必须是存在的key
-        this.dbContext.add(entity)
-                .setInsertCol(x-> Columns.of(x.getapproveformId(),x.getprocdefKey(),x.getcreateformId(),x.getico(),x.getbizName()));
+        this.dbContext.add(entity).setInsertAllCol();
         this.dbContext.saveChange();
         return entity;
     }
@@ -41,7 +40,7 @@ public class ProcdefexController {
 
     public procdefex delete(procdefex entity) {
         this.dbContext.delete(procdefex.class)
-                .where(x->x.col(a->a.getbizName()).eq(entity.getbizName()));
+                .where(x->x.col(a->a.getprocdefKey()).eq(entity.getprocdefKey()));
         this.dbContext.saveChange();
         return entity;
     }
