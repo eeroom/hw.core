@@ -1,5 +1,6 @@
 package io.github.eeroom.gtop.hz.controller;
 
+import io.github.eeroom.gtop.entity.BizDataStatus;
 import io.github.eeroom.gtop.entity.camunda.StartProcessInput;
 import io.github.eeroom.gtop.entity.camunda.CompleteTaskInput;
 import io.github.eeroom.gtop.entity.TaskStatus;
@@ -164,6 +165,7 @@ public class CamundaController {
         biz.setcompleteformComponetName(procdefex.getcompleteformComponetName());
         biz.setcreateformComponentName(procdefex.getcreateformComponentName());
         biz.setico(procdefex.getico());
+        biz.setstatus(BizDataStatus.处理中);
         var title=startProcessInput.getFormdata().getOrDefault(VariableKey.bizdataTitle,"");
         if("".equals(title)){
             title= this.processEngine.getRuntimeService().getVariable(processInstance.getProcessInstanceId(),VariableKey.bizdataTitle);

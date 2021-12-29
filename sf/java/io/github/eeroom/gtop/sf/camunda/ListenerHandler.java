@@ -7,6 +7,7 @@ import io.github.eeroom.gtop.entity.sf.db.bizdatasub;
 import io.github.eeroom.gtop.sf.MyObjectFacotry;
 import io.github.eeroom.gtop.sf.MyDbContext;
 import io.github.eeroom.nalu.Columns;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.springframework.stereotype.Component;
 
@@ -44,6 +45,20 @@ public class ListenerHandler implements Serializable {
      * @param delegateExecution
      */
     public void updateBizdataStatus(DelegateTask delegateExecution,String status) {
+        var pid= delegateExecution.getProcessInstanceId();
+        var dbcontext= MyObjectFacotry.getBean(MyDbContext.class);
+        var bizd= dbcontext.dbSet(bizdata.class).select()
+                .where(x->x.col(a->a.getprocessId()).eq(pid))
+                .firstOrDefault();
+        if(bizd==null)
+            throw new RuntimeException("没有找到对应的bizdata,processId:"+pid);
+        var value= BizDataStatus.valueOf(status);
+        dbcontext.edit(bizdata.class)
+                .setUpdateCol(x->x.getstatus(),value)
+                .where(x->x.col(a->a.getprocessId()).eq(bizd.getprocessId()));
+    }
+
+    public void updateBizdataStatus(DelegateExecution delegateExecution, String status) {
         var pid= delegateExecution.getProcessInstanceId();
         var dbcontext= MyObjectFacotry.getBean(MyDbContext.class);
         var bizd= dbcontext.dbSet(bizdata.class).select()
