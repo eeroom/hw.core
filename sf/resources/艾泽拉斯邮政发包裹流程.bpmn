@@ -70,7 +70,7 @@
     <bpmn:manualTask id="Activity_1ue785o" name="提交申请">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:outputParameter name="bizdataTitle">${listenerHandler.concat("No.",execution.getProcessInstanceId()," 国内快递")}</camunda:outputParameter>
+          <camunda:outputParameter name="bizdataTitle">${listenerHandler.concat("No.",execution.getProcessInstanceId())}</camunda:outputParameter>
           <camunda:outputParameter name="xiayitiaoTaskFlag">qe</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
@@ -79,11 +79,7 @@
     </bpmn:manualTask>
     <bpmn:manualTask id="Activity_0m511ea" name="通知对方&#10;过磅结果">
       <bpmn:extensionElements>
-        <camunda:executionListener expression="${GuoneiKuaidiHandler.feed(execution)}" event="end" />
-        <camunda:inputOutput>
-          <camunda:inputParameter name="msgkeys">zhongliang</camunda:inputParameter>
-          <camunda:inputParameter name="msgtype">过磅</camunda:inputParameter>
-        </camunda:inputOutput>
+        <camunda:executionListener expression="${listenerHandler.feed(execution,&#34;过磅&#34;,&#34;zhongliang&#34;)}" event="end" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1q0qzid</bpmn:incoming>
       <bpmn:outgoing>Flow_0p53sx0</bpmn:outgoing>
