@@ -1,6 +1,9 @@
 package io.github.eeroom.gtop.entity.sf.db;
 
-import io.github.eeroom.gtop.entity.*;
+
+ import io.github.eeroom.gtop.entity.*;
+ import io.github.eeroom.gtop.entity.sf.*;
+
 public class kuaidientcustomer {
 
     String id;

@@ -51,7 +51,7 @@ let cfg = {
 let templatestr = fs.readFileSync('./t4-mysql-template.ejs').toString('utf-8');
 let packageName = "io.github.eeroom.gtop.entity.sf.db";
 let targetDir = "gtop\\java\\io\\github\\eeroom\\gtop\\entity\\sf\\db\\";
-let packageImport="io.github.eeroom.gtop.entity.*";
+let packageImport=["io.github.eeroom.gtop.entity.*","io.github.eeroom.gtop.entity.sf.*"];
 
 let cnn = mysql.createConnection(cfg)
 

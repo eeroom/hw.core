@@ -1,6 +1,9 @@
 package io.github.eeroom.gtop.entity.sf.db;
 
-import io.github.eeroom.gtop.entity.*;
+
+ import io.github.eeroom.gtop.entity.*;
+ import io.github.eeroom.gtop.entity.sf.*;
+
 public class procdefex {
 
     String procdefKey;
@@ -13,14 +16,14 @@ public class procdefex {
         this.procdefKey = pValue;
     }
 
-    String bizName;
+    String bizType;
 
-    public String getbizName() {
-        return bizName;
+    public String getbizType() {
+        return bizType;
     }
 
-    public void setbizName(String pValue) {
-        this.bizName = pValue;
+    public void setbizType(String pValue) {
+        this.bizType = pValue;
     }
 
     String ico;
@@ -33,24 +36,24 @@ public class procdefex {
         this.ico = pValue;
     }
 
-    Integer createformId;
+    String createformComponentName;
 
-    public Integer getcreateformId() {
-        return createformId;
+    public String getcreateformComponentName() {
+        return createformComponentName;
     }
 
-    public void setcreateformId(Integer pValue) {
-        this.createformId = pValue;
+    public void setcreateformComponentName(String pValue) {
+        this.createformComponentName = pValue;
     }
 
-    Integer approveformId;
+    String completeformComponetName;
 
-    public Integer getapproveformId() {
-        return approveformId;
+    public String getcompleteformComponetName() {
+        return completeformComponetName;
     }
 
-    public void setapproveformId(Integer pValue) {
-        this.approveformId = pValue;
+    public void setcompleteformComponetName(String pValue) {
+        this.completeformComponetName = pValue;
     }
 
 }

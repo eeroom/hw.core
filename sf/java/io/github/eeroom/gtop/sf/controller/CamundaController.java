@@ -3,9 +3,11 @@ package io.github.eeroom.gtop.sf.controller;
 import io.github.eeroom.gtop.entity.TaskStatus;
 import io.github.eeroom.gtop.entity.camunda.StartProcessInput;
 import io.github.eeroom.gtop.entity.camunda.CompleteTaskInput;
-import io.github.eeroom.gtop.entity.hz.db.bizdatasub;
 import io.github.eeroom.gtop.entity.sf.db.bizdata;
-import io.github.eeroom.gtop.sf.*;
+import io.github.eeroom.gtop.entity.sf.db.bizdatasub;
+import io.github.eeroom.gtop.entity.sf.db.procdefex;
+import io.github.eeroom.gtop.sf.MyDbContext;
+import io.github.eeroom.gtop.sf.MyObjectFacotry;
 import io.github.eeroom.gtop.sf.aspnet.HttpPost;
 import io.github.eeroom.gtop.sf.authen.CurrentUserInfo;
 import io.github.eeroom.gtop.sf.authen.SkipAuthentication;
@@ -137,7 +139,7 @@ public class CamundaController {
     }
 
     public bizdata startProcess(StartProcessInput startProcessInput) {
-        var procdefex= this.dbContext.dbSet(io.github.eeroom.gtop.entity.hz.db.procdefex.class).select()
+        var procdefex= this.dbContext.dbSet(procdefex.class).select()
                 .where(x->x.col(a->a.getprocdefKey()).eq(startProcessInput.getProcdefKey()))
                 .firstOrDefault();
         if(procdefex==null)
@@ -147,7 +149,7 @@ public class CamundaController {
         var formdataOfCreate= this.jsonConvert.serializeObject(startProcessInput.getFormdata());
         map.put(VariableKey.formdataOfCreate,formdataOfCreate);
         //jdk11环境下，  如果camunda的流程参数使用javabean类型，就需要添加这个依赖。tomcat7和2.3版本的有小冲突，启动报错，但不影响使用，这里使用2.2版本，tomcat7启动不报错
-        var lstbeanName=MyObjectFacotry.getBeanNamesForType(ListenerHandler.class);
+        var lstbeanName= MyObjectFacotry.getBeanNamesForType(ListenerHandler.class);
         //默认约定，如果有注册 流程图key对应的Handler,则使用这个handler,否则使用通用的ListenerHandler;
         //业务专用Handler直接继承通用的ListenerHandler，得到几个通用方法
         var handlerKey=procdefex.getprocdefKey()+"Handler";
@@ -158,12 +160,18 @@ public class CamundaController {
                 .startProcessInstanceByKey(procdefex.getprocdefKey(),map);
         //往主业务表添加一条记录
         var biz=new io.github.eeroom.gtop.entity.sf.db.bizdata();
-        biz.setbizName(procdefex.getbizName());
+        biz.setbizType(procdefex.getbizType());
         biz.setcreateBy(this.currentUserInfo.getAccount());
         biz.setcreateformdatajson(formdataOfCreate);
         biz.setcreateTime(new java.sql.Timestamp(new Date().getTime()));
         biz.setprocessId(processInstance.getProcessInstanceId());
-        var title= this.processEngine.getRuntimeService().getVariable(processInstance.getProcessInstanceId(),VariableKey.bizdataTitle);
+        biz.setcompleteformComponetName(procdefex.getcompleteformComponetName());
+        biz.setcreateformComponentName(procdefex.getcreateformComponentName());
+        biz.setico(procdefex.getico());
+        var title=startProcessInput.getFormdata().getOrDefault(VariableKey.bizdataTitle,"");
+        if("".equals(title)){
+            title= this.processEngine.getRuntimeService().getVariable(processInstance.getProcessInstanceId(),VariableKey.bizdataTitle);
+        }
         if(title!=null){
             biz.settitle(title.toString());
         }
@@ -353,9 +361,9 @@ public class CamundaController {
         var task= this.processEngine.getTaskService().createTaskQuery().taskId(completeTaskInput.getTaskId())
                 .singleResult();
         if(task==null)
-            throw new IllegalArgumentException("指定id的task不存在，taskid="+completeTaskInput.getTaskId());
-        if(!this.currentUserInfo.getName().equals(task.getAssignee()))
-            throw new IllegalArgumentException("你不是当前任务的处理人！");
+            throw new RuntimeException("指定id的task不存在，taskid="+completeTaskInput.getTaskId());
+        if(this.currentUserInfo.getAccount()==null||!this.currentUserInfo.getAccount().equals(task.getAssignee()))
+            throw new RuntimeException("你不是当前任务的处理人！account:"+this.currentUserInfo.getAccount());
         //map中的键和可能值，流程图和completeTaskParameter要事先约定好，
         // 这里的约定是，
         // 如果UserTask执行结果是修改当前任务的执行人，就在表单数据中包含completeResult：delegate和delegetedHandler：新的执行人
@@ -363,13 +371,11 @@ public class CamundaController {
         String delegetedHandler="delegetedHandler";
         var formdata=completeTaskInput.getFormdata();
         String formdataOfComplete=this.jsonConvert.serializeObject(formdata);
-        if(formdata.containsKey(completeResult) &&"delegate".equals(formdata.get(completeResult))){
-            if(!formdata.containsKey(delegetedHandler))
-                throw new IllegalArgumentException("必须指定被委托人");
-            var tmpHanlder= formdata.get(delegetedHandler);
-            if(tmpHanlder==null || tmpHanlder.toString().length()<1)
-                throw new IllegalArgumentException("必须指定被委托人");
-            this.processEngine.getTaskService().delegateTask(completeTaskInput.getTaskId(),tmpHanlder.toString());
+        if("delegate".equals(formdata.getOrDefault(completeResult,""))){
+            var delegetedHandlerValue= formdata.getOrDefault(delegetedHandler,"").toString();
+            if(delegetedHandlerValue==null || delegetedHandlerValue.length()<1)
+                throw new RuntimeException("必须指定被委托人");
+            this.processEngine.getTaskService().delegateTask(completeTaskInput.getTaskId(),delegetedHandlerValue);
         }else {
             formdata.put(VariableKey.formdataOfComplete,formdataOfComplete);
             this.processEngine.getTaskService().complete(completeTaskInput.getTaskId(),formdata);

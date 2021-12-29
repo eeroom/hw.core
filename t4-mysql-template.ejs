@@ -1,6 +1,8 @@
 package <%=packageName%>;
 
-import <%=packageImport%>;
+<% packageImport.forEach(function(pi){ %>
+ import <%=pi%>;<% });%>
+
 public class <%=tableName%> {
 <% columns.forEach(function(col){ %>
     <%=col.DATA_TYPE%> <%=col.COLUMN_NAME%>;

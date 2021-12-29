@@ -5,7 +5,8 @@ import io.github.eeroom.gtop.api.sf.kuaidi.IGuoneiKuaidiController;
 import io.github.eeroom.gtop.entity.TaskStatus;
 import io.github.eeroom.gtop.entity.camunda.CompleteTaskInput;
 import io.github.eeroom.gtop.entity.camunda.StartProcessInput;
-import io.github.eeroom.gtop.entity.sf.BizName;
+import io.github.eeroom.gtop.entity.sf.ApiAlias;
+import io.github.eeroom.gtop.entity.sf.db.bizapicfg;
 import io.github.eeroom.gtop.entity.sf.kuaidi.EntityByPaymoney;
 import io.github.eeroom.gtop.entity.sf.db.bizdata;
 import io.github.eeroom.gtop.entity.sf.db.bizdatasub;
@@ -37,8 +38,13 @@ public class GuoneiKuaidiController implements IGuoneiKuaidiController {
     @SkipAuthentication
     @Override
     public bizdata create(EntityByCreate entity) {
+        var apicfg= this.dbContext.dbSet(bizapicfg.class)
+                .where(x->x.col(a->a.getapi()).eq(ApiAlias.国内快递))
+                .firstOrDefault();
+        if(apicfg==null)
+            throw new RuntimeException(String.format("没有找到bizapicfg的数据,请联系管理员配置，api:%s",ApiAlias.国内快递.name()));
         var startProcessInput =new StartProcessInput();
-        startProcessInput.setBizName(BizName.国内快递.name());
+        startProcessInput.setProcdefKey(apicfg.getprocdefKey());
         var jsonstr=this.jsonConvert.serializeObject(entity);
         var formdata=this.jsonConvert.deSerializeObject(jsonstr, new TypeReference<HashMap<String,Object>>() {});
         startProcessInput.setFormdata(formdata);

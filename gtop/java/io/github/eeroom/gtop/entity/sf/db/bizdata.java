@@ -1,6 +1,9 @@
 package io.github.eeroom.gtop.entity.sf.db;
 
-import io.github.eeroom.gtop.entity.*;
+
+ import io.github.eeroom.gtop.entity.*;
+ import io.github.eeroom.gtop.entity.sf.*;
+
 public class bizdata {
 
     String processId;
@@ -13,14 +16,24 @@ public class bizdata {
         this.processId = pValue;
     }
 
-    String bizName;
+    String procdefKey;
 
-    public String getbizName() {
-        return bizName;
+    public String getprocdefKey() {
+        return procdefKey;
     }
 
-    public void setbizName(String pValue) {
-        this.bizName = pValue;
+    public void setprocdefKey(String pValue) {
+        this.procdefKey = pValue;
+    }
+
+    String bizType;
+
+    public String getbizType() {
+        return bizType;
+    }
+
+    public void setbizType(String pValue) {
+        this.bizType = pValue;
     }
 
     String title;
@@ -71,6 +84,36 @@ public class bizdata {
 
     public void setstatus(BizDataStatus pValue) {
         this.status = pValue;
+    }
+
+    String createformComponentName;
+
+    public String getcreateformComponentName() {
+        return createformComponentName;
+    }
+
+    public void setcreateformComponentName(String pValue) {
+        this.createformComponentName = pValue;
+    }
+
+    String completeformComponetName;
+
+    public String getcompleteformComponetName() {
+        return completeformComponetName;
+    }
+
+    public void setcompleteformComponetName(String pValue) {
+        this.completeformComponetName = pValue;
+    }
+
+    String ico;
+
+    public String getico() {
+        return ico;
+    }
+
+    public void setico(String pValue) {
+        this.ico = pValue;
     }
 
 }
