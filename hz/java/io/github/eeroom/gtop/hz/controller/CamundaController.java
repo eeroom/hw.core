@@ -155,6 +155,7 @@ public class CamundaController {
                 .startProcessInstanceByKey(procdefex.getprocdefKey(),map);
         //往主业务表添加一条记录
         bizdata biz=new bizdata();
+        biz.setprocdefKey(procdefex.getprocdefKey());
         biz.setbizType(procdefex.getbizType());
         biz.setcreateBy(this.currentUserInfo.getAccount());
         biz.setcreateformdatajson(formdataOfCreate);
