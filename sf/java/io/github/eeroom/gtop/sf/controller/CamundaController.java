@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -146,13 +147,13 @@ public class CamundaController {
         var formdataOfCreate= this.jsonConvert.serializeObject(startProcessInput.getFormdata());
         map.put(VariableKey.formdataOfCreate,formdataOfCreate);
         //jdk11环境下，  如果camunda的流程参数使用javabean类型，就需要添加这个依赖。tomcat7和2.3版本的有小冲突，启动报错，但不影响使用，这里使用2.2版本，tomcat7启动不报错
-        map.put(VariableKey.listenerHandler,MyObjectFacotry.getBean(ListenerHandler.class));
+        var lstbeanName=MyObjectFacotry.getBeanNamesForType(ListenerHandler.class);
+        //默认约定，如果有注册 流程图key对应的Handler,则使用这个handler,否则使用通用的ListenerHandler;
+        //业务专用Handler直接继承通用的ListenerHandler，得到几个通用方法
         var handlerKey=procdefex.getprocdefKey()+"Handler";
-        var bizHandler=MyObjectFacotry.getBeanIgnorCase(handlerKey);
-        if(bizHandler!=null){
-            //流程各自的handler
-            map.put(handlerKey,bizHandler);
-        }
+        var beanName= Arrays.stream(lstbeanName).filter(x->x.equalsIgnoreCase(handlerKey)).findFirst();
+        var listenerHandler=beanName.isPresent()?MyObjectFacotry.getBean(beanName.get()):MyObjectFacotry.getBean(VariableKey.listenerHandler);
+        map.put(VariableKey.listenerHandler,listenerHandler);
         var processInstance = this.processEngine.getRuntimeService()
                 .startProcessInstanceByKey(procdefex.getprocdefKey(),map);
         //往主业务表添加一条记录

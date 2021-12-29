@@ -21,7 +21,7 @@ import java.util.HashMap;
  * 问题不大
  */
 @Component
-public class GuoneiKuaidiHandler implements Serializable {
+public class GuoneiKuaidiHandler extends ListenerHandler implements Serializable {
 
     public void feed(DelegateExecution delegateExecution) {
         var pid= delegateExecution.getProcessInstanceId();

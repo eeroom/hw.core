@@ -20,23 +20,11 @@ public class MyObjectFacotry implements ApplicationContextAware {
         return rootcontext.getBean(meta);
     }
 
-    public static boolean containsBean(String beanName){
-        return rootcontext.containsBean(beanName);
-    }
-
-
-
     public static   Object getBean(String beanName){
         return rootcontext.getBean(beanName);
     }
 
-    public static   Object getBeanIgnorCase(String beanName){
-        var beanNameTmp= Arrays.stream(rootcontext.getBeanDefinitionNames())
-                .filter(x->x.length()==beanName.length())
-                .filter(x->x.equalsIgnoreCase(beanName))
-                .findFirst();
-        if(beanNameTmp.isPresent())
-            return rootcontext.getBean(beanNameTmp.get());
-        return null;
+    public static String[] getBeanNamesForType(Class<?> meta){
+        return rootcontext.getBeanNamesForType(meta);
     }
 }
