@@ -10,10 +10,24 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2021-12-28 09:13:22
+Date: 2021-12-29 16:12:34
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for `bizapicfg`
+-- ----------------------------
+DROP TABLE IF EXISTS `bizapicfg`;
+CREATE TABLE `bizapicfg` (
+  `api` varchar(20) NOT NULL COMMENT '枚举:ApiAlias:如果开放专门api就需要配置这个数据，让该api知道使用那个procdefKey',
+  `procdefKey` varchar(20) NOT NULL,
+  PRIMARY KEY (`api`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of bizapicfg
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `bizdata`
@@ -21,12 +35,16 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `bizdata`;
 CREATE TABLE `bizdata` (
   `processId` varchar(10) NOT NULL COMMENT '流程实例id',
-  `bizName` varchar(20) NOT NULL DEFAULT '',
+  `procdefKey` varchar(20) NOT NULL,
+  `bizType` varchar(20) NOT NULL DEFAULT '',
   `title` varchar(200) DEFAULT NULL,
   `createBy` varchar(10) NOT NULL,
   `createTime` datetime NOT NULL,
   `createformdatajson` text DEFAULT NULL,
   `status` varchar(10) DEFAULT '' COMMENT '枚举:BizDataStatus:未开始,处理中,已结束',
+  `createformComponentName` varchar(20) DEFAULT NULL,
+  `completeformComponetName` varchar(20) DEFAULT NULL,
+  `ico` varchar(100) DEFAULT '',
   PRIMARY KEY (`processId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -63,7 +81,7 @@ CREATE TABLE `bizdatasub` (
   `completeformdatajson` text DEFAULT NULL,
   `status` varchar(10) NOT NULL COMMENT '枚举:TaskStatus:处理中,已完成',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of bizdatasub
@@ -92,10 +110,10 @@ CREATE TABLE `dict` (
 DROP TABLE IF EXISTS `procdefex`;
 CREATE TABLE `procdefex` (
   `procdefKey` varchar(20) NOT NULL,
-  `bizName` varchar(20) NOT NULL,
+  `bizType` varchar(20) NOT NULL,
   `ico` varchar(100) DEFAULT NULL,
-  `createformId` int(11) DEFAULT NULL,
-  `approveformId` int(11) DEFAULT NULL,
+  `createformComponentName` varchar(20) DEFAULT '',
+  `completeformComponetName` varchar(20) DEFAULT '',
   PRIMARY KEY (`procdefKey`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
