@@ -18,7 +18,7 @@
     </bpmn:userTask>
     <bpmn:endEvent id="Event_1tm9o30">
       <bpmn:extensionElements>
-        <camunda:executionListener expression="${listenerHandler.updateBizdataStatus(execution,&#34;已结束&#34;)}" event="end" />
+        <camunda:executionListener expression="${listenerHandler.updateBizdataStatusByExecution(execution,&#34;已结束&#34;)}" event="end" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_13rebtq</bpmn:incoming>
       <bpmn:incoming>Flow_10h5bsl</bpmn:incoming>

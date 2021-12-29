@@ -40,10 +40,10 @@ public class ListenerHandler implements Serializable {
 
     /**
      * 可以取代BizdataStatusSetter
-     * @param delegateExecution
+     * @param delegateTask
      */
-    public void updateBizdataStatus(DelegateTask delegateExecution,String status) {
-        var pid= delegateExecution.getProcessInstanceId();
+    public void updateBizdataStatusByTask(DelegateTask delegateTask,String status) {
+        var pid= delegateTask.getProcessInstanceId();
         this.updateBizdataStatus(pid,status);
     }
 
@@ -60,7 +60,7 @@ public class ListenerHandler implements Serializable {
                 .where(x->x.col(a->a.getprocessId()).eq(bizd.getprocessId()));
     }
 
-    public void updateBizdataStatus(DelegateExecution delegateExecution, String status) {
+    public void updateBizdataStatusByExecution(DelegateExecution delegateExecution, String status) {
         var pid= delegateExecution.getProcessInstanceId();
         this.updateBizdataStatus(pid,status);
     }
