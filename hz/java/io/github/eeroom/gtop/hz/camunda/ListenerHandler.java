@@ -44,6 +44,10 @@ public class ListenerHandler implements Serializable {
      */
     public void updateBizdataStatus(DelegateTask delegateExecution,String status) {
         var pid= delegateExecution.getProcessInstanceId();
+        this.updateBizdataStatus(pid,status);
+    }
+
+    private void updateBizdataStatus(String pid, String status) {
         var dbcontext= MyObjectFacotry.getBean(MyDbContext.class);
         var bizd= dbcontext.dbSet(io.github.eeroom.gtop.entity.sf.db.bizdata.class).select()
                 .where(x->x.col(a->a.getprocessId()).eq(pid))
@@ -58,16 +62,7 @@ public class ListenerHandler implements Serializable {
 
     public void updateBizdataStatus(DelegateExecution delegateExecution, String status) {
         var pid= delegateExecution.getProcessInstanceId();
-        var dbcontext= MyObjectFacotry.getBean(MyDbContext.class);
-        var bizd= dbcontext.dbSet(io.github.eeroom.gtop.entity.sf.db.bizdata.class).select()
-                .where(x->x.col(a->a.getprocessId()).eq(pid))
-                .firstOrDefault();
-        if(bizd==null)
-            throw new RuntimeException("没有找到对应的bizdata,processId:"+pid);
-        var value= BizDataStatus.valueOf(status);
-        dbcontext.edit(bizdata.class)
-                .setUpdateCol(x->x.getstatus(),value)
-                .where(x->x.col(a->a.getprocessId()).eq(bizd.getprocessId()));
+        this.updateBizdataStatus(pid,status);
     }
 
     public String concat(String... value){
