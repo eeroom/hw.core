@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1qleewd" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.10.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1qleewd" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.10.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
   <bpmn:process id="Kuaidi" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0wg5f5t</bpmn:outgoing>
@@ -25,7 +25,9 @@
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1kwagrh" sourceRef="Activity_15uip9u" targetRef="Activity_1g44kgq" />
     <bpmn:sequenceFlow id="Flow_13rebtq" sourceRef="Activity_1u6ob7e" targetRef="Event_1tm9o30" />
-    <bpmn:sequenceFlow id="Flow_0o755dc" sourceRef="Activity_1g44kgq" targetRef="Activity_01wjv41" />
+    <bpmn:sequenceFlow id="Flow_0o755dc" name="驳回" sourceRef="Activity_1g44kgq" targetRef="Activity_01wjv41">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approveType=="驳回"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_10h5bsl" sourceRef="Activity_01wjv41" targetRef="Event_1tm9o30" />
     <bpmn:sequenceFlow id="Flow_1ovspoj" sourceRef="Activity_1g38mvu" targetRef="Activity_03yz04i" />
     <bpmn:sequenceFlow id="Flow_1thvpf1" sourceRef="Activity_03yz04i" targetRef="Activity_15uip9u" />
@@ -36,7 +38,9 @@
       <bpmn:incoming>Flow_1ovspoj</bpmn:incoming>
       <bpmn:outgoing>Flow_1thvpf1</bpmn:outgoing>
     </bpmn:manualTask>
-    <bpmn:sequenceFlow id="Flow_1omgl13" sourceRef="Activity_1g44kgq" targetRef="Activity_1u6ob7e" />
+    <bpmn:sequenceFlow id="Flow_1omgl13" name="通过" sourceRef="Activity_1g44kgq" targetRef="Activity_1u6ob7e">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approveType=="驳回"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:userTask id="Activity_1g44kgq" name="主管审批" camunda:assignee="${master}">
       <bpmn:extensionElements>
         <camunda:taskListener expression="${listenerHandler.syncAssigneeToBizdatasub(task)}" event="assignment" />
@@ -47,14 +51,14 @@
     </bpmn:userTask>
     <bpmn:manualTask id="Activity_1u6ob7e" name="通知sf已付款">
       <bpmn:extensionElements>
-        <camunda:executionListener expression="${listenerHandler.payKuaidi(execution)}" event="start" />
+        <camunda:executionListener expression="${listenerHandler.payKuaidi(execution,1)}" event="start" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1omgl13</bpmn:incoming>
       <bpmn:outgoing>Flow_13rebtq</bpmn:outgoing>
     </bpmn:manualTask>
     <bpmn:manualTask id="Activity_01wjv41" name="通知sf终止快递">
       <bpmn:extensionElements>
-        <camunda:executionListener expression="${listenerHandler.payKuaidi(execution)}" event="start" />
+        <camunda:executionListener expression="${listenerHandler.payKuaidi(execution,2)}" event="start" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0o755dc</bpmn:incoming>
       <bpmn:outgoing>Flow_10h5bsl</bpmn:outgoing>
@@ -65,6 +69,9 @@
       <bpmndi:BPMNEdge id="Flow_1omgl13_di" bpmnElement="Flow_1omgl13">
         <di:waypoint x="210" y="660" />
         <di:waypoint x="210" y="740" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="214" y="697" width="22" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1thvpf1_di" bpmnElement="Flow_1thvpf1">
         <di:waypoint x="210" y="400" />
@@ -83,6 +90,9 @@
         <di:waypoint x="260" y="620" />
         <di:waypoint x="380" y="620" />
         <di:waypoint x="380" y="740" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="311" y="602" width="21" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_13rebtq_di" bpmnElement="Flow_13rebtq">
         <di:waypoint x="210" y="820" />

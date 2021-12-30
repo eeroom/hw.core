@@ -38,7 +38,7 @@ public class KuaidiHandler extends ListenerHandler  implements Serializable {
                 delegateExecution.setVariable(VariableKey.sf,VariableKey.sf);
         }
 
-        public void payKuaidi(DelegateExecution delegateExecution){
+        public void payKuaidi(DelegateExecution delegateExecution,Integer flag){
                 var dbcontext=MyObjectFacotry.getBean(MyDbContext.class);
                 var bizdataex= dbcontext.dbSet(bizdataex.class).select()
                         .where(x->x.col(a->a.getprocessId()).eq(delegateExecution.getProcessInstanceId()))
