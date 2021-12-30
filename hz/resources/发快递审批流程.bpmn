@@ -26,7 +26,7 @@
     <bpmn:sequenceFlow id="Flow_1kwagrh" sourceRef="Activity_15uip9u" targetRef="Activity_1g44kgq" />
     <bpmn:sequenceFlow id="Flow_13rebtq" sourceRef="Activity_1u6ob7e" targetRef="Event_1tm9o30" />
     <bpmn:sequenceFlow id="Flow_0o755dc" name="驳回" sourceRef="Activity_1g44kgq" targetRef="Activity_01wjv41">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approveType=="驳回"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approveType.equals("驳回")}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_10h5bsl" sourceRef="Activity_01wjv41" targetRef="Event_1tm9o30" />
     <bpmn:sequenceFlow id="Flow_1ovspoj" sourceRef="Activity_1g38mvu" targetRef="Activity_03yz04i" />
@@ -39,7 +39,7 @@
       <bpmn:outgoing>Flow_1thvpf1</bpmn:outgoing>
     </bpmn:manualTask>
     <bpmn:sequenceFlow id="Flow_1omgl13" name="通过" sourceRef="Activity_1g44kgq" targetRef="Activity_1u6ob7e">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approveType=="驳回"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approveType.equals("驳回")}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:userTask id="Activity_1g44kgq" name="主管审批" camunda:assignee="${master}">
       <bpmn:extensionElements>
