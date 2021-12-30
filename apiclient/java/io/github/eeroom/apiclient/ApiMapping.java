@@ -2,20 +2,42 @@ package io.github.eeroom.apiclient;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ApiMapping {
+    public static String NullAction="__";
+    public static ApiMapping Default=new ApiMapping(){
+        @Override
+        public Class<? extends Annotation> annotationType() {
+            return null;
+        }
 
-    public String action();
-    public HttpMetod method();
-    public MediaType consumes();
-    public MediaType Produces();
+        @Override
+        public String action() {
+            return NullAction;
+        }
 
+        @Override
+        public HttpMetod method() {
+            return HttpMetod.POST;
+        }
+
+        @Override
+        public MediaType consumes() {
+            return MediaType.Json;
+        }
+
+        @Override
+        public MediaType produces() {
+            return MediaType.Json;
+        }
+    };
+    public String action() default "__";
+    public HttpMetod method() default HttpMetod.POST;
+    public MediaType consumes() default MediaType.Json;
+    public MediaType produces() default MediaType.Json;
 
 
     public static enum HttpMetod{
@@ -24,10 +46,17 @@ public @interface ApiMapping {
     }
 
     public static enum MediaType{
-        Json,
-        FormUrlEncoded,
-        Xml,
-        FormData,
-        Text
+        Json("application/json"),
+        FormUrlEncoded("application/x-www-form-urlencoded"),
+        Xml("application/xml"),
+        FormData(""),
+        Text("text/plain");
+        MediaType(String contentType){
+            this.contentType=contentType;
+        }
+        String contentType;
+        public String getContentType(){
+            return  this.contentType;
+        }
     }
 }
