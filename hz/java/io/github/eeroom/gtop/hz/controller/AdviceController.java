@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 
 @ControllerAdvice
 public class AdviceController implements ResponseBodyAdvice<Object> {
@@ -42,10 +43,25 @@ public class AdviceController implements ResponseBodyAdvice<Object> {
 
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<ApidataWrapper> handlerError(Throwable ex){
+        var lstmsg=new ArrayList<String>();
+        this.parseErrorMsg(ex,lstmsg,5);
         var rt=new ApidataWrapper();
         rt.setCode(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        rt.setMessage(ex.getMessage());
+        rt.setMessage(String.join("\r\n",lstmsg));
         rt.setTag(ex.toString());
         return new ResponseEntity<>(rt, HttpStatus.OK);
+    }
+
+    private void parseErrorMsg(Throwable ex, ArrayList<String> lstmsg,int deep) {
+        lstmsg.add(ex.getMessage());
+        deep--;
+        if(deep<0)
+            return;
+        var tmp=ex.getCause();
+        if(tmp==null)
+            return;
+        if(tmp==ex)
+            return;
+        parseErrorMsg(tmp,lstmsg,deep);
     }
 }
