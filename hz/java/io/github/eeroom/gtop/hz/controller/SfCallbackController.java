@@ -24,10 +24,12 @@ public class SfCallbackController implements IGuoneiKuaidiCallback {
     MyDbContext dbContext;
     CamundaController camundaController;
     CurrentUserInfo currentUserInfo;
-    public SfCallbackController(MyDbContext dbContext, CamundaController camundaController, CurrentUserInfo currentUserInfo){
+    JsonConvert jsonConvert;
+    public SfCallbackController(MyDbContext dbContext, CamundaController camundaController, CurrentUserInfo currentUserInfo,JsonConvert jsonConvert){
         this.dbContext=dbContext;
         this.camundaController = camundaController;
         this.currentUserInfo=currentUserInfo;
+        this.jsonConvert=jsonConvert;
     }
 
     @SkipAuthentication
@@ -35,6 +37,10 @@ public class SfCallbackController implements IGuoneiKuaidiCallback {
     public FeedResponse execute(FeedMessage msg) {
         //如果是通知过磅的结果，就推动外发快递的进入领导审批
         if(msg.getType().equals(FeedType.过磅)){
+            //参数校验，必须有重量信息
+            var guobangrt= this.jsonConvert.deSerializeObject(this.jsonConvert.serializeObject(msg.getData()),io.github.eeroom.gtop.entity.sf.kuaidi.GuobangResult.class);
+            if(guobangrt.getZhongliang()==null || guobangrt.getZhongliang()<0)
+                throw new RuntimeException(String.format("过磅的信息异常，信息内容：%s",this.jsonConvert.serializeObject(msg.getData())));
             //把对应的hz的流程实例找出来，找到当前的task,完成这个task
             var bizex= this.dbContext.dbSet(bizdataex.class).select()
                     .where(x->x.col(a->a.geteKey()).eq(VariableKey.processInstanceIdOfSf))

@@ -1,14 +1,14 @@
 package io.github.eeroom.gtop.entity.sf.kuaidi;
 
 public class GuobangResult {
-    public int getZhongliang() {
+    public Integer getZhongliang() {
         return zhongliang;
     }
 
-    public void setZhongliang(int zhongliang) {
+    public void setZhongliang(Integer zhongliang) {
         this.zhongliang = zhongliang;
     }
 
-    int zhongliang;
+    Integer zhongliang;
 
 }
