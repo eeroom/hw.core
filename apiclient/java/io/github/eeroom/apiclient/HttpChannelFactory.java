@@ -58,10 +58,15 @@ public class HttpChannelFactory {
             }
         }
 
-        private Object parseResponse(String toString, Method method, ApiMapping apimapping) {
+        private Object parseResponse(String resvalue, Method method, ApiMapping apimapping) {
             switch (apimapping.produces()){
                 case Json:
-                    return new JsonConvert().deSerializeObject(toString,method.getReturnType());
+                    if(apimapping.wrapperType().equals(void.class) && method.getReturnType().equals(void.class))
+                        return null;
+                    else if(apimapping.wrapperType().equals(void.class) && !method.getReturnType().equals(void.class))
+                        return new JsonConvert().deSerializeObject(resvalue,method.getReturnType());
+                    else
+                        return ((IUnWrapper)new JsonConvert().deSerializeObject(resvalue,apimapping.wrapperType())).unwrapper(method.getReturnType());
                 default:
                     throw new RuntimeException("parseResponse代码还未完成");
             }
@@ -70,7 +75,7 @@ public class HttpChannelFactory {
 
         private byte[] parsePayload(Object[] objects, ApiMapping apimapping) {
             if(objects.length<1)
-                return null;
+                return "".getBytes(StandardCharsets.UTF_8);
             switch (apimapping.consumes()){
                 case Json:
                     return new JsonConvert().serializeObject(objects[0]).getBytes(StandardCharsets.UTF_8);
@@ -87,9 +92,9 @@ public class HttpChannelFactory {
                 //接口和mvc控制器的额外处理
                 var cName=HttpChannelFactory.this.meta.getSimpleName().toLowerCase();
                 if(cName.startsWith("i"))
-                    cName=cName.substring(1,cName.length()-1);
+                    cName=cName.substring(1,cName.length());
                 if(cName.endsWith("controller"))
-                    cName=cName.substring(0,cName.length()-1-"controller".length());
+                    cName=cName.substring(0,cName.length()-"controller".length());
                 lstsegment.add(cName);
                 lstsegment.add(method.getName());
                 var lst2= lstsegment.stream().map(x->this.trim(x,flag)).collect(Collectors.toList());
@@ -112,14 +117,14 @@ public class HttpChannelFactory {
         private String trimEnd(String value, String flag) {
             if(!value.endsWith(flag))
                 return value;
-            var tmp= value.substring(0,value.length()-1-flag.length());
+            var tmp= value.substring(0,value.length()-flag.length());
             return trimEnd(tmp,flag);
         }
 
         private String trimStart(String value, String flag) {
             if(!value.startsWith(flag))
                 return value;
-            var tmp=value.substring(flag.length(),value.length()-1);
+            var tmp=value.substring(flag.length(),value.length());
             return trimStart(tmp,flag);
         }
     }
