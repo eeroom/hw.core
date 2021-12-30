@@ -59,7 +59,7 @@ DROP TABLE IF EXISTS `bizdataex`;
 CREATE TABLE `bizdataex` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `processId` varchar(10) NOT NULL,
-  `eKey` varchar(10) NOT NULL,
+  `eKey` varchar(100) NOT NULL,
   `eValue` varchar(1000) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
