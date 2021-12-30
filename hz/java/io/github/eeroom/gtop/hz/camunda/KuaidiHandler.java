@@ -7,6 +7,7 @@ import io.github.eeroom.gtop.entity.sf.kuaidi.EntityByCreate;
 import io.github.eeroom.gtop.hz.AppConfig;
 import io.github.eeroom.gtop.hz.MyDbContext;
 import io.github.eeroom.gtop.hz.MyObjectFacotry;
+import io.github.eeroom.gtop.hz.authen.CurrentUserInfo;
 import io.github.eeroom.gtop.hz.serialize.JsonConvert;
 import io.github.eeroom.nalu.Columns;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -19,11 +20,13 @@ public class KuaidiHandler extends ListenerHandler  implements Serializable {
         public void createKuaidi(DelegateExecution delegateExecution){
                 //读取表单数据，组织sf那边需要的参数格式，调用sf的接口
                 var formdatastr= delegateExecution.getVariable(VariableKey.formdataOfCreate).toString();
-                var formdata= MyObjectFacotry.getBean(JsonConvert.class).deSerializeObject(formdatastr, EntityByCreate.class);
+                var entityByCreate= MyObjectFacotry.getBean(JsonConvert.class).deSerializeObject(formdatastr, EntityByCreate.class);
                 var config=MyObjectFacotry.getBean(AppConfig.class);
-                formdata.setCustomerId(config.kuaidimycode);
+                entityByCreate.setCustomerId(config.kuaidimycode);
+                //默认已当前登录人作为发送人
+                entityByCreate.setSender(MyObjectFacotry.getBean(CurrentUserInfo.class).getAccount());
                 var sfkuaidiHandler= io.github.eeroom.apiclient.HttpChannelFactory.createChannel(config.kuaidiSfUrl, IGuoneiKuaidiController.class);
-                var rt= sfkuaidiHandler.create(formdata);
+                var rt= sfkuaidiHandler.create(entityByCreate);
                 //保存数据,
                 // 这里不进行savechange,由统一的添加bizdata的地方进行savechange
                 var bizdex=new bizdataex();

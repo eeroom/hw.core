@@ -1,16 +1,7 @@
 package io.github.eeroom.gtop.entity.hz.kuaidi;
 
 public class EntityByCreate {
-    String sender;
     String reciver;
-
-    public String getSender() {
-        return sender;
-    }
-
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
 
     public String getReciver() {
         return reciver;
