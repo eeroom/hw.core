@@ -9,11 +9,13 @@ import io.github.eeroom.gtop.hz.MyObjectFacotry;
 import io.github.eeroom.nalu.Columns;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+@Component
 public class ListenerHandler implements Serializable {
     /**
      * 可以取代AssigneeHook
@@ -35,7 +37,6 @@ public class ListenerHandler implements Serializable {
         }).collect(Collectors.toList());
         dbcontext.add(lstbizdatasub)
                 .setInsertCol(x-> Columns.of(x.getassignee(),x.getprocessId(),x.gettaskId(),x.getassigneeCompleted(),x.getstatus()));
-        dbcontext.saveChange();
     }
 
     /**
