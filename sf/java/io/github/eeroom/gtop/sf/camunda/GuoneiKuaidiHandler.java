@@ -40,7 +40,10 @@ public class GuoneiKuaidiHandler extends ListenerHandler implements Serializable
         for (var key:msgkeys){
             map.put(key,delegateExecution.getVariable(key));
         }
-        var msg=new FeedMessage(pid, FeedType.valueOf(feedtype),map);
+        var msg=new FeedMessage();
+        msg.setData(map);
+        msg.setProcessInstanceId(pid);
+        msg.setType(FeedType.valueOf(feedtype));
         var guoneiKuaidiCallback= HttpChannelFactory.createChannel(customer.getfeedbackurl(), IGuoneiKuaidiCallback.class);
         var rt= guoneiKuaidiCallback.execute(msg);
     }

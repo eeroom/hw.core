@@ -3,12 +3,6 @@ package io.github.eeroom.gtop.entity.sf.kuaidi;
 import java.util.HashMap;
 
 public class FeedMessage {
-    public FeedMessage(String processInstanceId, FeedType type, HashMap<String,Object> data){
-        this.type=type;
-        this.data=data;
-        this.processInstanceId=processInstanceId;
-    }
-
     FeedType type;
 
     public FeedType getType() {

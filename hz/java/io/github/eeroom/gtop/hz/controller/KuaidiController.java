@@ -47,7 +47,7 @@ public class KuaidiController {
         //参数校验
         var cinput=new io.github.eeroom.gtop.entity.camunda.CompleteTaskInput();
         cinput.setTaskId(approveResult.getTaskId());
-        if(approveResult.getApproveType().equals(ApproveType.转审批)){
+        if(approveResult.getApproveType().equals(ApproveType.转审)){
             cinput.setCompleteType(CompleteType.delegate);
             cinput.setDelegateAssignee(approveResult.getNewHandler());
         }
