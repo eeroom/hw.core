@@ -36,13 +36,13 @@ public class SfCallbackController implements IGuoneiKuaidiCallback {
         //如果是通知过磅的结果，就推动外发快递的进入领导审批
         if(msg.getType().equals(FeedType.过磅)){
             //把对应的hz的流程实例找出来，找到当前的task,完成这个task
-            var bizex= this.dbContext.dbSet(bizdataex.class)
+            var bizex= this.dbContext.dbSet(bizdataex.class).select()
                     .where(x->x.col(a->a.geteKey()).eq(VariableKey.processInstanceIdOfSf))
                     .where(x->x.col(a->a.geteValue()).eq(msg.getProcessInstanceId()))
                     .firstOrDefault();
             if(bizex==null)
                 throw new RuntimeException(String.format("没有对应的流程实例,sf流程id:%s",msg.getProcessInstanceId()));
-            var bizdsub= this.dbContext.dbSet(bizdatasub.class)
+            var bizdsub= this.dbContext.dbSet(bizdatasub.class).select()
                     .where(x->x.col(a->a.getprocessId()).eq(bizex.getprocessId()))
                     .where(x->x.col(a->a.getstatus()).eq(TaskStatus.处理中))
                     .where(x->x.col(a->a.getassignee()).eq(VariableKey.sf))
