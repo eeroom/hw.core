@@ -39,6 +39,7 @@ public class KuaidiController {
         var pa=new StartProcessInput();
         pa.setProcdefKey(cfg.getprocdefKey());
         var map=this.jsonConvert.deSerializeObject(this.jsonConvert.serializeObject(entityByCreate), new TypeReference<HashMap<String,Object>>() {});
+        map.put("master","基尔加丹");//直接添加审批人，这里仅仅作为demo演示
         pa.setFormdata(map);
         return this.camundaController.startProcess(pa);
     }
