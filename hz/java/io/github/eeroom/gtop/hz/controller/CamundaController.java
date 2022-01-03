@@ -156,8 +156,9 @@ public class CamundaController {
         var processInstance = this.processEngine.getRuntimeService()
                 .startProcessInstanceByKey(procdefex.getprocdefKey(),map);
         //往主业务表添加一条记录
+
         bizdata biz=new bizdata();
-        biz.setprocdefKey(procdefex.getprocdefKey());
+        biz.setprocdefKey(processInstance.getProcessDefinitionId());
         biz.setbizType(procdefex.getbizType());
         biz.setcreateBy(this.currentUserInfo.getAccount());
         biz.setcreateformdatajson(formdataOfCreate);
@@ -387,5 +388,30 @@ public class CamundaController {
                 .where(x->x.col(a->a.gettaskId()).eq(completeTaskInput.getTaskId()))
                 .where(x->x.col(a->a.getstatus()).eq(TaskStatus.处理中));
         this.dbContext.saveChange();
+    }
+
+    public List<bizdata> getBizdataEntities(){
+        return this.dbContext.dbSet(bizdata.class).select()
+                .orderByDescending(x->x.getcreateTime())
+                .toList();
+    }
+
+    public void getBpmnjsData(BpmnjsDataInput bpmnjsDataInput){
+        var bizd= this.dbContext.dbSet(bizdata.class).select()
+                .where(x->x.col(a->a.getprocessId()).eq(bpmnjsDataInput.getProcId()))
+                .firstOrDefault();
+
+    }
+
+    static class BpmnjsDataInput{
+        public String getProcId() {
+            return procId;
+        }
+
+        public void setProcId(String procId) {
+            this.procId = procId;
+        }
+
+        String procId;
     }
 }
