@@ -40,8 +40,8 @@
     </style>
     <script >
         
-        function loadBpmImg(viewer,procid) {
-            $.post("/camunda/getBpmnjsData",{procid},function (res){
+        function loadBpmImg(viewer,procId) {
+            $.post("/camunda/getBpmnjsData",{procId},function (res){
                     viewer.importXML(res.data.item1)
                         .then(x=>{
                             var overlays=viewer.get("overlays");
