@@ -178,8 +178,7 @@ public class CamundaController {
         if(title!=null){
             biz.settitle(title.toString());
         }
-        this.dbContext.add(biz)
-                .setInsertAllCol();
+        this.dbContext.add(biz).setInsertCol();
         this.dbContext.saveChange();
         return biz;
     }
