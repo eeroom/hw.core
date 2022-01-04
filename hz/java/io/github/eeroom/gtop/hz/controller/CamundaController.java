@@ -15,6 +15,7 @@ import io.github.eeroom.gtop.hz.authen.SkipAuthentication;
 import io.github.eeroom.gtop.hz.camunda.ListenerHandler;
 import io.github.eeroom.gtop.hz.camunda.VariableKey;
 import io.github.eeroom.gtop.hz.serialize.JsonConvert;
+import io.github.eeroom.nalu.Tuple;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.task.DelegationState;
 import org.camunda.bpm.engine.task.Task;
@@ -23,10 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Scope(WebApplicationContext.SCOPE_REQUEST)
@@ -390,17 +393,46 @@ public class CamundaController {
         this.dbContext.saveChange();
     }
 
+    @SkipAuthentication
     public List<bizdata> getBizdataEntities(){
         return this.dbContext.dbSet(bizdata.class).select()
                 .orderByDescending(x->x.getcreateTime())
                 .toList();
     }
 
-    public void getBpmnjsData(BpmnjsDataInput bpmnjsDataInput){
-        var bizd= this.dbContext.dbSet(bizdata.class).select()
-                .where(x->x.col(a->a.getprocessId()).eq(bpmnjsDataInput.getProcId()))
-                .firstOrDefault();
-
+    @SkipAuthentication
+    public Tuple.Tuple3<String, List<String>, List<String>> getBpmnjsData(BpmnjsDataInput bpmnjsDataInput) {
+        var processInstance= this.processEngine.getHistoryService().createHistoricProcessInstanceQuery()
+                .processInstanceId(bpmnjsDataInput.getProcId())
+                .singleResult();
+        var processdef= this.processEngine.getRepositoryService().getProcessDefinition(processInstance.getProcessDefinitionId());
+        var sb=new StringBuilder();
+        var bufferSize=8192;
+        var buffer=new char[bufferSize];
+        var datalength=0;
+        try ( var bpmnResource= this.processEngine.getRepositoryService().getResourceAsStream(processdef.getDeploymentId(),processdef.getResourceName());
+              var reader=new java.io.InputStreamReader(bpmnResource)){
+            while ((datalength=reader.read(buffer,0,bufferSize))>0){
+                sb.append(buffer,0,datalength);
+            }
+        }catch (Throwable throwable){
+            throw new RuntimeException("获取流程定义的xml的时候发生异常,流程id:"+bpmnjsDataInput.getProcId(),throwable);
+        }
+        var xml= sb.toString();
+        var lstCompletedId= this.processEngine.getHistoryService().createHistoricActivityInstanceQuery()
+                .processInstanceId(bpmnjsDataInput.getProcId())
+                .finished()
+                .list()
+                .stream()
+                .map(x->x.getActivityId())
+                .collect(Collectors.toList());
+         var lstAppendingId= this.processEngine.getTaskService().createTaskQuery()
+                .processInstanceId(bpmnjsDataInput.getProcId())
+                .list()
+                 .stream()
+                 .map(x->x.getTaskDefinitionKey())
+                 .collect(Collectors.toList());
+         return Tuple.create(xml,lstCompletedId,lstAppendingId);
     }
 
     static class BpmnjsDataInput{
