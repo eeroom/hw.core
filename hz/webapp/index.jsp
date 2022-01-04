@@ -10,30 +10,38 @@
     <script src="./jquery/dist/jquery.js"></script>
     <script src="./bpmn-js/dist/bpmn-navigated-viewer.development.js"></script>
     <style>
-        .bpm-img{
-          height: 800px;
+        body{
+            height: 100px;
+        }
+        .bpm-lst{
+            float: left;
             width: 400px;
+            border:1px rgb(83, 128, 224) solid;
+            list-style: none;
+        }
+        .bpm-img{
+          position: absolute;
+          top:0;
+          bottom: 0;
+          right: 0;
+            left: 500px;
             border:1px red solid;
         }
         .highlight-task-completed{
-            background-color: greenyellow;
+            background-color: blue;
             opacity: 0.4;
             border-radius: 10px;
         }
         .highlight-task-cc{
-            background-color: rgb(29, 26, 218);
+            background-color: greenyellow;
             opacity: 0.4;
             border-radius: 10px;
         }
     </style>
     <script >
-        $(function (params) {
-            var viewer=new BpmnJS({container:"#bpm"});
-            $(document).on("click","#lstProc>li>a",function (params) {
-                console.log("click",this);
-                //发请求拿xml,已完成节点
-                var procid= $(this).data("procid");
-                $.post("/camunda/getBpmnjsData",{procid},function (res){
+        
+        function loadBpmImg(viewer,procid) {
+            $.post("/camunda/getBpmnjsData",{procid},function (res){
                     viewer.importXML(res.data.item1)
                         .then(x=>{
                             var overlays=viewer.get("overlays");
@@ -60,18 +68,26 @@
                              });
                         })
                 })
+        }
+
+        $(function (params) {
+            var viewer=new BpmnJS({container:"#bpm"});
+            $(document).on("click","#lstProc>li>a",function (params) {
+                //发请求拿xml,已完成节点
+                loadBpmImg(viewer,$(this).data("procid"))
             });
 
             $.post("/camunda/getBizdataEntities",{},function (res) {
-                var lstli= $.map(res.data,(el,i)=>$(`<li><a data-procid="${el.processId}">${el.processId}</a></li>`));
+                var lstli= $.map(res.data,(el,i)=>$(`<li><a href="#" data-procid="${el.processId}">${el.bizType}-No.${el.processId}--${el.status}</a></li>`));
                 $("#lstProc").append(lstli);
+                loadBpmImg(viewer,res.data[0].processId);
             })
         })
     </script>
 </head>
 <body>
     <h3><a target="_blank" href="swagger-ui.html">swagger-ui.html</a><h3></h3>
-    <ul id="lstProc">
+    <ul id="lstProc" class="bpm-lst">
         
     </ul>
     <div id="bpm" class="bpm-img">
