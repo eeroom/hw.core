@@ -23,7 +23,7 @@ public class DbSetAdd<T> extends TableSet<T> {
         return this;
     }
 
-    public DbSetAdd<T> setInsertAllCol(){
+    public DbSetAdd<T> setInsertCol(){
         var lst= dictGetMethod.get(this.meta.getName()).keySet().stream()
                 .map(colName->new Column(this,colName))
                 .collect(Collectors.toList());
@@ -34,7 +34,7 @@ public class DbSetAdd<T> extends TableSet<T> {
     int execute(Connection cnn,ParseSqlContext context) throws Throwable {
         int rst=0;
         if(this.lstcol.size()<1)
-            throw  new IllegalArgumentException("必须指定要新增赋值的列");
+            throw  new RuntimeException("必须指定要新增赋值的列");
         var lstName= this.lstcol.stream().map(x->x.colName).collect(Collectors.toList());
         var strCol=String.join(",",lstName);
         var lstPName= lstName.stream().map(x->"?").collect(Collectors.toList());

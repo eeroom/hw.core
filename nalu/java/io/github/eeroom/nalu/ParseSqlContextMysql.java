@@ -8,6 +8,8 @@ public class ParseSqlContextMysql extends  ParseSqlContext {
 
     protected ArrayList<String> parseSqls() {
         ArrayList<String> lstsql=new ArrayList<>();
+        if(this.lstSelectNode.size()<1)
+            throw new RuntimeException("必须指定要查询的列，请使用select相关的方法");
         var lstselect=this.lstSelectNode.stream().map(x->x.parse(this)).collect(java.util.stream.Collectors.toList());
         String selectstr=String.join(",\r\n",lstselect);
         String fromstr=String.format("%s as %s",this.GetTableName(this.fromTable),this.GetTableNameAlias(this.fromTable));
@@ -40,7 +42,7 @@ public class ParseSqlContextMysql extends  ParseSqlContext {
             return lstsql;
         }
         if("".equals(orderbystr))
-            throw new IllegalArgumentException("必须指定排序的列");
+            throw new RuntimeException("必须指定排序的列");
         var sql=String.format("select %s \r\n from %s\r\n%s\r\n%s\r\n%s\r\n%s\r\n%s \r\nlimit %s,%s ",
                 selectstr,
                 fromstr,

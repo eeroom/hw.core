@@ -73,6 +73,6 @@ public class WhereNodeLeaf<C> extends WhereNode {
     }
 
      String toSqlWithExists(ParseSqlContext context){
-        throw  new IllegalArgumentException("方法未完成");
+        throw  new RuntimeException("方法未完成");
      }
 }

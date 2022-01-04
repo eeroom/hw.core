@@ -24,7 +24,7 @@ public class DbSetEdit<T> extends TableSet<T> {
         return this;
     }
 
-    public DbSetEdit<T> setUpdateAllCol(){
+    public DbSetEdit<T> setUpdateCol(){
         var lst= dictGetMethod.get(this.meta.getName()).keySet().stream()
                 .map(colName->new Column(this,colName))
                 .collect(Collectors.toList());
@@ -32,8 +32,8 @@ public class DbSetEdit<T> extends TableSet<T> {
         return this;
     }
 
-    public DbSetEdit<T> setWhereCreator(MyFunction2<DbSetEdit<T>,T,WhereNode> whCreator){
-        this.whCreator=whCreator;
+    public DbSetEdit<T> where(MyFunction2<DbSetEdit<T>,T,WhereNode> wh){
+        this.whCreator=wh;
         return this;
     }
 
@@ -46,9 +46,9 @@ public class DbSetEdit<T> extends TableSet<T> {
 
     int execute(Connection cnn, ParseSqlContext context) throws Throwable {
         if(this.lstcol.size()<1)
-            throw  new IllegalArgumentException("必须制定update的目标列");
+            throw  new RuntimeException("必须指定update的目标列");
         if(this.whCreator==null)
-            throw  new IllegalArgumentException("必须制定where条件");
+            throw  new RuntimeException("必须指定where条件");
         var lstName= this.lstcol.stream().map(x->x.colName).collect(Collectors.toList());
         var strCol=String.join(",",lstName);
         var lstPName= lstName.stream().map(x->x+"=?").collect(Collectors.toList());

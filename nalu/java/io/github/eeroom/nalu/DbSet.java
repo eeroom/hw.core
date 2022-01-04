@@ -165,9 +165,9 @@ public class DbSet<T> extends TableSet<T> {
     int takerows;
     public DbSet<T> skipTake(int skiprows,int takerows){
         if(skiprows<0)
-            throw  new IllegalArgumentException("skiprows不能小于0");
+            throw  new RuntimeException("skiprows不能小于0");
         if(takerows<=0)
-            throw new IllegalArgumentException("takerows不能小于1");
+            throw new RuntimeException("takerows不能小于1");
         this.skiprows=skiprows;
         this.takerows=takerows;
         return this;

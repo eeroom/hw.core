@@ -46,6 +46,8 @@ public class ParseSqlContext {
      * 这里的分页采用rownumber方式
      */
     protected  String parseSql() {
+        if(this.lstSelectNode.size()<1)
+            throw new RuntimeException("必须指定要查询的列，请使用select相关的方法");
         var lstselect=this.lstSelectNode.stream().map(x->x.parse(this)).collect(java.util.stream.Collectors.toList());
         String selectstr=String.join(",\r\n",lstselect);
         String fromstr=String.format("%s as %s",this.GetTableName(this.fromTable),this.GetTableNameAlias(this.fromTable));
@@ -76,7 +78,7 @@ public class ParseSqlContext {
             return sql;
         }else {
             if("".equals(orderbystr))
-                throw new IllegalArgumentException("必须指定排序的列");
+                throw new RuntimeException("必须指定排序的列");
             var tmpRowIndex = "_theRowIndex";
             var cmdstr =String.format("select %s,\r\nROW_NUMBER() OVER(%s) AS %s \r\n from %s\r\n%s\r\n%s\r\n%s\r\n%s",
                     selectstr,

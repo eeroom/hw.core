@@ -19,14 +19,14 @@ public class DbSetDel<T> extends TableSet<T> {
         return column;
     }
 
-    public DbSetDel<T> setWhereCreator(MyFunction2<DbSetDel<T>,T,WhereNode> whCreator){
-        this.whCreator=whCreator;
+    public DbSetDel<T> where(MyFunction2<DbSetDel<T>,T,WhereNode> wh){
+        this.whCreator=wh;
         return this;
     }
 
     int execute(Connection cnn, ParseSqlContext context) throws Throwable {
         if(this.whCreator==null)
-            throw  new IllegalArgumentException("必须设置WhereCreator");
+            throw  new RuntimeException("必须指定where条件");
         int rst=0;
         for (var obj:this.lstEntity){
             context.lstDbParameter.clear();

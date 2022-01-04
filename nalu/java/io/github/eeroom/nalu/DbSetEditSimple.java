@@ -40,7 +40,7 @@ public class DbSetEditSimple<T> extends TableSet<T> {
 
     int execute(Connection cnn, ParseSqlContext context) throws Throwable {
         if(this.lstUpdateCol.size()<1)
-            throw  new IllegalArgumentException("必须指定update的目标列");
+            throw  new RuntimeException("必须指定update的目标列");
         var lstset= lstUpdateCol.stream().map(x->x.item1.colName+"=?").collect(Collectors.toList());
         var strSet=String.join(",",lstset);
         context.lstDbParameter.clear();

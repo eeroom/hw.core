@@ -27,7 +27,7 @@ public class TableSet<T> {
         try {
             this.entityIdentity=meta.getConstructor(null).newInstance(null);
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("通过默认构造函数创建model的实例发生错误,请确保model为纯model,并且有无参构造函数，类型名称："+meta.getName(),e);
         }
         this.handler=new PropertyNameHandler(this,this.entityIdentity);
         //使用cglib创建class的代理对象，java自带的代理类只能创建基于接口的代理对象，

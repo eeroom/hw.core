@@ -6,7 +6,7 @@
 
   <groupId>io.github.eeroom</groupId>
   <artifactId>nalu</artifactId>
-  <version>2.2</version>
+  <version>2.3</version>
   <packaging>jar</packaging>
   <name>nalu</name>
   <description>An ORM class library is used to create, read, update and delete single table data in the database. All these operations are completed by lambda. nalu translate lambda expressions into SQL statements, then execute queries, and then map data to entity objects, which is very different from traditional ORM such as mybatis.</description>
