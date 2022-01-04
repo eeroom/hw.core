@@ -158,7 +158,7 @@ public class CamundaController {
         //往主业务表添加一条记录
 
         bizdata biz=new bizdata();
-        biz.setprocdefKey(processInstance.getProcessDefinitionId());
+        biz.setprocdefKey(startProcessInput.getProcdefKey());
         biz.setbizType(procdefex.getbizType());
         biz.setcreateBy(this.currentUserInfo.getAccount());
         biz.setcreateformdatajson(formdataOfCreate);
