@@ -22,7 +22,7 @@ public class GuoneiKuaidiEntCustomerController {
                 .where(x->x.col(a->a.getname()).eq(entity.getname()))
                 .firstOrDefault();
         if(tmp!=null)
-            throw new IllegalArgumentException("指定的大客户已经存在："+entity.getname());
+            throw new RuntimeException("指定的大客户已经存在："+entity.getname());
         this.dbContext.add(entity).setInsertAllCol();
         this.dbContext.saveChange();
         return entity;
