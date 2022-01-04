@@ -23,7 +23,7 @@ public class GuoneiKuaidiEntCustomerController {
                 .firstOrDefault();
         if(tmp!=null)
             throw new RuntimeException("指定的大客户已经存在："+entity.getname());
-        this.dbContext.add(entity).setInsertAllCol();
+        this.dbContext.add(entity).setInsertCol();
         this.dbContext.saveChange();
         return entity;
     }

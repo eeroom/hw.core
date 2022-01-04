@@ -29,7 +29,7 @@ public class ProcdefexController {
         if(tmp!=null)
             throw new RuntimeException("指定的procdefKey已经存在："+entity.getprocdefKey());
         //这里还需要增加对procedefkey的校验,必须是存在的key
-        this.dbContext.add(entity).setInsertAllCol();
+        this.dbContext.add(entity).setInsertCol();
         this.dbContext.saveChange();
         return entity;
     }
