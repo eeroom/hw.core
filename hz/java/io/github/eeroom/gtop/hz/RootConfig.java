@@ -1,6 +1,8 @@
 package io.github.eeroom.gtop.hz;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
@@ -62,5 +64,19 @@ public class RootConfig {
     public Map<String,Object> httpContext(){
         var mp=new HashMap<String,Object>();
         return mp;
+    }
+
+    public static final String basicDataSourceN1="basicDataSourceN1";
+    @Bean
+    @Qualifier(basicDataSourceN1)
+    public BasicDataSource basicDataSource(AppConfig appConfig){
+        var ds=new BasicDataSource();
+        ds.setDriverClassName(appConfig.dbdrivern1);
+        ds.setUrl(appConfig.dburln1);
+        ds.setUsername(appConfig.dbusernamen1);
+        ds.setPassword(appConfig.dbpwdn1);
+        ds.setInitialSize(appConfig.dbpoolminn1);
+        ds.setMaxTotal(appConfig.dbpoolmaxn1);
+        return ds;
     }
 }

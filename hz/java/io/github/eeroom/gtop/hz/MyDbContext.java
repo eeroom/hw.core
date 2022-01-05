@@ -21,10 +21,9 @@ public class MyDbContext extends DbContext {
     @Override
     protected Connection getConnection() throws Throwable {
         try {
-            var cnn= java.sql.DriverManager.getConnection(this.config.dburln1,this.config.dbusernamen1,this.config.dbpwdn1);
-            return cnn;
+            return (Connection) MyObjectFacotry.getBean(RootConfig.basicDataSourceN1);
         }catch (Throwable ex){
-            throw new RuntimeException(String.format("连接数据库失败,url:%s,用户名：%s",this.config.dburln1,this.config.dbusernamen1));
+            throw new RuntimeException(String.format("获取数据库连接失败,url:%s,用户名：%s",this.config.dburln1,this.config.dbusernamen1),ex);
         }
     }
 

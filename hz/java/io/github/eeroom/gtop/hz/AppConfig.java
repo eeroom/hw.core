@@ -38,6 +38,10 @@ public class AppConfig {
     public String dbusernamen1;
     @Value("${db.pwd.n1}")
     public String dbpwdn1;
+    @Value("${db.poolmin.n1}")
+    public Integer dbpoolminn1;
+    @Value("${db.poolmax.n1}")
+    public Integer dbpoolmaxn1;
 
     @Value("${controller.path}")
     public String controllerPath;
