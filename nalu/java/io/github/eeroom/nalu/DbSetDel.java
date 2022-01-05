@@ -1,8 +1,12 @@
 package io.github.eeroom.nalu;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class DbSetDel<T> extends TableSet<T> {
     List<T> lstEntity;
@@ -24,7 +28,7 @@ public class DbSetDel<T> extends TableSet<T> {
         return this;
     }
 
-    int execute(Connection cnn, ParseSqlContext context) throws Throwable {
+    int execute(Connection cnn, ParseSqlContext context)  {
         if(this.whCreator==null)
             throw  new RuntimeException("必须指定where条件");
         int rst=0;
@@ -32,12 +36,15 @@ public class DbSetDel<T> extends TableSet<T> {
             context.lstDbParameter.clear();
             var strwhere=this.whCreator.apply(this,obj).parse(context);
             var sql=String.format("delete from %s where %s",this.tableName,strwhere);
-            var pts= cnn.prepareStatement(sql);
-            int pindex=1;
-            for (var pp:context.lstDbParameter){
-                pts.setObject(pindex++,pp.item2);
+            try(var pts= cnn.prepareStatement(sql)) {
+                int pindex=1;
+                for (var pp:context.lstDbParameter){
+                    pts.setObject(pindex++,pp.item2);
+                }
+                rst+=pts.executeUpdate();
+            }catch (Throwable throwable){
+                throw  new ExecuteSqlException(sql,context.lstDbParameter.stream().map(x->x.item2).collect(Collectors.toList()),null,throwable);
             }
-            rst+=pts.executeUpdate();
         }
         return rst;
     }

@@ -3,6 +3,8 @@ package io.github.eeroom.nalu;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ParseSqlContextMysql extends  ParseSqlContext {
 
@@ -65,7 +67,7 @@ public class ParseSqlContextMysql extends  ParseSqlContext {
     }
 
     @Override
-    protected <T> PagingList<T> toList(Connection cnn, MyFunction<ResultSet, T> map) throws Throwable {
+    protected <T> PagingList<T> toList(Connection cnn, MyFunction<ResultSet, T> map) {
         var lstcmdstr =this.parseSqls();
         this.lstsql=new ArrayList<>();
         this.lstsql.addAll(lstcmdstr);
@@ -84,6 +86,8 @@ public class ParseSqlContextMysql extends  ParseSqlContext {
                     }
                     return rt;
                 }
+            }catch (Throwable throwable){
+                throw new ExecuteSqlException(lstcmdstr,this.lstDbParameter.stream().map(x->x.item2).collect(Collectors.toList()),null,throwable);
             }
         }else {
             var rt=new PagingList<T>();
@@ -99,6 +103,8 @@ public class ParseSqlContextMysql extends  ParseSqlContext {
                         lst.add(obj);
                     }
                 }
+            }catch (Throwable throwable){
+                throw new ExecuteSqlException(lstcmdstr,this.lstDbParameter.stream().map(x->x.item2).collect(Collectors.toList()),null,throwable);
             }
             try(var pst= cnn.prepareStatement(lstcmdstr.get(1))) {
                 for (var i = 0; i<this.lstDbParameter.size(); i++){
@@ -108,6 +114,8 @@ public class ParseSqlContextMysql extends  ParseSqlContext {
                     rs.next();
                     rt.count= rs.getInt("_theRowIndex");
                 }
+            }catch (Throwable throwable){
+                throw new ExecuteSqlException(lstcmdstr,this.lstDbParameter.stream().map(x->x.item2).collect(Collectors.toList()),null,throwable);
             }
             return rt;
         }

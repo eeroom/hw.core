@@ -12,13 +12,16 @@ class PropertyNameHandler implements org.springframework.cglib.proxy.InvocationH
     }
 
     String getName() {
-        return name;
+        return this.name;
     }
 
-    void setName(String name) {
-        if(name.equals("toString"))
+    void setName(String thename) {
+        if(thename.equals("toString"))
             return;
-        this.name = name.substring(3);
+        if(DbContext.ColNameGetter!=null)
+            this.name=DbContext.ColNameGetter.apply(thename);
+        else
+            this.name = thename.substring(3);
     }
 
     String name;

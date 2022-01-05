@@ -1,7 +1,10 @@
 package io.github.eeroom.nalu;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class DbSetDelSimple<T> extends TableSet<T> {
     WhereNode whereNode;
@@ -26,17 +29,20 @@ public class DbSetDelSimple<T> extends TableSet<T> {
         return this;
     }
 
-    int execute(Connection cnn, ParseSqlContext context) throws Throwable {
+    int execute(Connection cnn, ParseSqlContext context){
         context.lstDbParameter.clear();
         var strwhere="";
         if(this.whereNode!=null)
             strwhere="where "+ this.whereNode.parse(context);
         var sql=String.format("delete from %s %s",this.tableName,strwhere);
-        var pts= cnn.prepareStatement(sql);
-        int pindex=1;
-        for (var pp:context.lstDbParameter){
-            pts.setObject(pindex++,pp.item2);
+        try (var pts= cnn.prepareStatement(sql)){
+            int pindex=1;
+            for (var pp:context.lstDbParameter){
+                pts.setObject(pindex++,pp.item2);
+            }
+            return pts.executeUpdate();
+        }catch (Throwable throwable){
+            throw  new ExecuteSqlException(sql,context.lstDbParameter.stream().map(x->x.item2).collect(Collectors.toList()),null,throwable);
         }
-        return pts.executeUpdate();
     }
 }

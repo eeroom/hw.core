@@ -3,6 +3,8 @@ package io.github.eeroom.nalu;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ParseSqlContext {
 
@@ -100,7 +102,7 @@ public class ParseSqlContext {
     }
 
     protected ArrayList<String> lstsql;
-    protected  <T> PagingList<T> toList(Connection cnn, MyFunction<ResultSet,T> map) throws Throwable {
+    protected  <T> PagingList<T> toList(Connection cnn, MyFunction<ResultSet,T> map) {
         String cmdstr=this.parseSql();
         this.lstsql=new ArrayList<>();
         this.lstsql.add(cmdstr);
@@ -124,6 +126,8 @@ public class ParseSqlContext {
                 }
                 return rt;
             }
+        }catch (Throwable throwable){
+            throw new ExecuteSqlException(cmdstr,this.lstDbParameter.stream().map(x->x.item2).collect(Collectors.toList()),null,throwable);
         }
     }
 }

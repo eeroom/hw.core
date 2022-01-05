@@ -38,7 +38,7 @@ public class DbSetEditSimple<T> extends TableSet<T> {
         return this;
     }
 
-    int execute(Connection cnn, ParseSqlContext context) throws Throwable {
+    int execute(Connection cnn, ParseSqlContext context) {
         if(this.lstUpdateCol.size()<1)
             throw  new RuntimeException("必须指定update的目标列");
         var lstset= lstUpdateCol.stream().map(x->x.item1.colName+"=?").collect(Collectors.toList());
@@ -48,14 +48,17 @@ public class DbSetEditSimple<T> extends TableSet<T> {
         if(this.whereNode!=null)
             strWhere="where "+this.whereNode.parse(context);
         var sql=String.format("update %s set %s %s",this.tableName,strSet,strWhere);
-        var pst=cnn.prepareStatement(sql);
-        int pindex=1;
-        for (var ucol:lstUpdateCol){
-            pst.setObject(pindex++,ucol.item2);
+        try (var pst=cnn.prepareStatement(sql)){
+            int pindex=1;
+            for (var ucol:lstUpdateCol){
+                pst.setObject(pindex++,ucol.item2);
+            }
+            for (var pp:context.lstDbParameter){
+                pst.setObject(pindex++,pp.item2);
+            }
+            return pst.executeUpdate();
+        }catch (Throwable throwable){
+            throw  new ExecuteSqlException(sql,context.lstDbParameter.stream().map(x->x.item2).collect(Collectors.toList()),null,throwable);
         }
-        for (var pp:context.lstDbParameter){
-            pst.setObject(pindex++,pp.item2);
-        }
-        return pst.executeUpdate();
     }
 }

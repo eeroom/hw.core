@@ -1,14 +1,16 @@
 package io.github.eeroom.nalu;
 
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public abstract class DbContext {
 
-
-    ArrayList<MyFunction2Throwable<Connection,ParseSqlContext,Integer>> lstexecute=new ArrayList<>();
+    protected static Function<String,String> ColNameGetter;
+    ArrayList<MyFunction2<Connection,ParseSqlContext,Integer>> lstexecute=new ArrayList<>();
 
     public <T> DbSet<T> dbSet(Class<T> meta) {
         return new DbSet<>(this,meta);

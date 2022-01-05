@@ -44,7 +44,7 @@ public class DbSetEdit<T> extends TableSet<T> {
         return column;
     }
 
-    int execute(Connection cnn, ParseSqlContext context) throws Throwable {
+    int execute(Connection cnn, ParseSqlContext context){
         if(this.lstcol.size()<1)
             throw  new RuntimeException("必须指定update的目标列");
         if(this.whCreator==null)
@@ -59,15 +59,18 @@ public class DbSetEdit<T> extends TableSet<T> {
             context.lstDbParameter.clear();
             var strWhere=this.whCreator.apply(this,obj).parse(context);
             var sql=String.format("update %s set %s where %s",this.tableName,strSet,strWhere);
-            var pst=cnn.prepareStatement(sql);
-            int pindex=1;
-            for (var name:lstName){
-                pst.setObject(pindex++,dict.get(name).apply(obj));
+            try (var pst=cnn.prepareStatement(sql)){
+                int pindex=1;
+                for (var name:lstName){
+                    pst.setObject(pindex++,dict.get(name).apply(obj));
+                }
+                for (var pp:context.lstDbParameter){
+                    pst.setObject(pindex++,pp.item2);
+                }
+                rst+=pst.executeUpdate();
+            }catch (Throwable throwable){
+                throw  new ExecuteSqlException(sql,context.lstDbParameter.stream().map(x->x.item2).collect(Collectors.toList()),obj,throwable);
             }
-            for (var pp:context.lstDbParameter){
-                pst.setObject(pindex++,pp.item2);
-            }
-            rst+=pst.executeUpdate();
         }
         return rst;
     }
