@@ -13,11 +13,14 @@
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
+  <parent>
+    <groupId>io.github.eeroom</groupId>
+    <artifactId>hzsln</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <relativePath>../hzsln/pom.xml</relativePath>
+  </parent>
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
-    <org.springframework.version>4.3.25.RELEASE</org.springframework.version>
+
   </properties>
 
   <dependencies>
@@ -32,7 +35,7 @@
       <!--      servlet规范3.0版本以上引入新的约定接口，实现java代码配置进行程序初始化，而老版本只能通过取web.xml里的配置信息实现程序初始化-->
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
-      <version>3.1.0</version>
+      <version>${javax.servlet-api.version}</version>
       <scope>provided</scope>
     </dependency>
     <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
@@ -40,23 +43,23 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.8.11.3</version>
+      <version>${jackson-databind.version}</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
     <dependency>
       <groupId>io.springfox</groupId>
       <artifactId>springfox-swagger2</artifactId>
-      <version>2.9.2</version>
+      <version>${springfox-swagger2.version}</version>
     </dependency>
     <dependency>
       <groupId>io.springfox</groupId>
       <artifactId>springfox-swagger-ui</artifactId>
-      <version>2.9.2</version>
+      <version>${springfox-swagger2.version}</version>
     </dependency>
     <dependency>
       <groupId>org.camunda.bpm</groupId>
       <artifactId>camunda-engine</artifactId>
-      <version>7.9.0</version>
+      <version>${camunda-engine.version}</version>
       <exclusions>
         <exclusion>
           <!--          这个是3版本的spring-beans,移除掉，避免冲突-->
@@ -69,13 +72,13 @@
     <dependency>
       <groupId>com.auth0</groupId>
       <artifactId>java-jwt</artifactId>
-      <version>3.10.3</version>
+      <version>${java-jwt.version}</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.19</version>
+      <version>${mysql-connector-java.version}</version>
     </dependency>
     <dependency>
       <groupId>io.github.eeroom</groupId>
@@ -85,18 +88,17 @@
     <dependency>
       <groupId>io.github.eeroom</groupId>
       <artifactId>nalu</artifactId>
-      <version>2.3</version>
+      <version>${nalu.version}</version>
     </dependency>
     <dependency>
       <groupId>io.github.eeroom</groupId>
       <artifactId>apiclient</artifactId>
-      <version>2.0</version>
+      <version>${apiclient.version}</version>
     </dependency>
-    <!--  jdk11环境下，  如果camunda的流程参数使用javabean类型，就需要添加这个依赖。tomcat7和2.3版本的有小冲突，启动报错，但不影响使用，这里使用2.2版本，tomcat7启动不报错-->
     <dependency>
       <groupId>javax.xml.bind</groupId>
       <artifactId>jaxb-api</artifactId>
-      <version>2.2.12</version>
+      <version>${jaxb-api.version}</version>
     </dependency>
 
 

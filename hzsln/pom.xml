@@ -22,6 +22,19 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
+    <org.springframework.version>4.3.25.RELEASE</org.springframework.version>
+    <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+    <jackson-databind.version>2.8.11.3</jackson-databind.version>
+    <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+    <camunda-engine.version>7.9.0</camunda-engine.version>
+    <java-jwt.version>3.10.3</java-jwt.version>
+    <mysql-connector-java.version>8.0.19</mysql-connector-java.version>
+    <nalu.version>2.3</nalu.version>
+    <apiclient.version>2.0</apiclient.version>
+    <!-- jdk11环境下，如果camunda的流程参数使用javabean类型，就需要添加jaxb-api依赖。
+    tomcat7和jaxb-api2.3版本有小冲突，启动报错，但不影响使用，这里使用2.2版本，tomcat7启动不报错-->
+    <jaxb-api.version>2.2.12</jaxb-api.version>
+    <commons-dbcp2.version>2.8.0</commons-dbcp2.version>
   </properties>
 
   <dependencies>
