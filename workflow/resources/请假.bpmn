@@ -11,7 +11,7 @@
           <camunda:inputParameter name="findAssigneeTarget">直接主管</camunda:inputParameter>
           <camunda:inputParameter name="findAssigneeMode">按角色</camunda:inputParameter>
         </camunda:inputOutput>
-        <camunda:taskListener class="org.azeroth.workflow.bpm.SetAssigneeListener" event="create" />
+        <camunda:taskListener class="SetAssigneeListener" event="create" />
         <camunda:properties>
           <camunda:property name="findAssigneeMode" value="直接指定" />
         </camunda:properties>
@@ -26,7 +26,7 @@
           <camunda:inputParameter name="findAssigneeTarget">总经理</camunda:inputParameter>
           <camunda:inputParameter name="findAssigneeMode">按角色</camunda:inputParameter>
         </camunda:inputOutput>
-        <camunda:taskListener class="org.azeroth.workflow.bpm.SetAssigneeListener" event="create" />
+        <camunda:taskListener class="SetAssigneeListener" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1hr93d6</bpmn:incoming>
       <bpmn:outgoing>Flow_091tai8</bpmn:outgoing>
