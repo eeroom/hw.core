@@ -116,7 +116,7 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
                 .enable(true)
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("org.azeroth.workflow.controller"))
+                .apis(RequestHandlerSelectors.basePackage("io.github.eeroom.workflow.controller"))
                 .paths(PathSelectors.any())
                 .build();
         //配置各个方法的请求头设置（非全局），Access-Token是请求头名称
