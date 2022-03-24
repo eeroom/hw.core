@@ -1,4 +1,4 @@
-package org.azeroth.okhttp3client;
+package io.github.eeroom.okhttp3client;
 
 import javax.net.ssl.*;
 import java.io.File;
