@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.azeroth</groupId>
+    <groupId>io.github.eeroom</groupId>
     <artifactId>activemqSender</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -46,7 +46,7 @@
                     <archive>
                         <manifest>
                             <!--这里要替换成jar包main方法所在类 -->
-                            <mainClass>org.azeroth.activemqSender.App</mainClass>
+                            <mainClass>io.github.eeroom.activemqSender.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

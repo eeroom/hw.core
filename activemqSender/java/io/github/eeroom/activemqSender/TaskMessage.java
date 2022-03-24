@@ -1,4 +1,4 @@
-package org.azeroth.activemqSender;
+package io.github.eeroom.activemqSender;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

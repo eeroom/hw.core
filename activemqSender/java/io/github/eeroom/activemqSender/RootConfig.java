@@ -1,4 +1,4 @@
-package org.azeroth.activemqSender;
+package io.github.eeroom.activemqSender;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;

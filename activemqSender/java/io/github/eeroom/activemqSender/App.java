@@ -1,4 +1,4 @@
-package org.azeroth.activemqSender;
+package io.github.eeroom.activemqSender;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.context.ApplicationContext;
