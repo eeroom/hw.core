@@ -1,4 +1,4 @@
-package org.azeroth.activemqReciver;
+package io.github.eeroom.activemqReciver;
 
 import org.springframework.stereotype.Component;
 

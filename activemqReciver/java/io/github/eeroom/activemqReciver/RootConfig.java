@@ -1,4 +1,4 @@
-package org.azeroth.activemqReciver;
+package io.github.eeroom.activemqReciver;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -7,7 +7,6 @@ import org.springframework.jms.support.converter.MessageType;
 
 import javax.jms.ConnectionFactory;
 import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @ComponentScan

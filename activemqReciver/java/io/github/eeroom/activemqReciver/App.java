@@ -1,9 +1,8 @@
-package org.azeroth.activemqReciver;
+package io.github.eeroom.activemqReciver;
 
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.jms.core.JmsOperations;
 
-import javax.jms.ObjectMessage;
 import javax.jms.Session;
 
 public class App {
