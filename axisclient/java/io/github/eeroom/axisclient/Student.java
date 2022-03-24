@@ -1,4 +1,4 @@
-package org.azeroth.axisclient;
+package io.github.eeroom.axisclient;
 
 import java.io.Serializable;
 

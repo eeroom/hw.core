@@ -1,4 +1,4 @@
-package org.azeroth.axisclient;
+package io.github.eeroom.axisclient;
 
 import org.apache.axis.encoding.XMLType;
 import org.apache.axis.soap.SOAPConstants;
