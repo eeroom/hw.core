@@ -1,4 +1,4 @@
-package org.azeroth.iostream;
+package io.github.eeroom.iostream;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
