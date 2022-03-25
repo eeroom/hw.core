@@ -1,5 +1,7 @@
 package io.github.eeroom.springcontext;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+
 public class Main {
 
     public static  void  main(String[] args){
@@ -21,6 +23,15 @@ public class Main {
          * 6、在配置类中标注@Import，import的参数为实现ImportSelector的类型，在实现中返回另一个配置类全名称，且该配置类不需要标注@Configuration，参看本项目@MyImportSelector
          * 7、利用AnnotationConfigApplicationContext类的add系列方法，添加一些processer等，本质也是注册bean
          */
+
+        /**
+         * bean的生命周期/作用域
+         */
+        var configurableBeanFactory= org.springframework.beans.factory.config.ConfigurableBeanFactory.class;
+        var 原型= ConfigurableBeanFactory.SCOPE_PROTOTYPE;//每次获取都是不同的实例
+        var 单例=ConfigurableBeanFactory.SCOPE_SINGLETON;//每次获取都是相同的实例
+        //web项目还有每次请求，每个会话的生命周期
+        //定义在spring-web-[版本].jar中的org.springframework.web.context.WebApplicationContext的各个常量
 
         /**
          * spring提供很多基于Aware的回调接口，方便在bean中获取一些想要的容器相关的数据，比如容器本身，
