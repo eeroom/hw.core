@@ -59,6 +59,9 @@ public class Main {
          * spring容器实例化的bean本身就是一个原类型对应的代理类型；后续调用这个bean实例的方法或者字段的时候，代理对象会判断当前调用是否匹配某个或多个切点方法，然后实现出aop的效果
          * 参看本项目的CalFilter切面类
          */
+        /**
+         * test
+         */
         var sayhello= context.getBean("seyhello");
         Calculation cal= context.getBean(Calculation.class);
         cal.Handler();
