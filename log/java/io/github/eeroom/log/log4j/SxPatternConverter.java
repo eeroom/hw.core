@@ -29,7 +29,7 @@ public class SxPatternConverter extends LogEventPatternConverter {
             var value= fd.get(obj);
             stringBuilder.append(value);
         } catch (Throwable e) {
-            e.printStackTrace();
+            throw  new RuntimeException("读取属性值发送异常",e);
         }
     }
 }
