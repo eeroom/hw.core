@@ -67,8 +67,7 @@ public class RootConfig {
     }
 
     public static final String basicDataSourceN1="basicDataSourceN1";
-    @Bean
-    @Qualifier(basicDataSourceN1)
+    @Bean(basicDataSourceN1)
     public BasicDataSource basicDataSource(AppConfig appConfig){
         var ds=new BasicDataSource();
         ds.setDriverClassName(appConfig.dbdrivern1);
