@@ -90,11 +90,11 @@
       <dependency>
         <groupId>io.github.eeroom</groupId>
         <artifactId>nalu</artifactId>
-        <version>2.3</version>
+        <version>2.4</version>
       </dependency>
       <dependency>
         <groupId>io.github.eeroom</groupId>
-        <artifactId>apiclient</artifactId>
+        <artifactId>proxyclient</artifactId>
         <version>2.0</version>
       </dependency>
       <!-- jdk11环境下，如果camunda的流程参数使用javabean类型，就需要添加jaxb-api依赖。

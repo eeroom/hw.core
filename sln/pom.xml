@@ -12,7 +12,7 @@
     <modules>
         <module>../activemqReciver</module>
         <module>../activemqSender</module>
-        <module>../apiclient</module>
+        <module>../proxyclient</module>
         <module>../axisclient</module>
         <module>../jni</module>
         <module>../nalu</module>

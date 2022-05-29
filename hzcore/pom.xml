@@ -25,7 +25,7 @@
   <dependencies>
     <dependency>
       <groupId>io.github.eeroom</groupId>
-      <artifactId>apiclient</artifactId>
+      <artifactId>proxyclient</artifactId>
     </dependency>
   </dependencies>
 

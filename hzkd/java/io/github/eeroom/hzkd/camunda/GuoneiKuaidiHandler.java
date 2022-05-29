@@ -1,6 +1,6 @@
 package io.github.eeroom.hzkd.camunda;
 
-import io.github.eeroom.apiclient.HttpChannelFactory;
+import io.github.eeroom.proxyclient.HttpChannelFactory;
 import io.github.eeroom.hzcore.hzkd.api.IGuoneiKuaidiCallback;
 import io.github.eeroom.hzcore.hzkd.db.kuaidientcustomer;
 import io.github.eeroom.hzcore.hzkd.guonei.EntityByCreate;

@@ -1,6 +1,6 @@
 package io.github.eeroom.hzcore.hzkd.api;
 
-import io.github.eeroom.apiclient.ApiMapping;
+import io.github.eeroom.proxyclient.ApiMapping;
 import io.github.eeroom.hzcore.ApidataWrapper;
 import io.github.eeroom.hzcore.hzkd.guonei.FeedMessage;
 import io.github.eeroom.hzcore.hzkd.guonei.FeedResponse;
