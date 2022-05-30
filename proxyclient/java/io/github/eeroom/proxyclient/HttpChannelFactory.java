@@ -1,4 +1,4 @@
-package io.github.eeroom.apiclient;
+package io.github.eeroom.proxyclient;
 
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationHandler;
@@ -7,7 +7,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class HttpChannelFactory {

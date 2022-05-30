@@ -1,10 +1,5 @@
-package io.github.eeroom.apiclient;
+package io.github.eeroom.proxyclient;
 
-
-
-import com.fasterxml.jackson.core.type.TypeReference;
-
-import java.util.List;
 
 public class App {
     public static  void main(String[] arg){

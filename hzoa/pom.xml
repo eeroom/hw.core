@@ -83,7 +83,7 @@
     </dependency>
     <dependency>
       <groupId>io.github.eeroom</groupId>
-      <artifactId>apiclient</artifactId>
+      <artifactId>proxyclient</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.xml.bind</groupId>

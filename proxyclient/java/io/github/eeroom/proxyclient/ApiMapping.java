@@ -1,6 +1,4 @@
-package io.github.eeroom.apiclient;
-
-import com.fasterxml.jackson.core.type.TypeReference;
+package io.github.eeroom.proxyclient;
 
 import java.lang.annotation.*;
 
