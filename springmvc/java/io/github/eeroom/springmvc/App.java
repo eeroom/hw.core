@@ -5,11 +5,16 @@ import org.springframework.web.servlet.FrameworkServlet;
 
 import javax.servlet.*;
 
+/**
+ * SPI机制，Service Provider Interface，服务提供者接口，服务是接口或者抽象类，服务提供者负责实现。在做插件化功能时很实用。
+ * servlet3.0新增加的规范,容器会在类路径中查找实现javax.servlet.ServletContainerInitializer接口的类
+ */
 public class App extends  org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
         //不启用springsecurity
         //return new Class[]{RootConfig.class, SpringSecurityConfig.class};
+        var servletContainerInitializer=javax.servlet.ServletContainerInitializer.class;
         return new Class[]{RootConfig.class};
     }
 
