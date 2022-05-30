@@ -1,13 +1,23 @@
 package io.github.eeroom.springmvc;
 
+import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.FrameworkServlet;
 
 import javax.servlet.*;
 
 /**
- * SPI机制，Service Provider Interface，服务提供者接口，服务是接口或者抽象类，服务提供者负责实现。在做插件化功能时很实用。
- * servlet3.0新增加的规范,容器会在类路径中查找实现javax.servlet.ServletContainerInitializer接口的类
+ * servlet3.0新增加的规范，利用spi机制,servlet容器(tomcat)会在启动过程中,查找各个jar包中的特定文件：META-INF/services/javax.servlet.ServletContainerInitializer
+ * 如果存在这个文件,就会利用spi机制获取接口javax.servlet.ServletContainerInitializer的实现类,然后执行其onStartup方法,可以有多个实现类，挨个执行
+ * 同时：新增规范还有一个注解@HandlesTypes,HandlesTypes的参数的类型就是class类型,表示javax.servlet.ServletContainerInitializer当前实现类能处理的类型
+ * servlet容器会扫描@HandlesTypes参数中的类型的实现类,并且创建这个实现类的实例,然后作为ServletContainerInitializer的onStartup的参数
+ * springmvc从3.1开始,在spring-web-xxxx.jar包中增加了这个特定文件,并且内容为：org.springframework.web.SpringServletContainerInitializer
+ * 并且SpringServletContainerInitializer的@HandlesTypes注解参数为WebApplicationInitializer.class
+ * 所以servlet容器会扫描WebApplicationInitializer.class的实现类然后作为参数传给onStartup方法
+ * 然后在ServletContainerInitializer的onStartup方法中,又挨个执行WebApplicationInitializer.class实现类的onStartup方法
+ * 当前的APP类最终就是WebApplicationInitializer.class的实现类
+ * 所以会自动被servlet容器实例化,实例值作为参数传递给SpringServletContainerInitializer的onStartup方法
+ * 我们的程序可以有多个WebApplicationInitializer.class的实现类
  */
 public class App extends  org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
@@ -15,6 +25,10 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
         //不启用springsecurity
         //return new Class[]{RootConfig.class, SpringSecurityConfig.class};
         var servletContainerInitializer=javax.servlet.ServletContainerInitializer.class;
+        var handlesTypes= javax.servlet.annotation.HandlesTypes.class;
+        var springServletContainerInitializer=  org.springframework.web.SpringServletContainerInitializer.class;
+        var webApplicationInitializer= org.springframework.web.WebApplicationInitializer.class;
+
         return new Class[]{RootConfig.class};
     }
 
@@ -40,6 +54,7 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
         //开启支持multipart/form-data，这样才能上传文件
+
         registration.setMultipartConfig(new MultipartConfigElement("D:/springmvc_multipart_formdata",2097152,4194304,0));
     }
 
