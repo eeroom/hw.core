@@ -76,5 +76,21 @@ public class Main {
         var sayhello= context.getBean("seyhello");
         Calculation cal= context.getBean(Calculation.class);
         cal.Handler();
+
+        /**
+         * SPI机制和使用方法
+         * SPI全称，Service Provider Interface，服务提供者接口。服务是接口或者抽象类，服务提供者负责实现。在做插件化功能时很实用。
+         * 使用步骤
+         * 1、定义接口/抽象类。
+         * 2、实现类
+         * 3、实现方在META-INF/services下，创建一个以接口的全限定名为名称的文件，内容是提供是该接口的实现类的全限定名。
+         * 4、使用java.util.ServiceLoader.load()方法来加载实现类。
+         * 典型的使用场景：JDBC,Tomcat实现servlet3.0新规范
+         *
+         */
+        var ediHandler= java.util.ServiceLoader.load(IEdiDataHandler.class).findFirst().get();
+        ediHandler.processReqest("edihandler-----spi");
+
+
     }
 }
