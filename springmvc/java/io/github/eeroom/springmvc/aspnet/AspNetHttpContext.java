@@ -1,4 +1,4 @@
-package io.github.eeroom.springmvc;
+package io.github.eeroom.springmvc.aspnet;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

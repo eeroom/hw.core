@@ -1,4 +1,4 @@
-package io.github.eeroom.springmvc;
+package io.github.eeroom.springmvc.authen;
 
 import io.github.eeroom.springmvc.model.UserInfoWrapper;
 import org.springframework.web.context.support.WebApplicationContextUtils;

@@ -1,4 +1,4 @@
-package io.github.eeroom.springmvc.springsecurity;
+package io.github.eeroom.springmvc.authen;
 
 import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;

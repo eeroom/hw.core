@@ -1,6 +1,6 @@
 package io.github.eeroom.springmvc;
 
-import org.springframework.web.WebApplicationInitializer;
+import io.github.eeroom.springmvc.authen.AuthenticationFilter;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.FrameworkServlet;
 
@@ -28,7 +28,6 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
         var handlesTypes= javax.servlet.annotation.HandlesTypes.class;
         var springServletContainerInitializer=  org.springframework.web.SpringServletContainerInitializer.class;
         var webApplicationInitializer= org.springframework.web.WebApplicationInitializer.class;
-
         return new Class[]{RootConfig.class};
     }
 
@@ -42,14 +41,15 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
         return new String[]{"/"};
     }
 
-//    @Override
-//    protected Filter[] getServletFilters() {
-//        //不启用springsecurity
-//        //开启spring-security，实现自己的登陆校验，把springsecurity相关的先不加载
-////        var filter=new org.springframework.web.filter.DelegatingFilterProxy("springSecurityFilterChain");
-////        return new Filter[]{filter};
-//        //结束spring-security
-//    }
+    @Override
+    protected Filter[] getServletFilters() {
+        //不启用springsecurity
+        //开启spring-security，实现自己的登陆校验，把springsecurity相关的先不加载
+        //var filter=new org.springframework.web.filter.DelegatingFilterProxy("springSecurityFilterChain");
+        //return new Filter[]{filter};
+        return new Filter[0];
+        //结束spring-security
+    }
 
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
@@ -62,14 +62,14 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
     public void onStartup(ServletContext servletContext) throws ServletException {
         super.onStartup(servletContext);
         //对应web.xml文件的Filter部分
-        var fdy= servletContext.addFilter("AuthenticationFilter",AuthenticationFilter.class);
+        var fdy= servletContext.addFilter("AuthenticationFilter", AuthenticationFilter.class);
         fdy.setInitParameter("a","hello world");
         fdy.addMappingForUrlPatterns(null,false,"/*");
     }
 
     @Override
     protected FrameworkServlet createDispatcherServlet(WebApplicationContext context) {
-        return new MyDispatcherServlet(context);
+        return super.createDispatcherServlet(context);
     }
 
     @Override

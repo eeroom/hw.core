@@ -1,6 +1,6 @@
 package io.github.eeroom.springmvc.controller;
 
-import io.github.eeroom.springmvc.HttpGet;
+import io.github.eeroom.springmvc.aspnet.HttpGet;
 import io.github.eeroom.springmvc.model.Student;
 import io.github.eeroom.springmvc.model.UserInfoWrapper;
 import org.springframework.beans.factory.annotation.Autowired;

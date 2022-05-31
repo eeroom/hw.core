@@ -1,6 +1,6 @@
 package io.github.eeroom.springmvc.controller;
 
-import io.github.eeroom.springmvc.AspNetHttpContext;
+import io.github.eeroom.springmvc.aspnet.AspNetHttpContext;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

@@ -1,6 +1,7 @@
-package io.github.eeroom.springmvc.springsecurity;
+package io.github.eeroom.springmvc.authen;
 
 import io.github.eeroom.springmvc.ApiResult;
+import io.github.eeroom.springmvc.authen.MyFormLoginConfigurer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;

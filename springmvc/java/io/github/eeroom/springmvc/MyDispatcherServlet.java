@@ -1,9 +1,9 @@
 package io.github.eeroom.springmvc;
 
+import io.github.eeroom.springmvc.aspnet.AspNetHttpContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
