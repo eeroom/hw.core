@@ -2,10 +2,13 @@ package io.github.eeroom.springmvc.authen;
 
 import io.github.eeroom.springmvc.ApiResult;
 import io.github.eeroom.springmvc.authen.MyFormLoginConfigurer;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -16,12 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-//@Configuration
-//@EnableWebSecurity
+@Configuration
+@EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implements AuthenticationSuccessHandler, AuthenticationFailureHandler {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         //super.configure(http);
         //这一句等价于默认的http.formLogin()，后续就使用默认的写法配置登陆的一些设置
         MyFormLoginConfigurer<HttpSecurity> formLoginConfigurer=new MyFormLoginConfigurer<>();

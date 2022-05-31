@@ -1,6 +1,7 @@
 package io.github.eeroom.springmvc;
 
 import io.github.eeroom.springmvc.authen.AuthenticationFilter;
+import io.github.eeroom.springmvc.authen.SpringSecurityConfig;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.FrameworkServlet;
 
@@ -45,16 +46,15 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
     protected Filter[] getServletFilters() {
         //不启用springsecurity
         //开启spring-security，实现自己的登陆校验，把springsecurity相关的先不加载
-        //var filter=new org.springframework.web.filter.DelegatingFilterProxy("springSecurityFilterChain");
-        //return new Filter[]{filter};
-        return new Filter[0];
+        //var springSecurityFilterChain=new org.springframework.web.filter.DelegatingFilterProxy("springSecurityFilterChain");
+        var authenticationFilter=new org.springframework.web.filter.DelegatingFilterProxy("authenticationFilter");
+        return new Filter[]{authenticationFilter};
         //结束spring-security
     }
 
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
         //开启支持multipart/form-data，这样才能上传文件
-
         registration.setMultipartConfig(new MultipartConfigElement("D:/springmvc_multipart_formdata",2097152,4194304,0));
     }
 
