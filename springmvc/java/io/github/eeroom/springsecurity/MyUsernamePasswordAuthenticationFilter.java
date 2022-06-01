@@ -1,4 +1,4 @@
-package io.github.eeroom.springmvc.authen;
+package io.github.eeroom.springsecurity;
 
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

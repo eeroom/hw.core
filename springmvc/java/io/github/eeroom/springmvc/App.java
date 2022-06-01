@@ -1,7 +1,6 @@
 package io.github.eeroom.springmvc;
 
 import io.github.eeroom.springmvc.authen.AuthenticationFilter;
-import io.github.eeroom.springmvc.authen.SpringSecurityConfig;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.FrameworkServlet;
 
