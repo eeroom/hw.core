@@ -14,4 +14,12 @@
 如果其它地方配置了自动扫包,那么@org.springframework.context.annotation.Configuration的配置类也会被扫
 对于一个可选的、验证性的涉及第三方引入相关的配置类,可以把配置类建在自动扫包basedir的往上一级,避免被springcontext扫包
 ```
+### springsecurity
+```
+关键依赖：spring-security-web,spring-security-config,spring-security-core
+开启方式1：在配置类中使用@EnableWebSecurity注解,那么springcontext会注册关键的filter的bean(名称为springSecurityFilterChain)
+    然后利用org.springframework.web.filter.DelegatingFilterProxy("springSecurityFilterChain")添加这个关键bean到servlet容器
+开启方式2：创建一个org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer的实现类,
+    AbstractSecurityWebApplicationInitializer继承自springweb的WebApplicationInitializer,其内部也是往springcontext注册关键bean，后续原理和1类似
+```
 
