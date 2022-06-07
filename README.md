@@ -23,3 +23,80 @@ execution实现了DelegateExecution接口
 也就能解释，导入后选择jdk，代码文件（有依赖其它包的时候）提示报错，然后修改被依赖的代码文件，编译，又可以正常提示。因为改了源代码文件，会重新编译
 
 ```
+## maven插件
+1. maven-jar-plugin 把普通jar做成可运行的jar,最简配置如下
+    ```
+    <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.0.2</version>
+        <configuration>
+            <classesDirectory>target/classes/</classesDirectory>
+            <archive>
+                <manifest>
+                    <mainClass>这里要替换成jar包main方法所在类</mainClass>
+                    <!-- 打包时 MANIFEST.MF文件不记录的时间戳版本 -->
+                    <useUniqueVersions>false</useUniqueVersions>
+                    <addClasspath>true</addClasspath>
+                    <classpathPrefix>lib/</classpathPrefix>
+                </manifest>
+            </archive>
+        </configuration>
+    </plugin>
+    ```
+2. maven-dependency-plugin 编译完成后,把所有依赖的类库汇总到指定目录,类似于c#的默认编译配置
+    ```
+   前提是使用maven-compiler-plugin插件进行编译
+   <plugin>
+       <groupId>org.apache.maven.plugins</groupId>
+       <!-- maven-dependency-plugin插件在maven的根pom.xml配置文件中有，位于节点pluginManagement-->
+       <artifactId>maven-dependency-plugin</artifactId>
+       <executions>
+           <execution>
+               <id>copy-dependencies</id>
+               <phase>package</phase>
+               <goals>
+                   <goal>copy-dependencies</goal>
+               </goals>
+               <configuration>
+                   <type>jar</type>
+                   <includeTypes>jar</includeTypes>
+                   <outputDirectory>
+                       ${project.build.directory}/lib
+                   </outputDirectory>
+               </configuration>
+           </execution>
+       </executions>
+   </plugin>
+   ```
+3. maven-assembly-plugin 作用和maven-dependency-plugin一致,区别:依赖也被打包到目标jar里面,类似c#嵌入式资源文件的做法
+    ```
+   <plugin>
+       <!-- maven3.6本身的根配置文件pom.xml在pluginManagement节点已经配置了这个插件，版本较低且为beta版本-->
+       <groupId>org.apache.maven.plugins</groupId>
+       <artifactId>maven-assembly-plugin</artifactId>
+       <version>3.1.1</version>
+       <configuration>
+           <archive>
+               <manifest>
+                   <!--这里要替换成jar包main方法所在类 -->
+                   <mainClass>这里要替换成jar包main方法所在类</mainClass>
+               </manifest>
+               <manifestEntries>
+                   <Class-Path>.</Class-Path>
+               </manifestEntries>
+           </archive>
+           <descriptorRefs>
+               <descriptorRef>jar-with-dependencies</descriptorRef>
+           </descriptorRefs>
+       </configuration>
+       <executions>
+           <execution>
+               <id>make-assembly</id> <!-- this is used for inheritance merges -->
+               <phase>package</phase> <!-- 指定在打包节点执行jar包合并操作 -->
+               <goals>
+                   <goal>single</goal>
+               </goals>
+           </execution>
+       </executions>
+   </plugin>
+   ```
