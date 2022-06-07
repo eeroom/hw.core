@@ -1,16 +1,17 @@
 package io.github.eeroom.hzoa.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.github.eeroom.hzcore.camunda.ApproveType;
-import io.github.eeroom.hzcore.camunda.CompleteType;
-import io.github.eeroom.hzcore.camunda.StartProcessInput;
-import io.github.eeroom.hzcore.hzoa.ApiAlias;
-import io.github.eeroom.hzcore.hzoa.db.bizapicfg;
-import io.github.eeroom.hzcore.hzoa.db.bizdata;
-import io.github.eeroom.hzcore.hzoa.kd.ApproveResult;
-import io.github.eeroom.hzcore.hzoa.kd.EntityByCreate;
 import io.github.eeroom.hzoa.MyDbContext;
+import io.github.eeroom.hzoa.camunda.ApproveType;
+import io.github.eeroom.hzoa.camunda.CompleteTaskInput;
+import io.github.eeroom.hzoa.camunda.CompleteType;
+import io.github.eeroom.hzoa.camunda.StartProcessInput;
+import io.github.eeroom.hzoa.db.bizapicfg;
+import io.github.eeroom.hzoa.db.bizdata;
 import io.github.eeroom.hzoa.serialize.JsonConvert;
+import io.github.eeroom.hzoa.viewmodel.ApiAlias;
+import io.github.eeroom.hzoa.viewmodel.ApproveResult;
+import io.github.eeroom.hzoa.viewmodel.EntityByCreate;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
@@ -46,7 +47,7 @@ public class KuaidiController {
 
     public Boolean approve(ApproveResult approveResult){
         //参数校验
-        var cinput=new io.github.eeroom.hzcore.camunda.CompleteTaskInput();
+        var cinput=new CompleteTaskInput();
         cinput.setTaskId(approveResult.getTaskId());
         if(approveResult.getApproveType().equals(ApproveType.转审)){
             cinput.setCompleteType(CompleteType.delegate);

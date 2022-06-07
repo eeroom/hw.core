@@ -1,13 +1,13 @@
 package io.github.eeroom.hzoa.camunda;
 
-import io.github.eeroom.hzcore.hzkd.guonei.EntityByPaymoney;
-import io.github.eeroom.hzcore.hzkd.api.IGuoneiKuaidiController;
-import io.github.eeroom.hzcore.hzkd.guonei.EntityByCreate;
-import io.github.eeroom.hzcore.hzoa.db.bizdataex;
 import io.github.eeroom.hzoa.AppConfig;
 import io.github.eeroom.hzoa.MyDbContext;
 import io.github.eeroom.hzoa.MyObjectFacotry;
 import io.github.eeroom.hzoa.authen.CurrentUserInfo;
+import io.github.eeroom.hzoa.db.bizdataex;
+import io.github.eeroom.hzoa.hzkd.EntityByCreate;
+import io.github.eeroom.hzoa.hzkd.EntityByPaymoney;
+import io.github.eeroom.hzoa.hzkd.IGuoneiKuaidiController;
 import io.github.eeroom.hzoa.serialize.JsonConvert;
 import io.github.eeroom.nalu.Columns;
 import io.github.eeroom.remoting.proxy.HttpChannelFactory;
@@ -49,7 +49,7 @@ public class KuaidiHandler extends ListenerHandler  implements Serializable {
                         throw new RuntimeException(String.format("没有找到该流程在sf系统对应的快递流程id,本流程id：%s",delegateExecution.getProcessInstanceId()));
                 var appConfig=MyObjectFacotry.getBean(AppConfig.class);
                 var formdatastr= delegateExecution.getVariable(VariableKey.formdataOfComplete).toString();
-                var payentity= MyObjectFacotry.getBean(JsonConvert.class).deSerializeObject(formdatastr,EntityByPaymoney.class);
+                var payentity= MyObjectFacotry.getBean(JsonConvert.class).deSerializeObject(formdatastr, EntityByPaymoney.class);
                 payentity.setProcessInstanceId(bizdataex.geteValue());//这个值非常关键，hz系统的表单提交数据不涉及sf系统的流程实例id
                 payentity.setCustomerId(appConfig.kuaidimycode);
                 var sfkuaidiHandler= HttpChannelFactory.createChannel(appConfig.kuaidiSfUrl, IGuoneiKuaidiController.class);

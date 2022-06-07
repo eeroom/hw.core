@@ -1,18 +1,15 @@
 package io.github.eeroom.hzoa.controller;
 
-import io.github.eeroom.hzcore.hzkd.api.IGuoneiKuaidiCallback;
-import io.github.eeroom.hzcore.camunda.CompleteTaskInput;
-import io.github.eeroom.hzcore.TaskStatus;
-import io.github.eeroom.hzcore.hzkd.guonei.FeedMessage;
-import io.github.eeroom.hzcore.hzkd.guonei.FeedResponse;
-import io.github.eeroom.hzcore.hzkd.guonei.FeedType;
-import io.github.eeroom.hzcore.hzoa.db.bizdataex;
-import io.github.eeroom.hzcore.hzoa.db.bizdatasub;
 import io.github.eeroom.hzoa.authen.CurrentUserInfo;
 import io.github.eeroom.hzoa.authen.SkipAuthentication;
 import io.github.eeroom.hzoa.MyDbContext;
 import io.github.eeroom.hzoa.MyObjectFacotry;
+import io.github.eeroom.hzoa.camunda.CompleteTaskInput;
+import io.github.eeroom.hzoa.camunda.TaskStatus;
 import io.github.eeroom.hzoa.camunda.VariableKey;
+import io.github.eeroom.hzoa.db.bizdataex;
+import io.github.eeroom.hzoa.db.bizdatasub;
+import io.github.eeroom.hzoa.hzkd.*;
 import io.github.eeroom.hzoa.serialize.JsonConvert;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,7 +35,7 @@ public class SfCallbackController implements IGuoneiKuaidiCallback {
         //如果是通知过磅的结果，就推动外发快递的进入领导审批
         if(msg.getType().equals(FeedType.过磅)){
             //参数校验，必须有重量信息
-            var guobangrt= this.jsonConvert.deSerializeObject(this.jsonConvert.serializeObject(msg.getData()), io.github.eeroom.hzcore.hzkd.guonei.GuobangResult.class);
+            var guobangrt= this.jsonConvert.deSerializeObject(this.jsonConvert.serializeObject(msg.getData()), GuobangResult.class);
             if(guobangrt.getZhongliang()==null || guobangrt.getZhongliang()<0)
                 throw new RuntimeException(String.format("过磅的信息异常，信息内容：%s",this.jsonConvert.serializeObject(msg.getData())));
             //把对应的hz的流程实例找出来，找到当前的task,完成这个task

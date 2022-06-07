@@ -1,9 +1,9 @@
 package io.github.eeroom.hzoa.controller;
 
-import io.github.eeroom.hzcore.ApidataWrapper;
-import io.github.eeroom.hzcore.authen.LoginInput;
+import io.github.eeroom.hzoa.ApidataWrapper;
 import io.github.eeroom.hzoa.AppConfig;
 import io.github.eeroom.hzoa.authen.JwtTokenHelper;
+import io.github.eeroom.hzoa.authen.LoginInput;
 import io.github.eeroom.hzoa.authen.SkipAuthentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

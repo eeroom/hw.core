@@ -1,6 +1,6 @@
 package io.github.eeroom.hzoa.controller;
 
-import io.github.eeroom.hzcore.ApidataWrapper;
+import io.github.eeroom.hzoa.ApidataWrapper;
 import io.github.eeroom.hzoa.AppConfig;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;

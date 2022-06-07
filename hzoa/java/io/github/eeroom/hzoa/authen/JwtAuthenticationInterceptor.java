@@ -2,7 +2,7 @@ package io.github.eeroom.hzoa.authen;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.eeroom.hzcore.ApidataWrapper;
+import io.github.eeroom.hzoa.ApidataWrapper;
 import io.github.eeroom.hzoa.AppConfig;
 import io.github.eeroom.hzoa.MyObjectFacotry;
 import org.springframework.http.MediaType;
