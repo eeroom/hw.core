@@ -12,7 +12,7 @@
     <modules>
         <module>../activemqReciver</module>
         <module>../activemqSender</module>
-        <module>../proxyclient</module>
+        <module>../remoting</module>
         <module>../axisclient</module>
         <module>../jni</module>
         <module>../nalu</module>
@@ -23,7 +23,6 @@
         <module>../springboot1x</module>
         <module>../springcontext</module>
         <module>../springmvc</module>
-        <module>../workflow</module>
     </modules>
 
     <properties>

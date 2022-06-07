@@ -1,4 +1,4 @@
-package io.github.eeroom.proxyclient;
+package io.github.eeroom.remoting;
 
 
 public class App {

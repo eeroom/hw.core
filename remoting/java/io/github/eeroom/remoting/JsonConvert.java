@@ -1,4 +1,4 @@
-package io.github.eeroom.proxyclient;
+package io.github.eeroom.remoting;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
