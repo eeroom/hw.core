@@ -1,7 +1,7 @@
 package io.github.eeroom.hzkd.controller;
 
-import io.github.eeroom.hzcore.hzkd.db.kuaidientcustomer;
 import io.github.eeroom.hzkd.MyDbContext;
+import io.github.eeroom.hzkd.db.kuaidientcustomer;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;

@@ -2,9 +2,9 @@ package io.github.eeroom.hzkd.authen;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.eeroom.hzcore.ApidataWrapper;
 import io.github.eeroom.hzkd.AppConfig;
 import io.github.eeroom.hzkd.MyObjectFacotry;
+import io.github.eeroom.hzkd.viewmodel.ApidataWrapper;
 import org.springframework.http.MediaType;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.method.HandlerMethod;

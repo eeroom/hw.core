@@ -1,21 +1,20 @@
 package io.github.eeroom.hzkd.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.github.eeroom.hzcore.hzkd.api.IGuoneiKuaidiController;
-import io.github.eeroom.hzcore.TaskStatus;
-import io.github.eeroom.hzcore.camunda.CompleteTaskInput;
-import io.github.eeroom.hzcore.camunda.StartProcessInput;
-import io.github.eeroom.hzcore.hzkd.ApiAlias;
-import io.github.eeroom.hzcore.hzkd.db.bizapicfg;
-import io.github.eeroom.hzcore.hzkd.db.kuaidientcustomer;
-import io.github.eeroom.hzcore.hzkd.guonei.EntityByPaymoney;
-import io.github.eeroom.hzcore.hzkd.db.bizdata;
-import io.github.eeroom.hzcore.hzkd.db.bizdatasub;
-import io.github.eeroom.hzcore.hzkd.guonei.EntityByCreate;
 import io.github.eeroom.hzkd.authen.CurrentUserInfo;
 import io.github.eeroom.hzkd.MyDbContext;
 import io.github.eeroom.hzkd.authen.SkipAuthentication;
+import io.github.eeroom.hzkd.camunda.CompleteTaskInput;
+import io.github.eeroom.hzkd.camunda.StartProcessInput;
+import io.github.eeroom.hzkd.db.bizapicfg;
+import io.github.eeroom.hzkd.db.bizdata;
+import io.github.eeroom.hzkd.db.kuaidientcustomer;
+import io.github.eeroom.hzkd.guonei.EntityByCreate;
+import io.github.eeroom.hzkd.guonei.EntityByPaymoney;
+import io.github.eeroom.hzkd.guonei.IGuoneiKuaidiController;
 import io.github.eeroom.hzkd.serialize.JsonConvert;
+import io.github.eeroom.hzkd.viewmodel.ApiAlias;
+import io.github.eeroom.hzkd.viewmodel.TaskStatus;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
@@ -72,7 +71,7 @@ public class GuoneiKuaidiController implements IGuoneiKuaidiController {
             throw new RuntimeException("只能支付自己名下的快递");
         //这种场景下，对方系统只能提供流程单号，
         //需要我们自己反推找出taskid,
-        var bizdatasub= this.dbContext.dbSet(bizdatasub.class).select()
+        var bizdatasub= this.dbContext.dbSet(io.github.eeroom.hzkd.db.bizdatasub.class).select()
                 .where(x->x.col(a->a.getprocessId()).eq(entityByPaymoney.getProcessInstanceId()))
                 .where(x->x.col(a->a.getassignee()).eq(entityByPaymoney.getCustomerId()))
                 .where(x->x.col(a->a.getstatus()).eq(TaskStatus.处理中))

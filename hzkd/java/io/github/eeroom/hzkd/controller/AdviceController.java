@@ -1,7 +1,7 @@
 package io.github.eeroom.hzkd.controller;
 
-import io.github.eeroom.hzcore.ApidataWrapper;
 import io.github.eeroom.hzkd.AppConfig;
+import io.github.eeroom.hzkd.viewmodel.ApidataWrapper;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

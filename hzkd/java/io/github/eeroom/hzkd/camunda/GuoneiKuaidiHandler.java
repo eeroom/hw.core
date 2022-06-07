@@ -1,11 +1,11 @@
 package io.github.eeroom.hzkd.camunda;
 
+import io.github.eeroom.hzkd.db.kuaidientcustomer;
+import io.github.eeroom.hzkd.guonei.EntityByCreate;
+import io.github.eeroom.hzkd.guonei.FeedMessage;
+import io.github.eeroom.hzkd.guonei.FeedType;
+import io.github.eeroom.hzkd.guonei.IGuoneiKuaidiCallback;
 import io.github.eeroom.remoting.proxy.HttpChannelFactory;
-import io.github.eeroom.hzcore.hzkd.api.IGuoneiKuaidiCallback;
-import io.github.eeroom.hzcore.hzkd.db.kuaidientcustomer;
-import io.github.eeroom.hzcore.hzkd.guonei.EntityByCreate;
-import io.github.eeroom.hzcore.hzkd.guonei.FeedMessage;
-import io.github.eeroom.hzcore.hzkd.guonei.FeedType;
 import io.github.eeroom.hzkd.MyDbContext;
 import io.github.eeroom.hzkd.MyObjectFacotry;
 import io.github.eeroom.hzkd.serialize.JsonConvert;

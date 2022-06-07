@@ -1,21 +1,17 @@
 package io.github.eeroom.hzkd.controller;
 
-import io.github.eeroom.hzcore.BizDataStatus;
-import io.github.eeroom.hzcore.TaskStatus;
-import io.github.eeroom.hzcore.camunda.CompleteType;
-import io.github.eeroom.hzcore.camunda.StartProcessInput;
-import io.github.eeroom.hzcore.camunda.CompleteTaskInput;
-import io.github.eeroom.hzcore.hzkd.db.bizdata;
-import io.github.eeroom.hzcore.hzkd.db.bizdatasub;
-import io.github.eeroom.hzcore.hzkd.db.procdefex;
 import io.github.eeroom.hzkd.MyDbContext;
 import io.github.eeroom.hzkd.MyObjectFacotry;
 import io.github.eeroom.hzkd.aspnet.HttpPost;
 import io.github.eeroom.hzkd.authen.CurrentUserInfo;
 import io.github.eeroom.hzkd.authen.SkipAuthentication;
-import io.github.eeroom.hzkd.camunda.ListenerHandler;
-import io.github.eeroom.hzkd.camunda.VariableKey;
+import io.github.eeroom.hzkd.camunda.*;
+import io.github.eeroom.hzkd.db.bizdata;
+import io.github.eeroom.hzkd.db.bizdatasub;
+import io.github.eeroom.hzkd.db.procdefex;
 import io.github.eeroom.hzkd.serialize.JsonConvert;
+import io.github.eeroom.hzkd.viewmodel.BizDataStatus;
+import io.github.eeroom.hzkd.viewmodel.TaskStatus;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.task.DelegationState;
 import org.camunda.bpm.engine.task.Task;
@@ -161,7 +157,7 @@ public class CamundaController {
         var processInstance = this.processEngine.getRuntimeService()
                 .startProcessInstanceByKey(procdefex.getprocdefKey(),map);
         //往主业务表添加一条记录
-        var biz=new io.github.eeroom.hzcore.hzkd.db.bizdata();
+        var biz=new bizdata();
         biz.setprocdefKey(procdefex.getprocdefKey());
         biz.setbizType(procdefex.getbizType());
         biz.setcreateBy(this.currentUserInfo.getAccount());

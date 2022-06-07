@@ -1,8 +1,8 @@
 package io.github.eeroom.hzkd.controller;
 
-import io.github.eeroom.hzcore.hzkd.db.bizapicfg;
 import io.github.eeroom.hzkd.MyDbContext;
 import io.github.eeroom.hzkd.authen.CurrentUserInfo;
+import io.github.eeroom.hzkd.db.bizapicfg;
 import io.github.eeroom.nalu.Columns;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,10 +1,11 @@
 package io.github.eeroom.hzkd.camunda;
 
-import io.github.eeroom.hzcore.BizDataStatus;
-import io.github.eeroom.hzcore.TaskStatus;
-import io.github.eeroom.hzcore.hzkd.db.bizdatasub;
 import io.github.eeroom.hzkd.MyObjectFacotry;
 import io.github.eeroom.hzkd.MyDbContext;
+import io.github.eeroom.hzkd.db.bizdata;
+import io.github.eeroom.hzkd.db.bizdatasub;
+import io.github.eeroom.hzkd.viewmodel.BizDataStatus;
+import io.github.eeroom.hzkd.viewmodel.TaskStatus;
 import io.github.eeroom.nalu.Columns;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
@@ -112,13 +113,13 @@ public class ListenerHandler implements Serializable {
 
     private void updateBizdataStatus(String pid, String status) {
         var dbcontext= MyObjectFacotry.getBean(MyDbContext.class);
-        var bizd= dbcontext.dbSet(io.github.eeroom.hzcore.hzkd.db.bizdata.class).select()
+        var bizd= dbcontext.dbSet(bizdata.class).select()
                 .where(x->x.col(a->a.getprocessId()).eq(pid))
                 .firstOrDefault();
         if(bizd==null)
             throw new RuntimeException("没有找到对应的bizdata,processId:"+pid);
         var value= BizDataStatus.valueOf(status);
-        dbcontext.edit(io.github.eeroom.hzcore.hzkd.db.bizdata.class)
+        dbcontext.edit(bizdata.class)
                 .setUpdateCol(x->x.getstatus(),value)
                 .where(x->x.col(a->a.getprocessId()).eq(bizd.getprocessId()));
     }
