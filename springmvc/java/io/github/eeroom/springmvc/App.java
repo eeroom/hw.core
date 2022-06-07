@@ -61,9 +61,9 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
     public void onStartup(ServletContext servletContext) throws ServletException {
         super.onStartup(servletContext);
         //对应web.xml文件的Filter部分
-        var fdy= servletContext.addFilter("AuthenticationFilter", AuthenticationFilter.class);
-        fdy.setInitParameter("a","hello world");
-        fdy.addMappingForUrlPatterns(null,false,"/*");
+//        var fdy= servletContext.addFilter("AuthenticationFilter", AuthenticationFilter.class);
+//        fdy.setInitParameter("a","hello world");
+//        fdy.addMappingForUrlPatterns(null,false,"/*");
     }
 
     @Override
