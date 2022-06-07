@@ -15,9 +15,9 @@
 
   <parent>
     <groupId>io.github.eeroom</groupId>
-    <artifactId>hzsln</artifactId>
+    <artifactId>slnhz</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <relativePath>../hzsln/pom.xml</relativePath>
+    <relativePath>../slnhz/pom.xml</relativePath>
   </parent>
   <properties>
 
