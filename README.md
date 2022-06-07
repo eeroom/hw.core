@@ -24,7 +24,7 @@ execution实现了DelegateExecution接口
 
 ```
 ## maven插件
-1. maven-jar-plugin 把普通jar做成可运行的jar,最简配置如下
+1. maven-jar-plugin 关键点就是设定MAINFEST.MF文件里的一些值,比如运行的Main class、classpath路径等等,把普通jar做成可以直接运行的jar,最简配置如下
     ```
     <plugin>
         <artifactId>maven-jar-plugin</artifactId>
