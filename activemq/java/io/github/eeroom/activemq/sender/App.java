@@ -1,12 +1,8 @@
-package io.github.eeroom.activemqSender;
+package io.github.eeroom.activemq.sender;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.jms.core.JmsOperations;
-import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 
-import javax.jms.Destination;
 import javax.jms.Session;
 
 public class App {

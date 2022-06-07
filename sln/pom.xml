@@ -10,8 +10,7 @@
     <packaging>pom</packaging>
     <name>sln</name>
     <modules>
-        <module>../activemqReciver</module>
-        <module>../activemqSender</module>
+        <module>../activemq</module>
         <module>../remoting</module>
         <module>../jni</module>
         <module>../nalu</module>

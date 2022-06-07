@@ -1,4 +1,4 @@
-package io.github.eeroom.activemqReciver;
+package io.github.eeroom.activemq.reciver;
 
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.jms.core.JmsOperations;

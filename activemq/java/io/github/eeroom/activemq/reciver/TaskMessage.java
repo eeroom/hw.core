@@ -1,6 +1,5 @@
-package io.github.eeroom.activemqSender;
+package io.github.eeroom.activemq.reciver;
 
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 public class TaskMessage {

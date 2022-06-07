@@ -1,4 +1,4 @@
-package io.github.eeroom.activemqReciver;
+package io.github.eeroom.activemq.reciver;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
