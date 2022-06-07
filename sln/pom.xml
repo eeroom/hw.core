@@ -14,7 +14,7 @@
         <module>../remoting</module>
         <module>../jni</module>
         <module>../nalu</module>
-        <module>../iostream</module>
+        <module>../javart</module>
         <module>../jdbc</module>
         <module>../log</module>
         <module>../springboot1x</module>
