@@ -10,6 +10,7 @@ import io.github.eeroom.hzoa.MyObjectFacotry;
 import io.github.eeroom.hzoa.authen.CurrentUserInfo;
 import io.github.eeroom.hzoa.serialize.JsonConvert;
 import io.github.eeroom.nalu.Columns;
+import io.github.eeroom.remoting.proxy.HttpChannelFactory;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,7 @@ public class KuaidiHandler extends ListenerHandler  implements Serializable {
                 entityByCreate.setCustomerId(config.kuaidimycode);
                 //默认已当前登录人作为发送人
                 entityByCreate.setSender(MyObjectFacotry.getBean(CurrentUserInfo.class).getAccount());
-                var sfkuaidiHandler= io.github.eeroom.remoting.HttpChannelFactory.createChannel(config.kuaidiSfUrl, IGuoneiKuaidiController.class);
+                var sfkuaidiHandler= HttpChannelFactory.createChannel(config.kuaidiSfUrl, IGuoneiKuaidiController.class);
                 var rt= sfkuaidiHandler.create(entityByCreate);
                 //保存数据,
                 // 这里不进行savechange,由统一的添加bizdata的地方进行savechange
@@ -51,7 +52,7 @@ public class KuaidiHandler extends ListenerHandler  implements Serializable {
                 var payentity= MyObjectFacotry.getBean(JsonConvert.class).deSerializeObject(formdatastr,EntityByPaymoney.class);
                 payentity.setProcessInstanceId(bizdataex.geteValue());//这个值非常关键，hz系统的表单提交数据不涉及sf系统的流程实例id
                 payentity.setCustomerId(appConfig.kuaidimycode);
-                var sfkuaidiHandler= io.github.eeroom.remoting.HttpChannelFactory.createChannel(appConfig.kuaidiSfUrl, IGuoneiKuaidiController.class);
+                var sfkuaidiHandler= HttpChannelFactory.createChannel(appConfig.kuaidiSfUrl, IGuoneiKuaidiController.class);
                 sfkuaidiHandler.paymoney(payentity);
         }
 }

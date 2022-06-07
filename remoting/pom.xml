@@ -25,6 +25,16 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
     </dependency>
+    <!-- okhttp3涉及的依赖 -->
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codelibs</groupId>
+      <artifactId>jcifs</artifactId>
+    </dependency>
+    <!-- okhttp3涉及的依赖_end -->
   </dependencies>
 
   <build>
