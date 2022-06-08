@@ -113,7 +113,19 @@ execution实现了DelegateExecution接口
 
 支持中文url路径的配置：URIEncoding="UTF-8"
 <Connector port="8080" protocol="HTTP/1.1"
-               connectionTimeout="20000"
-			   URIEncoding="UTF-8"
-               redirectPort="8443" />
+   connectionTimeout="20000"
+   URIEncoding="UTF-8"
+   redirectPort="8443" />
+
+tomcat虚拟内存JVM设置，
+直接运行版，修改catalina.bat中增加
+-Xms 初始堆大小 如：-Xms256m或2G
+-Xmx 最大堆大小
+-XX:PermSize 永久代(方法区)的初始大小
+-XX:MaxPermSize 永久代(方法区)的最大值
+set JAVA_OPTS=-Xms512m -Xmx512m -XX:PermSize=256m -XX:MaxPermSize=256m
+window服务版，打开tomcat7w.exe(图形界面)，打开Java选项卡，在Java Options中追加
+-XX:PermSize=256m-XX:MaxPermSize=256m
+然后修改表单项
+Initial memory pool和Maximum memory pool的值
 ```
