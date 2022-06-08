@@ -22,6 +22,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -80,6 +81,7 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
         templateResolver.setPrefix("/views/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode("HTML5");
+        templateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
         return templateResolver;
     }
 
@@ -97,7 +99,7 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
     public org.springframework.web.servlet.ViewResolver viewResolver(org.thymeleaf.ITemplateEngine engine){
       var resolver=new org.thymeleaf.spring4.view.ThymeleafViewResolver();
       resolver.setTemplateEngine(engine);
-      resolver.setCharacterEncoding("UTF-8");
+      resolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
         return  resolver;
     }
