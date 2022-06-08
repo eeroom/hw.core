@@ -108,4 +108,7 @@ execution实现了DelegateExecution接口
 
 可选配置:热更新,关键是reloadable="true",已知问题：如果某个依赖的jar文件被占用卡死,会导致热更新的时候无法删除原目录，从而更新失败
 修改conf\server.xml,<Host></Host>节下增加一条，<Context path="/springmvc" docBase="springmvc" reloadable="true"/>
+
+发布程序到根目录的方法：tomcat默认以webapps/ROOT文件夹为根目录，所以只需要把程序放到ROOT目录即可,或者把war文件命名为ROOT.war
+
 ```
