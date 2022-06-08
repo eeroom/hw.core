@@ -5,7 +5,7 @@
     <title>springmvc-总结</title>
 </head>
 <body>
-<h3><a href="/account/logout">退出登录</a></h3>
+<h3><a href="./account/logout">退出登录</a></h3>
 <h3>修改maven项目的目录结构</h3>
 <ol>
     <li>默认目录结构：src/main/java;src/main/resources；src/main/webapp</li>
@@ -18,8 +18,8 @@
     <li>修改conf\server.xml,&lt;Host&gt;&lt;/Host&gt;节下增加一条，&lt;Context path="/springmvc" docBase="springmvc" reloadable="true" /&gt;</li>
 </ol>
 <h3>代码目录结构和war包目录结构关系</h3>
-<img src="/代码目录结构和war包目录结构关系.png" alt="">
-<h3><a href="/home/add" target="_blank">Asp.Net MVC风格</a></h3>
+<img src="./代码目录结构和war包目录结构关系.png" alt="">
+<h3><a href="./home/add" target="_blank">Asp.Net MVC风格</a></h3>
 <ol>
     <li>基于约定：按照controller/action的请求路径监听</li>
     <li>优点：避免写一些重复和意义不大的RequestMapping("/home/student"),借鉴asp.net mvc的做法</li>
@@ -28,7 +28,7 @@
 <h3>Url和请求参数名称忽略大小写</h3>
 <p>默认为大小写敏感，通过配置实现修改</p>
 <h3>thymeleay视图引擎</h3>
-<h4><a target="_blank" href="/bootstrap/biaodan">母版页</a></h4>
+<h4><a target="_blank" href="./bootstrap/biaodan">母版页</a></h4>
 <ol>
     <li>引入thymeleaf-spring4和thymeleaf-layout-dialect</li>
     <li>javaconfig,配置视图解析器，特别注意layout的支持</li>
