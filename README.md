@@ -111,4 +111,9 @@ execution实现了DelegateExecution接口
 
 发布程序到根目录的方法：tomcat默认以webapps/ROOT文件夹为根目录，所以只需要把程序放到ROOT目录即可,或者把war文件命名为ROOT.war
 
+支持中文url路径的配置：URIEncoding="UTF-8"
+<Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+			   URIEncoding="UTF-8"
+               redirectPort="8443" />
 ```
