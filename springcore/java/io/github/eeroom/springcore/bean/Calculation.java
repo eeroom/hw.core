@@ -6,15 +6,20 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+/**
+ * 基于自动扫包注册bean
+ */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class Calculation {
 
+    //属性或字段注入
     @Value("${mqs.url}")
     String url;
 
     ISuanfa sf;
 
+    //构造函数注入
     @Autowired
     public Calculation(ISuanfa sf){
         this.sf=sf;
