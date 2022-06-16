@@ -88,10 +88,7 @@ public class Main {
          * 3、实现方在META-INF/services下，创建一个以接口的全限定名为名称的文件，内容是提供是该接口的实现类的全限定名。
          * 4、使用java.util.ServiceLoader.load()方法来加载实现类。
          * 典型的使用场景：JDBC,Tomcat实现servlet3.0新规范
-         *
          */
-        var ediHandler= java.util.ServiceLoader.load(IEdiDataHandler.class).findFirst().get();
-        ediHandler.processReqest("edihandler-----spi");
         //servlet3.0新规范中就会包含这个固定代码
         //我们可以修改/META-INF/services/javax.servlet.ServletContainerInitializer这个文件里面的内容，指定一个具体的实现类
         //spring-web包中就把这个具体实现类指定为org.springframework.web.SpringServletContainerInitializer
