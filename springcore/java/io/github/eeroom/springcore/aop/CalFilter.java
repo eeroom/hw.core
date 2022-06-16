@@ -1,4 +1,4 @@
-package io.github.eeroom.springcontext.aop;
+package io.github.eeroom.springcore.aop;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

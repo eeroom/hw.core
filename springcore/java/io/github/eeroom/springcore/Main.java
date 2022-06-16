@@ -1,8 +1,8 @@
-package io.github.eeroom.springcontext;
+package io.github.eeroom.springcore;
 
-import io.github.eeroom.springcontext.bean.Calculation;
-import io.github.eeroom.springcontext.context.MyApplicationListenerOnFinishRefresh;
-import io.github.eeroom.springcontext.context.MyApplicationListenerOnMyEvent;
+import io.github.eeroom.springcore.bean.Calculation;
+import io.github.eeroom.springcore.context.MyApplicationListenerOnFinishRefresh;
+import io.github.eeroom.springcore.context.MyApplicationListenerOnMyEvent;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import javax.servlet.ServletContainerInitializer;

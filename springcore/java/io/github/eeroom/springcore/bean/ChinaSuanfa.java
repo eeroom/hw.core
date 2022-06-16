@@ -1,4 +1,4 @@
-package io.github.eeroom.springcontext.bean;
+package io.github.eeroom.springcore.bean;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;

@@ -1,4 +1,4 @@
-package io.github.eeroom.springcontext.context;
+package io.github.eeroom.springcore.context;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;

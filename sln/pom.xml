@@ -18,7 +18,7 @@
         <module>../jdbc</module>
         <module>../log</module>
         <module>../springboot1x</module>
-        <module>../springcontext</module>
+        <module>../springcore</module>
         <module>../springmvc</module>
     </modules>
 

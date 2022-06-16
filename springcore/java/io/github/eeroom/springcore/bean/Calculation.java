@@ -1,4 +1,4 @@
-package io.github.eeroom.springcontext.bean;
+package io.github.eeroom.springcore.bean;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

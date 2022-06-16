@@ -1,7 +1,7 @@
-package io.github.eeroom.springcontext;
+package io.github.eeroom.springcore;
 
-import io.github.eeroom.springcontext.bean.MyBeanPostProcessorRegistrar;
-import io.github.eeroom.springcontext.context.MyImportSelector;
+import io.github.eeroom.springcore.bean.MyBeanPostProcessorRegistrar;
+import io.github.eeroom.springcore.context.MyImportSelector;
 import org.springframework.context.annotation.*;
 
 @Configuration
