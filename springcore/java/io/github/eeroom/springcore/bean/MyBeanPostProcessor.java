@@ -1,5 +1,6 @@
 package io.github.eeroom.springcore.bean;
 
+import io.github.eeroom.springcore.bean.Calculation;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -9,17 +10,11 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.ResourceLoader;
 
-
-public class MyBeanPostProcessor implements BeanFactoryAware, BeanPostProcessor, ApplicationContextAware, ResourceLoaderAware {
-    BeanFactory beanFactory;
-    ApplicationContext applicationContext;
-    ResourceLoader resourceLoader;
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.beanFactory=beanFactory;
-
-    }
-
+/**
+ * 这个特殊的bean,所以本身仍然是bean,所以可以按照普通的自动扫包进行注册
+ * 这里的注册方式为：利用ImportBeanDefinitionRegistrar这个特殊的类进注册
+ */
+public class MyBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessBeforeInitialization(Object bean, String s) throws BeansException {
         return bean;
@@ -32,15 +27,5 @@ public class MyBeanPostProcessor implements BeanFactoryAware, BeanPostProcessor,
         var obj=(Calculation)bean;
         obj.url="sdffffffffff";
         return obj;
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext=applicationContext;
-    }
-
-    @Override
-    public void setResourceLoader(ResourceLoader resourceLoader) {
-        this.resourceLoader=resourceLoader;
     }
 }
