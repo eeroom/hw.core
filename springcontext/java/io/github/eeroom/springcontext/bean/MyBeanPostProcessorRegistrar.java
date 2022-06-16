@@ -1,5 +1,6 @@
-package io.github.eeroom.springcontext;
+package io.github.eeroom.springcontext.bean;
 
+import io.github.eeroom.springcontext.bean.MyBeanPostProcessor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;

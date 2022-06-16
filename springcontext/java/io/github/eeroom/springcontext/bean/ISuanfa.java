@@ -1,4 +1,4 @@
-package io.github.eeroom.springcontext;
+package io.github.eeroom.springcontext.bean;
 
 public interface ISuanfa {
 

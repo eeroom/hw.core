@@ -1,4 +1,4 @@
-package io.github.eeroom.springcontext;
+package io.github.eeroom.springcontext.bean;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +21,7 @@ public class Calculation {
     }
 
     public void  Handler(){
-        System.out.println(this.url);
+        System.out.println("配置文件获取的mqs.url="+this.url);
         this.sf.Hit(1,10);
     }
 }

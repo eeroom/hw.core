@@ -1,4 +1,4 @@
-package io.github.eeroom.springcontext;
+package io.github.eeroom.springcontext.bean;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 public class ChinaSuanfa implements ISuanfa {
     @Override
     public int Hit(int a, int b) {
-        System.out.println("a+b=");
-        System.out.print(a+b);
+        System.out.print("ChinaSuanfa:a+b=");
+        System.out.println(a+b);
         return a+b;
     }
 }

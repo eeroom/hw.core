@@ -1,10 +1,10 @@
-package io.github.eeroom.springcontext;
+package io.github.eeroom.springcontext.context;
 
 import org.springframework.context.ApplicationListener;
 
 public class MyApplicationListenerOnMyEvent implements ApplicationListener<MyEvent> {
     @Override
     public void onApplicationEvent(MyEvent myEvent) {
-        System.out.println("执行事件MyEvent的回调方法");
+        System.out.println("spring-event:自定义事件MyEvent的回调方法");
     }
 }

@@ -1,5 +1,6 @@
 package io.github.eeroom.springcontext;
 
+import io.github.eeroom.springcontext.context.MyEvent;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;

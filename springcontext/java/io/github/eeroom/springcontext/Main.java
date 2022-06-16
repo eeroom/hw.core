@@ -1,5 +1,8 @@
 package io.github.eeroom.springcontext;
 
+import io.github.eeroom.springcontext.bean.Calculation;
+import io.github.eeroom.springcontext.context.MyApplicationListenerOnFinishRefresh;
+import io.github.eeroom.springcontext.context.MyApplicationListenerOnMyEvent;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import javax.servlet.ServletContainerInitializer;
@@ -14,7 +17,9 @@ public class Main {
         context.register(RootConfig.class);
         context.addApplicationListener(new MyApplicationListenerOnFinishRefresh());
         context.addApplicationListener(new MyApplicationListenerOnMyEvent());
+        System.out.println("context.refresh()---begin");
         context.refresh();
+        System.out.println("context.refresh()---end");
         /**
          * 向容易注册bean的常见方式
          * 1、在配置类中定义标注@bean的方法，方法名称就是bean的注册名称，方法返回类型就是bean的注册类型
