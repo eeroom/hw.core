@@ -1,4 +1,4 @@
-package io.github.eeroom.javart.io;
+package io.github.eeroom.javacore.io;
 
 import java.io.*;
 import java.nio.charset.Charset;
