@@ -2,6 +2,8 @@ package io.github.eeroom.springcontext;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
+import javax.servlet.ServletContainerInitializer;
+
 public class Main {
 
     public static  void  main(String[] args){
@@ -90,7 +92,11 @@ public class Main {
          */
         var ediHandler= java.util.ServiceLoader.load(IEdiDataHandler.class).findFirst().get();
         ediHandler.processReqest("edihandler-----spi");
-
+        //servlet3.0新规范中就会包含这个固定代码
+        //我们可以修改/META-INF/services/javax.servlet.ServletContainerInitializer这个文件里面的内容，指定一个具体的实现类
+        //spring-web包中就把这个具体实现类指定为org.springframework.web.SpringServletContainerInitializer
+        var sl=java.util.ServiceLoader.load(ServletContainerInitializer.class);
+        sl.findFirst().get().onStartup(new Object());
 
     }
 }
