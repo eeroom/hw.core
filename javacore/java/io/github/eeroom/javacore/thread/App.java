@@ -39,7 +39,3 @@ public class App {
     }
 }
 
-class Student{
-    String name;
-    int age;
-}
