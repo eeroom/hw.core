@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="运行springboot1x" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="io.github.eeroom.springboot1x.App" />
+    <module name="springboot1x" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

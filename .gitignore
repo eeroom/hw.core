@@ -24,7 +24,8 @@
 hs_err_pid*
 
 target
-.idea
+.idea/*
+!.idea/runConfigurations/
 node_modules
 .vscode
 package-lock.json
