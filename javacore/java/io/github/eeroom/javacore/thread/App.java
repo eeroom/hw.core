@@ -1,14 +1,19 @@
 package io.github.eeroom.javacore.thread;
 
+import java.util.ArrayList;
+
 /**
  * 1.5版本以前：
  */
 public class App {
     public static void main(String[] args) {
-        //showStudentInfo();
-        //showStudentInfoSynchronized();
-        //showStudentInfoSynchronizedV2();
-        showStudentInfoSynchronizedV3();
+        var lstRunable=new ArrayList<Runnable>();
+        lstRunable.add(App::showStudentInfo);
+        lstRunable.add(App::showStudentInfoSynchronized);
+        lstRunable.add(App::showStudentInfoSynchronizedV2);
+        lstRunable.add(App::showStudentInfoSynchronizedV3);
+        lstRunable.get(0).run();
+
     }
 
     private static void showStudentInfoSynchronizedV3() {
