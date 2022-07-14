@@ -5,7 +5,16 @@ package io.github.eeroom.javacore.thread;
  */
 public class App {
     public static void main(String[] args) {
-        showStudentInfo();
+        //showStudentInfo();
+        showStudentInfoSynchronized();
+    }
+
+    private static void showStudentInfoSynchronized() {
+        var student = new Student();
+        Thread t1 = new Thread(new SetStudentHandlerSynchronized(student));
+        Thread t2 = new Thread(new ShowStudentHandlerSynchronized(student));
+        t1.start();
+        t2.start();
     }
 
     /**
@@ -13,7 +22,9 @@ public class App {
      * 一个线程负责更新信息
      * 一个线程负责展示信息
      * 存在的问题：会出现{姓名：李四,年龄：10}{姓名：张三,年龄：12 }的情况
-     * 原因：设置姓名和设置年龄分成了2行语句，不是一个原子操作，导致展示信息的线程读取到 设置了一般信息的数据
+     * 原因：设置姓名和设置年龄分成了2行语句，不是一个原子操作，导致展示信息的线程可能读取 设置了一半信息的数据
+     * 解决办法1，使用synchronized语句，环绕设置姓名和设置年龄分成了2行语句，成为一个原子操作
+     * 关键点：2个线程的synchronized语句使用相同的监视器
      */
     private static void showStudentInfo() {
         var student = new Student();
