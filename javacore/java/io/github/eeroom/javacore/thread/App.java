@@ -5,9 +5,18 @@ package io.github.eeroom.javacore.thread;
  */
 public class App {
     public static void main(String[] args) {
-        showStudentInfo();
-        showStudentInfoSynchronized();
-        showStudentInfoSynchronizedV2();
+        //showStudentInfo();
+        //showStudentInfoSynchronized();
+        //showStudentInfoSynchronizedV2();
+        showStudentInfoSynchronizedV3();
+    }
+
+    private static void showStudentInfoSynchronizedV3() {
+        var student = new Student();
+        Thread t1 = new Thread(new SetStudentHandlerSynchronizedV3(student));
+        Thread t2 = new Thread(new ShowStudentHandlerSynchronizedV3(student));
+        t1.start();
+        t2.start();
     }
 
     private static void showStudentInfoSynchronizedV2() {
@@ -37,7 +46,8 @@ public class App {
      * 解决办法2，使用synchronized关键字修饰方法，等价代码就是synchronized语句，监视器为this,如果是静态方法，则为所在类的类型元数据
      * 关键点：这个方式侧重于把线程同步的逻辑放在被调用方，
      * 存在的另一个问题：张三和李四的信息是乱序切换，并且可能连续多次不切换，期望情况是挨个切换
-     * 解决办法：使用await和notify方法轮流停止当前所在线程和唤醒监视器下的其它线程
+     * 解决办法：使用wait和notify方法轮流停止当前所在线程和唤醒监视器下的其它线程
+     * 关键点：两个线程的线程监视器相同，使用线程监视器的wait和notify方法
      */
     private static void showStudentInfo() {
         var student = new Student();
