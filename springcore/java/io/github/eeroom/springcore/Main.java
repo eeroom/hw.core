@@ -100,5 +100,6 @@ public class Main {
         var sl=java.util.ServiceLoader.load(ServletContainerInitializer.class);
         sl.findFirst().get().onStartup(new Object());
 
+
     }
 }
