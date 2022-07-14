@@ -1,19 +1,30 @@
 package io.github.eeroom.javacore.thread;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 1.5版本以前：
  */
 public class App {
     public static void main(String[] args) {
-        var lstRunable=new ArrayList<Runnable>();
-        lstRunable.add(App::showStudentInfo);
-        lstRunable.add(App::showStudentInfoSynchronized);
-        lstRunable.add(App::showStudentInfoSynchronizedV2);
-        lstRunable.add(App::showStudentInfoSynchronizedV3);
-        lstRunable.get(0).run();
+        var dict=new HashMap<Integer,Runnable>();
+        dict.put(0,App::showStudentInfo);
+        dict.put(1,App::showStudentInfoSynchronized);
+        dict.put(2,App::showStudentInfoSynchronizedV2);
+        dict.put(3,App::showStudentInfoSynchronizedV3);
+        dict.put(4,App::photoStudent);
+        dict.get(0).run();
+    }
 
+
+    /**
+     * 场景：学生通过刷卡通道进入学校，摄像头为每个进入的学生拍一张照片
+     * 一到多个线程处理学生进入
+     * 一到多个线程处理摄像头拍照
+     * 不能偷拍，也不能乱拍，要按照进入的顺序拍照
+     */
+    private static void photoStudent() {
     }
 
     private static void showStudentInfoSynchronizedV3() {
