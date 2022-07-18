@@ -12,23 +12,22 @@ public class App {
         dict.put(1,App::showStudentInfoSynchronized);
         dict.put(2,App::showStudentInfoSynchronizedV2);
         dict.put(3,App::showStudentInfoSynchronizedV3);
-        dict.put(4,App::photoStudent);
+        dict.put(4,App::BreadDemo);
         dict.get(4).run();
     }
 
 
     /**
-     * 场景：服务接待，服务员接待顾客，一对一接待
-     * 一个或多个线程模顾客进店
-     * 一个或多个线程模拟服务员接待
-     * 顾客和服务员一对一碰头后进店，否则双方都在等待！
+     * 场景：面包店，厨师做面包，顾客买面包
+     * 一个或多个线程模拟厨师做面包，做好的面包放在指定位置等待用户购买，为了顾客买到最新出炉的面包，指定位置只能放一个面包，厨师等这个面包卖掉后再做下一个面包
+     * 一个或多个线程模拟顾客买面包，只买最新做好的面包，如果没有最新做好的面包，就等待厨师把面包做好
      */
-    private static void photoStudent() {
-        var student=new Student();
-        Thread t1 = new Thread(new SendStudentHandler(student));
-        Thread t2 = new Thread(new SendStudentHandler(student));
-        Thread t3 = new Thread(new PhotoStudentHandler(student));
-        Thread t4 = new Thread(new PhotoStudentHandler(student));
+    private static void BreadDemo() {
+        var bread=new Bread();
+        Thread t1 = new Thread(new Producer(bread));
+        Thread t2 = new Thread(new Producer(bread));
+        Thread t3 = new Thread(new Consumer(bread));
+        Thread t4 = new Thread(new Consumer(bread));
         t1.start();
         t2.start();
         t3.start();
