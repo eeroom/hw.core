@@ -3,6 +3,10 @@ package io.github.eeroom.javacore.thread;
 public class Student {
     String name;
     int age;
+    int index;
+    boolean fuwuyuanOk;
+    boolean gukeOk;
+    boolean flag;
 
     public synchronized void setValue(String name, int age) {
         this.name = name;

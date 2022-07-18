@@ -1,6 +1,5 @@
 package io.github.eeroom.javacore.thread;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -14,17 +13,26 @@ public class App {
         dict.put(2,App::showStudentInfoSynchronizedV2);
         dict.put(3,App::showStudentInfoSynchronizedV3);
         dict.put(4,App::photoStudent);
-        dict.get(0).run();
+        dict.get(4).run();
     }
 
 
     /**
-     * 场景：学生通过刷卡通道进入学校，摄像头为每个进入的学生拍一张照片
-     * 一到多个线程处理学生进入
-     * 一到多个线程处理摄像头拍照
-     * 不能漏拍，也不能乱拍，要按照进入的顺序拍照
+     * 场景：服务接待，服务员接待顾客，一对一接待
+     * 一个或多个线程模顾客进店
+     * 一个或多个线程模拟服务员接待
+     * 顾客和服务员一对一碰头后进店，否则双方都在等待！
      */
     private static void photoStudent() {
+        var student=new Student();
+        Thread t1 = new Thread(new SendStudentHandler(student));
+        Thread t2 = new Thread(new SendStudentHandler(student));
+        Thread t3 = new Thread(new PhotoStudentHandler(student));
+        Thread t4 = new Thread(new PhotoStudentHandler(student));
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
     }
 
     private static void showStudentInfoSynchronizedV3() {
