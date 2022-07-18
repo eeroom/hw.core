@@ -13,7 +13,20 @@ public class App {
         dict.put(2,App::showStudentInfoSynchronizedV2);
         dict.put(3,App::showStudentInfoSynchronizedV3);
         dict.put(4,App::BreadDemo);
-        dict.get(4).run();
+        dict.put(5,App::BreadDemoV2);
+        dict.get(5).run();
+    }
+
+    private static void BreadDemoV2() {
+        var bread=new Bread();
+        Thread t1 = new Thread(new ProducerV2(bread));
+        Thread t2 = new Thread(new ProducerV2(bread));
+        Thread t3 = new Thread(new ConsumerV2(bread));
+        Thread t4 = new Thread(new ConsumerV2(bread));
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
     }
 
 
@@ -21,6 +34,9 @@ public class App {
      * 场景：面包店，厨师做面包，顾客买面包
      * 一个或多个线程模拟厨师做面包，做好的面包放在指定位置等待用户购买，为了顾客买到最新出炉的面包，指定位置只能放一个面包，厨师等这个面包卖掉后再做下一个面包
      * 一个或多个线程模拟顾客买面包，只买最新做好的面包，如果没有最新做好的面包，就等待厨师把面包做好
+     * 问题：可能会发生死锁，所有线程都被wait，没有线程再来唤醒别的线程，
+     * 解决办法：使用notifyall
+     * 潜在问题：会唤醒业务逻辑上不需要唤醒的线程，科学的场景：消费者购买面包后，完全不必唤醒其它的消费者线程，只需要唤醒生产者线程，但是notifyall会唤醒所有其他的线程
      */
     private static void BreadDemo() {
         var bread=new Bread();
