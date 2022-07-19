@@ -3,24 +3,25 @@ package io.github.eeroom.javacore.thread;
 import java.util.HashMap;
 
 /**
- * 1.5版本以前：
+ *
  */
 public class App {
     public static void main(String[] args) {
         var dict=new HashMap<Integer,Runnable>();
-        dict.put(0,App::showStudentInfo);
-        dict.put(1,App::showStudentInfoSynchronized);
-        dict.put(2,App::showStudentInfoSynchronizedV2);
-        dict.put(3,App::showStudentInfoSynchronizedV3);
-        dict.put(4,App::BreadDemo);
-        dict.put(5,App::BreadDemoV2);
+        dict.put(0,App::studentDemo);
+        dict.put(1,App::studentDemoV2);
+        dict.put(2,App::studentDemoV3);
+        dict.put(3,App::studentDemoV4);
+        dict.put(4,App::breadDemo);
+        dict.put(5,App::breadDemoV2);
+        dict.put(6,App::breadDemoV3);
         dict.get(5).run();
     }
 
     /**
      * 使用jdk1.5的新api,lock，彻底解决唤醒监视器下所有其它线程的弊端
      */
-    private static void BreadDemoV3() {
+    private static void breadDemoV3() {
         var bread=new Bread();
         Thread t1 = new Thread(new Producer(bread::makeV3));
         Thread t2 = new Thread(new Producer(bread::makeV3));
@@ -35,7 +36,7 @@ public class App {
     /**
      * 使用notifyall解决线程死锁问题，没有线程再来唤醒别的线程，
      */
-    private static void BreadDemoV2() {
+    private static void breadDemoV2() {
         var bread=new Bread();
         Thread t1 = new Thread(new Producer(bread::makeV2));
         Thread t2 = new Thread(new Producer(bread::makeV2));
@@ -56,7 +57,7 @@ public class App {
      * 解决办法：使用notifyall
      * 潜在问题：会唤醒业务逻辑上不需要唤醒的线程，科学的场景：消费者购买面包后，完全不必唤醒其它的消费者线程，只需要唤醒生产者线程，但是notifyall会唤醒所有其他的线程
      */
-    private static void BreadDemo() {
+    private static void breadDemo() {
         var bread=new Bread();
         Thread t1 = new Thread(new Producer(bread::make));
         Thread t2 = new Thread(new Producer(bread::make));
@@ -68,26 +69,26 @@ public class App {
         t4.start();
     }
 
-    private static void showStudentInfoSynchronizedV3() {
+    private static void studentDemoV4() {
         var student = new Student();
-        Thread t1 = new Thread(new SetStudentHandlerSynchronizedV3(student));
-        Thread t2 = new Thread(new ShowStudentHandlerSynchronizedV3(student));
+        Thread t1 = new Thread(new DoLoopHandler(student::changeV4));
+        Thread t2 = new Thread(new DoLoopHandler(student::showV4));
         t1.start();
         t2.start();
     }
 
-    private static void showStudentInfoSynchronizedV2() {
+    private static void studentDemoV3() {
         var student = new Student();
-        Thread t1 = new Thread(new SetStudentHandlerSynchronizedV2(student));
-        Thread t2 = new Thread(new ShowStudentHandlerSynchronizedV2(student));
+        Thread t1 = new Thread(new DoLoopHandler(student::changeV3));
+        Thread t2 = new Thread(new DoLoopHandler(student::showV3));
         t1.start();
         t2.start();
     }
 
-    private static void showStudentInfoSynchronized() {
+    private static void studentDemoV2() {
         var student = new Student();
-        Thread t1 = new Thread(new SetStudentHandlerSynchronized(student));
-        Thread t2 = new Thread(new ShowStudentHandlerSynchronized(student));
+        Thread t1 = new Thread(new DoLoopHandler(student::changeV2));
+        Thread t2 = new Thread(new DoLoopHandler(student::showV2));
         t1.start();
         t2.start();
     }
@@ -106,10 +107,10 @@ public class App {
      * 解决办法：使用wait和notify方法轮流停止当前所在线程和唤醒监视器下的其它线程
      * 关键点：两个线程的线程监视器相同，使用线程监视器的wait和notify方法
      */
-    private static void showStudentInfo() {
+    private static void studentDemo() {
         var student = new Student();
-        Thread t1 = new Thread(new SetStudentHandler(student));
-        Thread t2 = new Thread(new ShowStudentHandler(student));
+        Thread t1 = new Thread(new DoLoopHandler(student::change));
+        Thread t2 = new Thread(new DoLoopHandler(student::show));
         t1.start();
         t2.start();
     }
