@@ -17,12 +17,30 @@ public class App {
         dict.get(5).run();
     }
 
+    /**
+     * 使用jdk1.5的新api,lock，彻底解决唤醒监视器下所有其它线程的弊端
+     */
+    private static void BreadDemoV3() {
+        var bread=new Bread();
+        Thread t1 = new Thread(new Producer(bread::makeV3));
+        Thread t2 = new Thread(new Producer(bread::makeV3));
+        Thread t3 = new Thread(new Consumer(bread::payV3));
+        Thread t4 = new Thread(new Consumer(bread::payV3));
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
+    }
+
+    /**
+     * 使用notifyall解决线程死锁问题，没有线程再来唤醒别的线程，
+     */
     private static void BreadDemoV2() {
         var bread=new Bread();
-        Thread t1 = new Thread(new ProducerV2(bread));
-        Thread t2 = new Thread(new ProducerV2(bread));
-        Thread t3 = new Thread(new ConsumerV2(bread));
-        Thread t4 = new Thread(new ConsumerV2(bread));
+        Thread t1 = new Thread(new Producer(bread::makeV2));
+        Thread t2 = new Thread(new Producer(bread::makeV2));
+        Thread t3 = new Thread(new Consumer(bread::payV2));
+        Thread t4 = new Thread(new Consumer(bread::payV2));
         t1.start();
         t2.start();
         t3.start();
@@ -40,10 +58,10 @@ public class App {
      */
     private static void BreadDemo() {
         var bread=new Bread();
-        Thread t1 = new Thread(new Producer(bread));
-        Thread t2 = new Thread(new Producer(bread));
-        Thread t3 = new Thread(new Consumer(bread));
-        Thread t4 = new Thread(new Consumer(bread));
+        Thread t1 = new Thread(new Producer(bread::make));
+        Thread t2 = new Thread(new Producer(bread::make));
+        Thread t3 = new Thread(new Consumer(bread::pay));
+        Thread t4 = new Thread(new Consumer(bread::pay));
         t1.start();
         t2.start();
         t3.start();
