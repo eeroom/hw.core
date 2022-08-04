@@ -13,9 +13,13 @@ import java.util.*;
  *     |               |---TreeSet 基于二叉树结构，数据按照比较接口的接口有序的分布在二叉树节点，这个有序是指数据排序，不是集合数据的添加顺序
  *     |               |---LinkedHashSet 基于hashmap?，并且数据包一层链表结构?
  *     |---Map（不同步，双列，key不能重复，但是value可以重复）
- *          |---HashMap ，基于哈希算法
- *          |---TreeMap
- *
+ *     |     |---HashMap ，基于哈希算法
+ *     |     |---TreeMap
+ *     |
+ *     |---Vector(jdk1.0,同步，功能类似于ArrayList，已过时，兼容老代码，所以保留)
+ *     |---Hashtable(jdk1.0,同步，功能类似于HashSet,已过时，兼容老代码，所以保留)
+ *     |---Enumeration（枚举器，jdk1.0，已过时，新的jdk增加功能可直接转为迭代器）
+ *     |---Iterator<E>（迭代器，取代枚举器）
  *
  */
 public class App {
