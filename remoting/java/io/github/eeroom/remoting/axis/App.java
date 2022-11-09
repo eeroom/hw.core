@@ -2,9 +2,11 @@ package io.github.eeroom.remoting.axis;
 
 import org.apache.axis.AxisEngine;
 import org.apache.axis.encoding.XMLType;
+import org.apache.axis.message.SOAPHeaderElement;
 import org.apache.axis.soap.SOAPConstants;
 
 import javax.xml.namespace.QName;
+
 
 public class App {
     public static void main(String[] args) throws Throwable {
@@ -51,8 +53,13 @@ public class App {
         call.setOperationName(new javax.xml.namespace.QName(xmlns,methodName));// 设置操作的名称。
 
         //设置复杂请求头
-        call.addParameterAsHeader(new QName(xmlns,"Student"),new QName(xmlns,"Student"),
-                Student.class,javax.xml.rpc.ParameterMode.IN,javax.xml.rpc.ParameterMode.IN);
+//        call.addParameterAsHeader(new QName(xmlns,"Student"),new QName(xmlns,"Student"),
+//                Student.class,javax.xml.rpc.ParameterMode.IN,javax.xml.rpc.ParameterMode.IN);
+
+        var header=new SOAPHeaderElement(xmlns,"Student");
+        header.setNamespaceURI(xmlns);
+        header.addChildElement("Age").setValue("30");
+        call.addHeader(header);
 
         call.registerTypeMapping(Student.class,
                 new QName(xmlns,"Student"),
