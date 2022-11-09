@@ -7,9 +7,9 @@ import javax.xml.namespace.QName;
 
 public class App {
     public static void main(String[] args) throws Throwable {
-        //invokeHelloWorld(44);
+        invokeHelloWorld(44);
         //invokeGetStudent(11);
-        invokeArrayOfAnyType();
+        //invokeArrayOfAnyType();
 
     }
 

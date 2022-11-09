@@ -53,6 +53,12 @@
       <groupId>wsdl4j</groupId>
       <artifactId>wsdl4j</artifactId>
     </dependency>
+<!--    解决jdk11下，缺少依赖的问题（JavaSE 8 包含包 java.xml.soap，JavaSE 9 将包 javax.xml.soap 移至模块 java.xml.ws，后续版本被移除）-->
+    <dependency>
+      <groupId>javax.xml.soap</groupId>
+      <artifactId>javax.xml.soap-api</artifactId>
+      <version>1.4.0</version>
+    </dependency>
     <!-- axis涉及的依赖_end -->
   </dependencies>
 
