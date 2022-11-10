@@ -1,6 +1,8 @@
 package io.github.eeroom.remoting.axis;
 
 import org.apache.axis.AxisEngine;
+import org.apache.axis.constants.Style;
+import org.apache.axis.constants.Use;
 import org.apache.axis.encoding.XMLType;
 import org.apache.axis.message.SOAPHeaderElement;
 import org.apache.axis.soap.SOAPConstants;
@@ -24,6 +26,8 @@ public class App {
         org.apache.axis.client.Service service = new org.apache.axis.client.Service();
 
         org.apache.axis.client.Call call = (org.apache.axis.client.Call) service.createCall();
+        //非常重要，否则.net的webservice接收不到自定义实体的参数，简单类型参数不受影响
+        call.setEncodingStyle(null);
         call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS,Boolean.FALSE);
         //避免生产请求xml中，每个请求参数标签都包含 类型 的 attr,Disable sending xsi:type
         call.setProperty(AxisEngine.PROP_SEND_XSI,Boolean.FALSE);
@@ -37,6 +41,8 @@ public class App {
         call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
         call.setSOAPActionURI(xmlns+methodName);
         call.setOperationName(new javax.xml.namespace.QName(xmlns,methodName));// 设置操作的名称。
+        call.setOperationStyle(Style.WRAPPED);//和服务端的webservice方法对应，.net的默认就是WRAPPED，axis默认的也是WRAPPED，可以通过添加特性修改
+        call.setOperationUse(Use.DEFAULT);//和服务端的webservice方法对应，可以通过添加特性修改
 
 //        var oper = new org.apache.axis.description.OperationDesc();
 //        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
@@ -66,7 +72,7 @@ public class App {
         st.Name="zhangsan";
         Student result = (Student) call.invoke(new Object[]{st,33});// 执行调用
 
-        System.out.println(result.Name);
+        System.out.println(result.Age);
     }
 
     private static void invokeArrayOfAnyType() throws Throwable{
