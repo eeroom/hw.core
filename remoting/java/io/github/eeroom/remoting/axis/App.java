@@ -10,10 +10,63 @@ import javax.xml.namespace.QName;
 
 public class App {
     public static void main(String[] args) throws Throwable {
-        invokeHelloWorld(44);
+        //invokeHelloWorld(44);
         //invokeGetStudent(11);
         //invokeArrayOfAnyType();
+        invokeWithHeader();
 
+    }
+
+    private static void invokeWithHeader() throws Throwable {
+        String endpointURL = "http://localhost:49755/Home.asmx";
+        String xmlns="http://tempuri.org/";
+        String methodName="Seek";
+        org.apache.axis.client.Service service = new org.apache.axis.client.Service();
+
+        org.apache.axis.client.Call call = (org.apache.axis.client.Call) service.createCall();
+        call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS,Boolean.FALSE);
+        //避免生产请求xml中，每个请求参数标签都包含 类型 的 attr,Disable sending xsi:type
+        call.setProperty(AxisEngine.PROP_SEND_XSI,Boolean.FALSE);
+        // XML with new line
+        call.setOption(org.apache.axis.AxisEngine.PROP_DISABLE_PRETTY_XML, Boolean.FALSE);
+        call.setProperty(AxisEngine.PROP_ENABLE_NAMESPACE_PREFIX_OPTIMIZATION,Boolean.FALSE);
+        call.setProperty(AxisEngine.PROP_DOTNET_SOAPENC_FIX,Boolean.TRUE);
+
+        call.setTargetEndpointAddress(endpointURL);
+        call.setUseSOAPAction(true);
+        call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
+        call.setSOAPActionURI(xmlns+methodName);
+        call.setOperationName(new javax.xml.namespace.QName(xmlns,methodName));// 设置操作的名称。
+
+//        var oper = new org.apache.axis.description.OperationDesc();
+//        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+//        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+//        call.setOperation(oper);
+        var header=new SOAPHeaderElement(xmlns,"TokenWraper");
+        header.setNamespaceURI(xmlns);
+        header.addChildElement("Jwt").setValue("aaaaaaaaaaaaaavvvvvvvvvvvvv");
+        call.addHeader(header);
+
+        call.registerTypeMapping(Student.class,
+                new QName(xmlns,"Student"),
+                new org.apache.axis.encoding.ser.BeanSerializerFactory(Student.class,new QName(xmlns,"Student")),
+                new org.apache.axis.encoding.ser.BeanDeserializerFactory(Student.class,new QName(xmlns,"Student")));
+
+        call.addParameter(new javax.xml.namespace.QName(xmlns,"st"),
+                new QName(xmlns,"Student"),
+                Student.class,
+                javax.xml.rpc.ParameterMode.IN);// 参数的类型
+        call.addParameter(new javax.xml.namespace.QName(xmlns,"age"),
+                org.apache.axis.encoding.XMLType.SOAP_INT,
+
+                javax.xml.rpc.ParameterMode.IN);// 参数的类型
+        call.setReturnClass(Student.class);
+        var st=new Student();
+        st.Age=101;
+        st.Name="zhangsan";
+        Student result = (Student) call.invoke(new Object[]{st,33});// 执行调用
+
+        System.out.println(result.Name);
     }
 
     private static void invokeArrayOfAnyType() throws Throwable{
@@ -51,15 +104,6 @@ public class App {
         call.setSOAPVersion(SOAPConstants.SOAP11_CONSTANTS);
         call.setSOAPActionURI(xmlns+methodName);
         call.setOperationName(new javax.xml.namespace.QName(xmlns,methodName));// 设置操作的名称。
-
-        //设置复杂请求头
-//        call.addParameterAsHeader(new QName(xmlns,"Student"),new QName(xmlns,"Student"),
-//                Student.class,javax.xml.rpc.ParameterMode.IN,javax.xml.rpc.ParameterMode.IN);
-
-        var header=new SOAPHeaderElement(xmlns,"Student");
-        header.setNamespaceURI(xmlns);
-        header.addChildElement("Age").setValue("30");
-        call.addHeader(header);
 
         call.registerTypeMapping(Student.class,
                 new QName(xmlns,"Student"),
