@@ -44,10 +44,6 @@ public class App {
         call.setOperationStyle(Style.WRAPPED);//和服务端的webservice方法对应，.net的默认就是WRAPPED，axis默认的也是WRAPPED，可以通过添加特性修改
         call.setOperationUse(Use.DEFAULT);//和服务端的webservice方法对应，可以通过添加特性修改
 
-//        var oper = new org.apache.axis.description.OperationDesc();
-//        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
-//        oper.setUse(org.apache.axis.constants.Use.LITERAL);
-//        call.setOperation(oper);
         var header=new SOAPHeaderElement(xmlns,"TokenWraper");
         header.setNamespaceURI(xmlns);
         header.addChildElement("Jwt").setValue("aaaaaaaaaaaaaavvvvvvvvvvvvv");
