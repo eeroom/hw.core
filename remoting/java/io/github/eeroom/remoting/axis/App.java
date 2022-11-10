@@ -22,12 +22,15 @@ public class App {
     private static void invokeWithHeader() throws Throwable {
         String endpointURL = "http://localhost:49755/Home.asmx";
         String xmlns="http://tempuri.org/";
+        var xmlns1="http://www.w3.org/2001/XMLSchema";
         String methodName="Seek";
         org.apache.axis.client.Service service = new org.apache.axis.client.Service();
 
         org.apache.axis.client.Call call = (org.apache.axis.client.Call) service.createCall();
         //非常重要，否则.net的webservice接收不到自定义实体的参数，简单类型参数不受影响
+        var style= call.getEncodingStyle();
         call.setEncodingStyle(null);
+
         call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS,Boolean.FALSE);
         //避免生产请求xml中，每个请求参数标签都包含 类型 的 attr,Disable sending xsi:type
         call.setProperty(AxisEngine.PROP_SEND_XSI,Boolean.FALSE);
@@ -47,6 +50,7 @@ public class App {
         var header=new SOAPHeaderElement(xmlns,"TokenWraper");
         header.setNamespaceURI(xmlns);
         header.addChildElement("Jwt").setValue("aaaaaaaaaaaaaavvvvvvvvvvvvv");
+
         call.addHeader(header);
 
         call.registerTypeMapping(Student.class,
@@ -65,7 +69,7 @@ public class App {
         call.setReturnType(XMLType.XSD_STRING);
         var st=new Student();
         st.Age=101;
-        st.Name="zhangsan";
+        st.Name="张三aaa";
         var result = (String) call.invoke(new Object[]{st,33});// 执行调用
 
         System.out.println(result);
