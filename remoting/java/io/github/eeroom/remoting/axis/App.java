@@ -62,13 +62,13 @@ public class App {
                 org.apache.axis.encoding.XMLType.SOAP_INT,
 
                 javax.xml.rpc.ParameterMode.IN);// 参数的类型
-        call.setReturnClass(Student.class);
+        call.setReturnType(XMLType.XSD_STRING);
         var st=new Student();
         st.Age=101;
         st.Name="zhangsan";
-        Student result = (Student) call.invoke(new Object[]{st,33});// 执行调用
+        var result = (String) call.invoke(new Object[]{st,33});// 执行调用
 
-        System.out.println(result.Age);
+        System.out.println(result);
     }
 
     private static void invokeArrayOfAnyType() throws Throwable{
