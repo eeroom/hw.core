@@ -60,6 +60,23 @@
       <version>1.4.0</version>
     </dependency>
     <!-- axis涉及的依赖_end -->
+<!--    axis2涉及的依赖-->
+      <dependency>
+      <groupId>org.apache.axis2</groupId>
+      <artifactId>axis2-adb</artifactId>
+      <version>1.8.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.axis2</groupId>
+      <artifactId>axis2-transport-local</artifactId>
+      <version>1.8.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.axis2</groupId>
+      <artifactId>axis2-transport-http</artifactId>
+      <version>1.8.0</version>
+    </dependency>
+<!-- axis2涉及的依赖end-->
   </dependencies>
 
   <build>
