@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class App {
@@ -22,7 +23,8 @@ public class App {
         //SqlserverHandler.query();
 
         SqliteHandler.query();
-
+        SqliteHandler.queryByIN();
+        SqliteHandler.add(st);
         System.out.println( "Hello World!" );
     }
 }
