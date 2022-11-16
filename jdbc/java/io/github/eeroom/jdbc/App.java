@@ -25,7 +25,9 @@ public class App {
 
 
 
-        io.github.eeroom.jdbc.mssql.MssqlTest.query();
+        //io.github.eeroom.jdbc.mssql.MssqlTest.query();
+
+        SqliteHandler.query();
         System.out.println( "Hello World!" );
     }
 
