@@ -20,11 +20,13 @@ public class App {
         System.out.println( "jsonstr:"+jsonstr );
         var dict=JsonHandler.deserializeToDict(jsonstr);
 
-        //SqlserverHandler.query();
-
-        SqliteHandler.query();
-        SqliteHandler.queryByIN();
-        SqliteHandler.add(st);
-        System.out.println( "Hello World!" );
+//        SqlserverHandler.query();
+//        SqliteHandler.query();
+//        SqliteHandler.queryByIN();
+//        SqliteHandler.add(st);
+        var lstStudent= MybatisHandler.query();
+//        var lstStudent2= MybatisHandler.query2();
+        System.out.println(  JsonHandler.serialize(lstStudent));
+//        System.out.println(  JsonHandler.serialize(lstStudent2));
     }
 }

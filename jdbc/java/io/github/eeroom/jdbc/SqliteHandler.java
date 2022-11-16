@@ -8,6 +8,7 @@ public class SqliteHandler {
 
 
     public static void  query() throws Throwable {
+
         String cnnstr="jdbc:sqlite:D:/Code/db/zl001-sqlite.db";
         var cnn= java.sql.DriverManager.getConnection(cnnstr);
         var cmdstr="select * from Student where Name = ?";
