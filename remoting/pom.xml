@@ -77,6 +77,11 @@
       <version>1.8.0</version>
     </dependency>
 <!-- axis2涉及的依赖end-->
+    <dependency>
+      <groupId>com.huaweicloud</groupId>
+      <artifactId>esdk-obs-java-bundle</artifactId>
+      <version>3.22.3</version>
+    </dependency>
   </dependencies>
 
   <build>
