@@ -30,4 +30,14 @@ public class Student {
 
     String name;
 
+    public Student getChirld() {
+        return chirld;
+    }
+
+    public void setChirld(Student chirld) {
+        this.chirld = chirld;
+    }
+
+    Student chirld;
+
 }
