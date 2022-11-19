@@ -16,6 +16,13 @@ public class Handler {
 
     public static void main(String[] args) throws Throwable {
         //listobj();
+        //download();
+
+
+
+    }
+
+    private static void download() throws Throwable {
         var cfg = new ObsConfiguration();
         cfg.setSocketTimeout(30 * 1000);
         cfg.setConnectionTimeout(10 * 1000);
@@ -73,8 +80,6 @@ public class Handler {
                 //break;
             }
         }
-
-
     }
 
     private static void listobj() {
