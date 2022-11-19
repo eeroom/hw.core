@@ -2,13 +2,12 @@ package io.github.eeroom.remoting.obs;
 
 import com.obs.services.ObsClient;
 import com.obs.services.ObsConfiguration;
-import com.obs.services.model.GetObjectRequest;
-import com.obs.services.model.ListObjectsRequest;
-import com.obs.services.model.ObjectListing;
+import com.obs.services.model.*;
 
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 public class Handler {
@@ -43,6 +42,17 @@ public class Handler {
         raf.seek(fileLength);
         var remoteFileName="Silverlight5.1.50918.0-运行时.zip";
         var request=new GetObjectRequest(bucketName,remoteFileName);
+
+        request.setProgressListener(new ProgressListener() {
+            @Override
+            public void progressChanged(ProgressStatus progressStatus) {
+                System.out.println(new java.text.SimpleDateFormat("HH:mm:ss").format(new Date()));
+                System.out.println("平均速度："+progressStatus.getAverageSpeed()/1024/1024+"MB/s");
+                System.out.println("下载进度："+progressStatus.getTransferPercentage()+"%");
+            }
+        });
+        request.setProgressInterval(1*1024*1024);
+
         request.setRangeStart(fileLength);
 
         var filemeta=obsclient.getObjectMetadata(bucketName,remoteFileName,null);
