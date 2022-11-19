@@ -17,8 +17,33 @@ public class Handler {
     public static void main(String[] args) throws Throwable {
         //listobj();
         //download();
+        upload();
 
 
+
+    }
+
+    private static void upload() {
+        var endpoint = "https://obs.cn-south-1.myhuaweicloud.com";
+        var bucketName = "eeroom-win";
+        var localFileName="D:/Downloads/ThinPC_110415_EVAL_x86fre.iso";
+        var localFile=new File(localFileName);
+        ObsClient obsClient=new ObsClient(ak,sk,endpoint);
+        var request=new UploadFileRequest(bucketName,localFile.getName());
+        request.setProgressListener(new ProgressListener() {
+            @Override
+            public void progressChanged(ProgressStatus progressStatus) {
+                System.out.println(new java.text.SimpleDateFormat("HH:mm:ss").format(new Date()));
+                System.out.println("平均速度："+progressStatus.getAverageSpeed()/1024/1024+"MB/s");
+                System.out.println("上传进度："+progressStatus.getTransferPercentage()+"%");
+            }
+        });
+        request.setProgressInterval(2*1024*1024);
+        request.setUploadFile(localFileName);
+        request.setTaskNum(2);
+        request.setPartSize(10*1024*1024);
+        request.setEnableCheckpoint(true);
+        var rst=obsClient.uploadFile(request);
 
     }
 
