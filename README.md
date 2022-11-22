@@ -100,6 +100,13 @@ execution实现了DelegateExecution接口
        </executions>
    </plugin>
    ```
+4. maven打包实现配置文件外置
+```
+等价于App.config或者Web.config方便程序部署后修改配置
+关键是配置build>resources>resource节点，对resource指定targetpath属性，就可以把resource中指定的文件在打包过程中放到指定目录
+spring boot程序会默认读取 congfig/application.yml>classpath:application.yml 的配置文件信息，所以把targetpath属性指定为${project.build.directory}/config即可
+最佳实践：在ideo里普通调试或运行场景必须配置文件打进jar文件里，否则程序跑不起来，原因未深究；利用profile，配置targetpath，然后只有正式发布等特定场景打的包实现外置配置文件
+```
 ## tomcat服务器
 ```
 发布程序到服务器
