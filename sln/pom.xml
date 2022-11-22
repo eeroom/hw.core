@@ -293,6 +293,17 @@
             <resource>
                 <!--    maven项目默认的路径是/src/main/resources,现在改成/src/resources，所有需要修改pom的配置文件-->
                 <directory>${basedir}/resources</directory>
+                <includes>
+                    <include>application.properties</include>
+                </includes>
+                <targetPath>${project.build.directory}/config</targetPath>
+            </resource>
+            <resource>
+                <!--    maven项目默认的路径是/src/main/resources,现在改成/src/resources，所有需要修改pom的配置文件-->
+                <directory>${basedir}/resources</directory>
+                <excludes>
+                    <exclude>application.properties</exclude>
+                </excludes>
             </resource>
         </resources>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
