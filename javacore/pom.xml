@@ -19,8 +19,18 @@
     <relativePath>../sln/pom.xml</relativePath>
   </parent>
 
-  <dependencies>
 
+  <dependencies>
+    <dependency>
+      <groupId>commons-net</groupId>
+      <artifactId>commons-net</artifactId>
+      <version>3.8.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>4.3.25.RELEASE</version>
+    </dependency>
   </dependencies>
 
   <build>
