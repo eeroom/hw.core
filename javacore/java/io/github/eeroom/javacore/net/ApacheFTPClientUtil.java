@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 /**
  *  ftp操作流程：登陆，登陆成功后进入用户的默认目录，切工作目录，上传或者下载文件
  */
-public class ApacheFTPClient {
+public class ApacheFTPClientUtil {
 
     /**
      *
