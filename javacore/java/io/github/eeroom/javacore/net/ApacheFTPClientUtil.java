@@ -4,15 +4,10 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
-import org.apache.commons.net.io.Util;
 
 import java.io.*;
-import java.net.SocketException;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -84,19 +79,19 @@ public class ApacheFTPClientUtil {
         }
     }
 
-    public static void upload(FTPClient ftpClient,String localfileFullPath,String remoteFileName,FtpUpMode mode) throws Throwable {
+    public static void upload(FTPClient ftpClient, String localfileFullPath, String remoteFileName, FtpTransferMode mode) throws Throwable {
         var remoteFileNameBy8859=new String(remoteFileName.getBytes(ftpClient.getControlEncoding()),FTP.DEFAULT_CONTROL_ENCODING);
         var lstfile= Arrays.stream(ftpClient.listFiles()).filter(x->x.getName().equals(remoteFileName)).collect(Collectors.toList()).toArray(FTPFile[]::new);
         if(lstfile.length>0){
             if(lstfile[0].isDirectory())
                 throw new RuntimeException("已经存在同名的文件夹");
-            if(mode==FtpUpMode.已存在则异常)
+            if(mode== FtpTransferMode.已存在则异常)
                 throw new RuntimeException("已经存在同名的文件");
-            else if(mode==FtpUpMode.已存在则忽略)
+            else if(mode== FtpTransferMode.已存在则忽略)
                 return;
         }
         try (var raf=new RandomAccessFile(localfileFullPath,"r");var fs=new FileInputStream(raf.getFD())){
-            if(mode==FtpUpMode.续传 && lstfile.length>0){
+            if(mode== FtpTransferMode.续传 && lstfile.length>0){
                 var offset=lstfile[0].getSize();
                 raf.seek(offset);
                 ftpClient.setRestartOffset(offset);
@@ -109,6 +104,40 @@ public class ApacheFTPClientUtil {
                 ftpClient.enterLocalActiveMode();
                 if(!ftpClient.storeFile(remoteFileNameBy8859,fs))
                     throw new RuntimeException("storeFile faild;replycode:"+ftpClient.getReplyCode(),throwable);
+            }
+        }
+    }
+
+    public static  void download(FTPClient ftpClient,String localfileFullPath,String remoteFileName,FtpTransferMode mode) throws Throwable{
+        var remoteFileNameBy8859=new String(remoteFileName.getBytes(ftpClient.getControlEncoding()),FTP.DEFAULT_CONTROL_ENCODING);
+        var lstremoteFile= ftpClient.listFiles(remoteFileNameBy8859);
+        if(lstremoteFile.length<1)
+            throw new RuntimeException("指定的文件在服务器不存在");
+        var file=new File(localfileFullPath);
+        if(file.exists()){
+            if(file.isDirectory())
+                throw new RuntimeException("已经存在同名的文件夹");
+            if(mode== FtpTransferMode.已存在则异常)
+                throw new RuntimeException("已经存在同名的文件");
+            else if(mode== FtpTransferMode.已存在则忽略)
+                return;
+        }else{
+            file.createNewFile();
+        }
+        try (var raf=new RandomAccessFile(file,"rw");var fs=new FileOutputStream(raf.getFD())){
+            if(mode== FtpTransferMode.续传){
+                var offset=file.length();
+                raf.seek(offset);
+                ftpClient.setRestartOffset(offset);
+            }
+            try {
+                ftpClient.enterLocalPassiveMode();//被动模式，21控制，
+                if(!ftpClient.retrieveFile(remoteFileNameBy8859,fs))
+                    throw new RuntimeException("retrieveFile faild;replycode:"+ftpClient.getReplyCode());
+            }catch (Throwable throwable){
+                ftpClient.enterLocalActiveMode();
+                if(!ftpClient.retrieveFile(remoteFileNameBy8859,fs))
+                    throw new RuntimeException("retrieveFile faild;replycode:"+ftpClient.getReplyCode(),throwable);
             }
         }
     }

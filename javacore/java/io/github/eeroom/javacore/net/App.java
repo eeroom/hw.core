@@ -15,7 +15,8 @@ public class App {
             ftpClient= ApacheFTPClientUtil.loginAndSoupportZh(ftpaddr,"Deroom","BT151");
             var remoteFile=new File(remoteFileFullPath);
             ApacheFTPClientUtil.changeWorkDirectory(ftpClient,remoteFile.getParent());
-            ApacheFTPClientUtil.upload(ftpClient,localfileFullPath,remoteFile.getName(),FtpUpMode.已存在则忽略);
+            ApacheFTPClientUtil.upload(ftpClient,localfileFullPath,remoteFile.getName(), FtpTransferMode.已存在则忽略);
+            ApacheFTPClientUtil.download(ftpClient,"d:/333.pdf",remoteFile.getName(),FtpTransferMode.已存在则异常);
         }finally {
             if (ftpClient!=null && ftpClient.isConnected())
                 ftpClient.disconnect();
