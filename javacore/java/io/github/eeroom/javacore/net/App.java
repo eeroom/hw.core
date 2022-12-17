@@ -1,5 +1,6 @@
 package io.github.eeroom.javacore.net;
 
+import com.jcraft.jsch.ChannelSftp;
 import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.File;
@@ -16,10 +17,25 @@ public class App {
             var remoteFile=new File(remoteFileFullPath);
             ApacheFTPClientUtil.changeWorkDirectory(ftpClient,remoteFile.getParent());
             ApacheFTPClientUtil.upload(ftpClient,localfileFullPath,remoteFile.getName(), FtpTransferMode.已存在则忽略);
-            ApacheFTPClientUtil.download(ftpClient,"d:/333.pdf",remoteFile.getName(),FtpTransferMode.已存在则异常);
+            ApacheFTPClientUtil.download(ftpClient,"d:/333.pdf",remoteFile.getName(),FtpTransferMode.已存在则忽略);
         }finally {
             if (ftpClient!=null && ftpClient.isConnected())
                 ftpClient.disconnect();
+        }
+        ChannelSftp sftpClient=null;
+        var sftpaddr="sftp://192.168.56.102:22";
+        try {
+            sftpClient=SftpClientUtil.loginAndSoupportZh(sftpaddr,"root","123456");
+            var remoteFile=new File(remoteFileFullPath);
+            SftpClientUtil.changeWorkDirectory(sftpClient,remoteFile.getParent());
+            SftpClientUtil.upload(sftpClient,localfileFullPath,remoteFile.getName(),FtpTransferMode.续传);
+            SftpClientUtil.download(sftpClient,"d:/222.pdf",remoteFile.getName(),FtpTransferMode.续传);
+
+        }finally {
+            if(sftpClient!=null && sftpClient.isConnected()){
+                sftpClient.getSession().disconnect();
+                sftpClient.disconnect();
+            }
         }
     }
 }
