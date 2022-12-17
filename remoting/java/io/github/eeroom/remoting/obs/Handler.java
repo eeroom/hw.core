@@ -68,7 +68,7 @@ public class Handler {
             file.createNewFile();
         }
 
-        //断点续传
+        //断点续传，sdk有封装版，参看upload方法
         var raf=new RandomAccessFile(file,"rw");
         var fileLength= raf.length();
         raf.seek(fileLength);
