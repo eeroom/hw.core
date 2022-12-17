@@ -1,4 +1,4 @@
-package io.github.eeroom.remoting.proxy;
+package io.github.eeroom.javacore.proxy;
 
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationHandler;

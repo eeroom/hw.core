@@ -1,4 +1,4 @@
-package io.github.eeroom.remoting.obs;
+package io.github.eeroom.javacore.obs;
 
 import com.obs.services.ObsClient;
 import com.obs.services.ObsConfiguration;

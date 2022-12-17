@@ -11,7 +11,6 @@
     <name>sln</name>
     <modules>
         <module>../activemq</module>
-        <module>../remoting</module>
         <module>../jni</module>
         <module>../nalu</module>
         <module>../javacore</module>

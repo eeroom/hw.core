@@ -1,4 +1,4 @@
-package io.github.eeroom.remoting.axis;
+package io.github.eeroom.javacore.axis;
 
 import java.io.Serializable;
 

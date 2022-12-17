@@ -1,4 +1,4 @@
-package io.github.eeroom.remoting.okhttp3;
+package io.github.eeroom.javacore.okhttp3;
 
 import okhttp3.*;
 

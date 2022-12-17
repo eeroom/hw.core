@@ -1,4 +1,4 @@
-package io.github.eeroom.remoting.axis2;
+package io.github.eeroom.javacore.axis2;
 
 import org.apache.axiom.soap.SOAP11Constants;
 import org.apache.axis2.Constants;
