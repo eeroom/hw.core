@@ -84,9 +84,9 @@ public class ApacheFTPClientUtil {
         var lstfile= Arrays.stream(ftpClient.listFiles()).filter(x->x.getName().equals(remoteFileName)).collect(Collectors.toList()).toArray(FTPFile[]::new);
         if(lstfile.length>0){
             if(lstfile[0].isDirectory())
-                throw new RuntimeException("已经存在同名的文件夹");
+                throw new RuntimeException("服务器目录中已经存在同名的文件夹:"+remoteFileName);
             if(mode== FtpTransferMode.已存在则异常)
-                throw new RuntimeException("已经存在同名的文件");
+                throw new RuntimeException("服务器目录中已经存在同名的文件:"+remoteFileName);
             else if(mode== FtpTransferMode.已存在则忽略)
                 return;
         }
@@ -112,13 +112,13 @@ public class ApacheFTPClientUtil {
         var remoteFileNameBy8859=new String(remoteFileName.getBytes(ftpClient.getControlEncoding()),FTP.DEFAULT_CONTROL_ENCODING);
         var lstremoteFile= ftpClient.listFiles(remoteFileNameBy8859);
         if(lstremoteFile.length<1)
-            throw new RuntimeException("指定的文件在服务器不存在");
+            throw new RuntimeException("服务器目录中不存在指定的文件:"+remoteFileName);
         var file=new File(localfileFullPath);
         if(file.exists()){
             if(file.isDirectory())
-                throw new RuntimeException("已经存在同名的文件夹");
+                throw new RuntimeException("本地磁盘已经存在同名的文件夹:"+remoteFileName);
             if(mode== FtpTransferMode.已存在则异常)
-                throw new RuntimeException("已经存在同名的文件");
+                throw new RuntimeException("本地磁盘已经存在同名的文件:"+remoteFileName);
             else if(mode== FtpTransferMode.已存在则忽略)
                 return;
         }else{

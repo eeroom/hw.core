@@ -72,9 +72,9 @@ public class SftpClientUtil {
         try {
             stat = ftpClient.stat(remoteFileName);
             if (!stat.isFifo())
-                throw new RuntimeException("sftp服务器目录中已经存在同名的文件夹或者符号链接或者设备");
+                throw new RuntimeException("服务器目录中已经存在同名的文件夹或者符号链接或者设备:"+remoteFileName);
             if (mode == FtpTransferMode.已存在则异常)
-                throw new RuntimeException("sftp服务器目录中已经存在同名的文件");
+                throw new RuntimeException("服务器目录中已经存在同名的文件:"+remoteFileName);
             else if (mode == FtpTransferMode.已存在则忽略)
                 return;
         } catch (Throwable throwable) {
@@ -92,14 +92,14 @@ public class SftpClientUtil {
         try {
             var stat = ftpClient.stat(remoteFileName);
         } catch (Throwable throwable) {
-            throw new RuntimeException("服务器目录中不存在指定的文件");
+            throw new RuntimeException("服务器目录中不存在指定的文件:"+remoteFileName);
         }
         var file = new File(localfileFullPath);
         if (file.exists()) {
             if (file.isDirectory())
-                throw new RuntimeException("本地磁盘已经存在同名的文件夹");
+                throw new RuntimeException("本地磁盘已经存在同名的文件夹:"+remoteFileName);
             if (mode == FtpTransferMode.已存在则异常)
-                throw new RuntimeException("本地磁盘已经存在同名的文件");
+                throw new RuntimeException("本地磁盘已经存在同名的文件:"+remoteFileName);
             else if (mode == FtpTransferMode.已存在则忽略)
                 return;
         } else {
