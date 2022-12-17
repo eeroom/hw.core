@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.proxy;
+package io.github.eeroom.javacore.http;
 
 import java.lang.annotation.*;
 

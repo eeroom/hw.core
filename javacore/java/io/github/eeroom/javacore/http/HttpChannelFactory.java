@@ -1,4 +1,6 @@
-package io.github.eeroom.javacore.proxy;
+package io.github.eeroom.javacore.http;
+
+import io.github.eeroom.javacore.text.JsonConvert;
 
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationHandler;

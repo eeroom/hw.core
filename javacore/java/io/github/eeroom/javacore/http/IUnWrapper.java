@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.proxy;
+package io.github.eeroom.javacore.http;
 
 public interface IUnWrapper {
     public Object unwrapper(Class<?> targetmeta);
