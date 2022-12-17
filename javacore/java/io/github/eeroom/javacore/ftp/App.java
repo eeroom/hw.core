@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.net;
+package io.github.eeroom.javacore.ftp;
 
 import com.jcraft.jsch.ChannelSftp;
 import org.apache.commons.net.ftp.FTPClient;
