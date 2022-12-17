@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.ftp;
+package io.github.eeroom.javacore.sftp;
 
 public enum FtpTransferMode {
     续传(0),
