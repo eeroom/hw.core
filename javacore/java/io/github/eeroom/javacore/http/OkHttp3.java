@@ -1,10 +1,10 @@
-package io.github.eeroom.javacore.okhttp3;
+package io.github.eeroom.javacore.http;
 
 import okhttp3.*;
 
 import java.util.Collections;
 
-public class App
+public class OkHttp3
 {
     public static void main( String[] args ) throws Throwable {
         invokeWithX509();

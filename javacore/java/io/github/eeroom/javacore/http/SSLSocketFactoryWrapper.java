@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.okhttp3;
+package io.github.eeroom.javacore.http;
 
 import javax.net.ssl.*;
 import java.io.File;

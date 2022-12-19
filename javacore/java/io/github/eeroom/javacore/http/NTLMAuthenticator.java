@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.okhttp3;
+package io.github.eeroom.javacore.http;
 
 import jcifs.ntlmssp.NtlmFlags;
 import jcifs.ntlmssp.Type1Message;
