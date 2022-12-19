@@ -13,7 +13,24 @@ import java.util.stream.Collectors;
 /**
  *  ftp操作流程：登陆，登陆成功后进入用户的默认目录，切工作目录，上传或者下载文件
  */
-public class ApacheFTPClientUtil {
+public class ApacheFTPClient {
+
+    public static void main() throws Throwable{
+        var localfileFullPath="D:\\dotnet环境变量.pdf";
+        var ftpaddr="ftp://192.168.56.1:21";
+        var remoteFileFullPath="我的文件/202106/dotnet环境变量3.pdf";
+        FTPClient ftpClient=null;
+        try{
+            ftpClient= ApacheFTPClient.loginAndSoupportZh(ftpaddr,"Deroom","BT151");
+            var remoteFile=new File(remoteFileFullPath);
+            ApacheFTPClient.changeWorkDirectory(ftpClient,remoteFile.getParent());
+            ApacheFTPClient.upload(ftpClient,localfileFullPath,remoteFile.getName(), FtpTransferMode.已存在则忽略);
+            ApacheFTPClient.download(ftpClient,"d:/333.pdf",remoteFile.getName(),FtpTransferMode.已存在则忽略);
+        }finally {
+            if (ftpClient!=null && ftpClient.isConnected())
+                ftpClient.disconnect();
+        }
+    }
 
     /**
      *
