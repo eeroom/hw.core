@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.obs;
+package io.github.eeroom.javacore.http;
 
 import com.obs.services.ObsClient;
 import com.obs.services.ObsConfiguration;
@@ -10,17 +10,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-public class Handler {
+public class HwObsClient {
+
     static  String ak="";
     static  String sk="";
 
     public static void main(String[] args) throws Throwable {
-        //listobj();
-        //download();
+        listobj();
+        download();
         upload();
-
-
-
     }
 
     private static void upload() {
@@ -42,6 +40,7 @@ public class Handler {
         request.setUploadFile(localFileName);
         request.setTaskNum(2);
         request.setPartSize(10*1024*1024);
+        //断点续传
         request.setEnableCheckpoint(true);
         var rst=obsClient.uploadFile(request);
 
@@ -136,5 +135,44 @@ public class Handler {
             lstFile.addAll(lsttmp);
         }while (objlist.isTruncated());
         System.out.print("hello world");
+    }
+
+    static class FileInfo {
+
+        public  FileInfo(String fullPath, Long size, Date lastmodifyDate){
+            this.fullPath=fullPath;
+            this.size=size;
+            this.lastmodifyDate=lastmodifyDate;
+        }
+
+        String fullPath;
+
+        public String getFullPath() {
+            return fullPath;
+        }
+
+        public void setFullPath(String fullPath) {
+            this.fullPath = fullPath;
+        }
+
+        public Long getSize() {
+            return size;
+        }
+
+        public void setSize(Long size) {
+            this.size = size;
+        }
+
+        public Date getLastmodifyDate() {
+            return lastmodifyDate;
+        }
+
+        public void setLastmodifyDate(Date lastmodifyDate) {
+            this.lastmodifyDate = lastmodifyDate;
+        }
+
+        Long size;
+        Date lastmodifyDate;
+
     }
 }
