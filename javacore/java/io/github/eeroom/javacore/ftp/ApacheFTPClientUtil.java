@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.sftp;
+package io.github.eeroom.javacore.ftp;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
