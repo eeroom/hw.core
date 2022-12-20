@@ -18,9 +18,14 @@ public class GenericMeta {
        var meta2=dw2.getClass().getGenericSuperclass();
         System.out.println("meta2:"+meta2);
        //匿名内部类的等价操作
-        var dw3=new DataWrapperV3();
-        var meta3= dw3.getClass().getGenericSuperclass();
+        var dw3=DataWrapperV3.class;
+        var meta3= dw3.getGenericSuperclass();
         System.out.println("meta3:"+meta3);
+        //匿名内部类的等价操作
+        var dw4=new DataWrapperV3();
+        var meta4= dw4.getClass().getGenericSuperclass();
+        System.out.println("meta4:"+meta4);
+
     }
 
     static class DataWrapper<T>{
