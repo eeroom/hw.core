@@ -1,13 +1,22 @@
 package io.github.eeroom.javacore.assembly;
 
 import java.io.Console;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.stream.Stream;
 
 /**
  * 泛型，类型擦除
  * 某些场景需要获取泛型的类型元数据
  */
 public class GenericMeta {
-    public static void main(String[] args){
+    public static void main(String[] args) throws  Throwable{
+        var dwgc= DataWrapper.class.getTypeParameters();
+        var dwgci= (DataWrapper<String>)DataWrapper.class.getDeclaredConstructor().newInstance();
+        Stream.of("").toArray(String[]::new);
+        dwgci.setValue("33");
+
+
         //定义变量的时候，会被类型擦除，反射无法获取泛型的类型参数信息
        var dw=new DataWrapper<String>();
        var meta= dw.getClass().getGenericSuperclass();
