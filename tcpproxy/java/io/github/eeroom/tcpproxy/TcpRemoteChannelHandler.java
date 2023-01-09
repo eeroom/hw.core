@@ -25,6 +25,7 @@ public class TcpRemoteChannelHandler extends io.netty.channel.ChannelInboundHand
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         ctx.close();
+        throw  new RuntimeException(cause);
     }
 
     @Override
