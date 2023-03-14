@@ -23,7 +23,7 @@ public class Handler {
     }
 
     public  static void  main(String[] args ) throws Throwable {
-        String cnnstr="jdbc:mysql://localhost:3306/wch?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true";
+        String cnnstr="jdbc:mysql://localhost:3306/wch?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&rewriteBatchedStatements=true";
         var csvpath="C:\\Users\\Deroom\\Desktop\\panda.csv";
         int groupId= new Random().nextInt(100000);
         var cdate=new java.sql.Date(new Date().getTime());
@@ -33,7 +33,7 @@ public class Handler {
             var cmdstr="insert into Panda(Name,GroupId,LocalAddr,Category,CreateTime) values(?,?,?,?,?)";
             var ps= cnn.prepareStatement(cmdstr);
             String datarow;
-            var maxSize=1000*50;
+            var maxSize=1000*10;
             int size=0;
             int totalSize=0;
             var mindate=new Date().getTime();
@@ -44,10 +44,11 @@ public class Handler {
                 ps.setString(3,dataarray[1]);
                 ps.setString(4,dataarray[2]);
                 ps.setDate(5,cdate);
-                ps.executeUpdate();
+                ps.addBatch();
                 size++;
                 totalSize++;
                 if(size>maxSize){
+                    ps.executeBatch();
                     cnn.commit();
                     //ps=cnn.prepareStatement(cmdstr);
                     size=0;
