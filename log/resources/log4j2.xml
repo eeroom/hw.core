@@ -14,6 +14,14 @@
             <ConnectionFactory class="io.github.eeroom.log.log4j.ConnectionFactory" method="getConnection" />
             <Column name="Name" pattern="%sx{Name}" />
         </Appender>
+        <Appender type="RollingFile" name="localFile" fileName="logs/log.txt" filePattern="logs/log-%d{yyyy-MM-dd}-%i.txt.gz">
+            <Layout type="PatternLayout" pattern="%n年龄：%sx{Age} %n姓名：%sx{Name}">
+            </Layout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="50MB"></SizeBasedTriggeringPolicy>
+            </Policies>
+            <DefaultRolloverStrategy max="100"></DefaultRolloverStrategy>
+        </Appender>
     </Appenders>
 
 
