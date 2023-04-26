@@ -1,5 +1,5 @@
 # java基础知识demo
-
+package -P production
 ## camunda
 ```
 UEL表达式使用场景：设置参数变量或者计算分支条件
