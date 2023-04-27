@@ -64,7 +64,15 @@
     <profile>
       <id>production</id>
       <build>
+
         <resources>
+          <!--          jar文件里面不包含application.yml这个文件，如果包含，这个文件的优先级会高于config文件夹中的配置文件-->
+          <resource>
+            <directory>${basedir}/resources</directory>
+            <excludes>
+              <exclude>application.yml</exclude>
+            </excludes>
+          </resource>
 <!--          把application.yml复制到config目录中，把配置文件从jar中剥离出来，方便上线后修改配置文件-->
           <resource>
             <directory>${basedir}/resources</directory>
@@ -73,13 +81,7 @@
             </includes>
             <targetPath>${project.build.directory}/config</targetPath>
           </resource>
-<!--          jar文件里面不包含application.yml这个文件，如果包含，这个文件的优先级会高于config文件夹中的配置文件-->
-          <resource>
-            <directory>${basedir}/resources</directory>
-            <excludes>
-              <exclude>application.yml</exclude>
-            </excludes>
-          </resource>
+
         </resources>
       </build>
     </profile>
