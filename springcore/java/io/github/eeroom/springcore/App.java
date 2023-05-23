@@ -3,11 +3,12 @@ package io.github.eeroom.springcore;
 import io.github.eeroom.springcore.bean.Calculation;
 import io.github.eeroom.springcore.context.MyApplicationListenerOnFinishRefresh;
 import io.github.eeroom.springcore.context.MyApplicationListenerOnMyEvent;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import javax.servlet.ServletContainerInitializer;
 
-public class Main {
+public class App {
 
     public static  void  main(String[] args){
         //使用配置类参数的构造函数，会直接调用refresh方法，不够灵活，不能在refresh之前使用AnnotationConfigApplicationContext的一些方法

@@ -48,7 +48,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>io.github.eeroom.springcore.Main</mainClass>
+              <mainClass>io.github.eeroom.springcore.App</mainClass>
             </manifest>
           </archive>
         </configuration>
