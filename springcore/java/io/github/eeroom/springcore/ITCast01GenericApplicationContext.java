@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
 
-public class ITCastGenericApplicationContext {
+public class ITCast01GenericApplicationContext {
     public static void main(String[] args) throws IOException {
         /**
          * BeanFactory是ApplicationContext的父接口
