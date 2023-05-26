@@ -38,12 +38,6 @@ public class ITCast04BeanFactory02 {
                 .getBeanDefinition());
         context.registerBeanDefinition("myBeanPostProcessor",BeanDefinitionBuilder.genericBeanDefinition(MyBeanPostProcessor.class).getBeanDefinition());
         context.refresh();
-//        var autowiredAnnotationBeanPostProcessor= context.getBean(AutowiredAnnotationBeanPostProcessor.class);
-//        var lst=new HashSet<Class<? extends Annotation>>();
-//        lst.add(Autowired.class);
-//        lst.add(Value.class);
-//        lst.add(Abc.class);
-//        autowiredAnnotationBeanPostProcessor.setAutowiredAnnotationTypes(lst);
         var lifeCycleBean= context.getBean("lifeCycleBean");
         context.close();
         System.out.println("lifeCycleBean:"+lifeCycleBean);
@@ -83,6 +77,10 @@ public class ITCast04BeanFactory02 {
         }
     }
 
+    /**
+     * bean的生命周期和bean的后处理器
+     * 自定义依赖注入的注解和注入逻辑
+     */
     static class MyBeanPostProcessor implements InstantiationAwareBeanPostProcessor, DestructionAwareBeanPostProcessor, MergedBeanDefinitionPostProcessor, PriorityOrdered {
 
 
