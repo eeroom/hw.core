@@ -3,6 +3,7 @@ package io.github.eeroom.springcore;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyValues;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,7 @@ import org.springframework.util.ReflectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.*;
 import java.lang.reflect.InvocationTargetException;
@@ -30,17 +32,17 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 public class ITCast04BeanFactory02 {
-    public static void main(String[] args){
-        var lstpp= BeanUtils.getPropertyDescriptors(LifeCycleBean.class);
-        var context=new AnnotationConfigApplicationContext();
+    public static void main(String[] args) {
+        var lstpp = BeanUtils.getPropertyDescriptors(LifeCycleBean.class);
+        var context = new AnnotationConfigApplicationContext();
         context.registerBeanDefinition("lifeCycleBean", BeanDefinitionBuilder.genericBeanDefinition(LifeCycleBean.class)
                 .setScope(BeanDefinition.SCOPE_PROTOTYPE)
                 .getBeanDefinition());
-        context.registerBeanDefinition("myBeanPostProcessor",BeanDefinitionBuilder.genericBeanDefinition(MyBeanPostProcessor.class).getBeanDefinition());
+        context.registerBeanDefinition("myBeanPostProcessor", BeanDefinitionBuilder.genericBeanDefinition(MyBeanPostProcessor.class).getBeanDefinition());
         context.refresh();
-        var lifeCycleBean= context.getBean("lifeCycleBean");
+        var lifeCycleBean = context.getBean("lifeCycleBean");
         context.close();
-        System.out.println("lifeCycleBean:"+lifeCycleBean);
+        System.out.println("lifeCycleBean:" + lifeCycleBean);
 
     }
 
@@ -51,29 +53,35 @@ public class ITCast04BeanFactory02 {
         int max() default 3;
     }
 
-    static class  LifeCycleBean{
-        LifeCycleBean(){
+    static class LifeCycleBean implements InitializingBean {
+        LifeCycleBean() {
             System.out.println("构造");
         }
 
         @Autowired
-        public void setHome(@Value("${JAVA_HOME}") String home){
-            System.out.println("依赖注入setHome："+home);
+        public void setHome(@Value("${JAVA_HOME}") String home) {
+            System.out.println("依赖注入setHome：" + home);
         }
 
         @Abc
-        public void setHead(int va){
-            System.out.println("依赖注入myHead："+va);
+        public void setHead(int va) {
+            System.out.println("依赖注入myHead：" + va);
         }
 
+        //这个注解在jakarta.annotation-api依赖中定义，还包括：@PreDestroy @Resource
         @PostConstruct
-        public void  init(){
+        public void init() {
             System.out.println("初始化init");
         }
 
         @PreDestroy
-        public  void  destroy(){
+        public void destroy() {
             System.out.println("销毁destroy");
+        }
+
+        @Override
+        public void afterPropertiesSet() throws Exception {
+            System.out.println("InitializingBean::afterPropertiesSet");
         }
     }
 
@@ -86,7 +94,7 @@ public class ITCast04BeanFactory02 {
 
         @Override
         public void postProcessBeforeDestruction(Object o, String beanName) throws BeansException {
-            if(beanName.equals("lifeCycleBean")){
+            if (beanName.equals("lifeCycleBean")) {
                 System.out.println("销毁之前执行：postProcessBeforeDestruction");
             }
         }
@@ -98,7 +106,7 @@ public class ITCast04BeanFactory02 {
 
         @Override
         public Object postProcessBeforeInstantiation(Class<?> aClass, String beanName) throws BeansException {
-            if(beanName.equals("lifeCycleBean")){
+            if (beanName.equals("lifeCycleBean")) {
                 System.out.println("实例化 之前 执行：postProcessBeforeInstantiation，如果这里返回的不为null,则返回值就是后续的bean实例");
             }
             return null;
@@ -106,7 +114,7 @@ public class ITCast04BeanFactory02 {
 
         @Override
         public boolean postProcessAfterInstantiation(Object o, String beanName) throws BeansException {
-            if(beanName.equals("lifeCycleBean")){
+            if (beanName.equals("lifeCycleBean")) {
                 System.out.println("实例化 之后 执行：postProcessAfterInstantiation，返回值为false,就会跳过依赖注入");
             }
             return true;
@@ -114,14 +122,14 @@ public class ITCast04BeanFactory02 {
 
         @Override
         public PropertyValues postProcessPropertyValues(PropertyValues propertyValues, PropertyDescriptor[] propertyDescriptors, Object o, String beanName) throws BeansException {
-            if(beanName.equals("lifeCycleBean")){
+            if (beanName.equals("lifeCycleBean")) {
                 System.out.println("依赖注入阶段执行：postProcessPropertyValues，@Autowired @Value  @Resource");
             }
-            this.dictInjectMethod.get(beanName).forEach(x->{
-                var abc= AnnotationUtils.getAnnotation(x,Abc.class);
-                var value= abc.max()*6;
+            this.dictInjectMethod.get(beanName).forEach(x -> {
+                var abc = AnnotationUtils.getAnnotation(x, Abc.class);
+                var value = abc.max() * 6;
                 try {
-                    x.invoke(o,value);
+                    x.invoke(o, value);
                 } catch (Throwable e) {
                     throw new RuntimeException(e);
                 }
@@ -132,7 +140,7 @@ public class ITCast04BeanFactory02 {
 
         @Override
         public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-            if(beanName.equals("lifeCycleBean")){
+            if (beanName.equals("lifeCycleBean")) {
                 System.out.println("初始化 之前 执行，返回值会替换掉原本的bean实例：postProcessBeforeInitialization，@PostConstruct @ConfigurationProperties");
             }
             return bean;
@@ -140,32 +148,38 @@ public class ITCast04BeanFactory02 {
 
         @Override
         public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-            if(beanName.equals("lifeCycleBean")){
+            if (beanName.equals("lifeCycleBean")) {
                 System.out.println("初始化 之后 执行，返回值会替换掉原本的bean实例：postProcessAfterInitialization，使用场景：代理增强");
             }
             return bean;
         }
 
-        HashMap<String,List<Method>> dictInjectMethod=new HashMap<>();
+        HashMap<String, List<Method>> dictInjectMethod = new HashMap<>();
 
         @Override
         public void postProcessMergedBeanDefinition(RootBeanDefinition rootBeanDefinition, Class<?> aClass, String beanName) {
-            if(beanName.equals("lifeCycleBean")){
+            if (beanName.equals("lifeCycleBean")) {
                 System.out.println("postProcessMergedBeanDefinition");
             }
-            this.dictInjectMethod.put(beanName,new ArrayList<Method>());
-            ReflectionUtils.doWithLocalMethods(aClass,method -> {
+            this.dictInjectMethod.put(beanName, new ArrayList<Method>());
+            ReflectionUtils.doWithLocalMethods(aClass, method -> {
                 var abc = AnnotatedElementUtils.getMergedAnnotation(method, Abc.class);
-                if(abc!=null){
+                if (abc != null) {
                     this.dictInjectMethod.get(beanName).add(method);
                 }
             });
 
         }
 
+        /**
+         * 容器会按order排序，然后执行各个后处理器
+         * 处理@Autowired @Value注入的后处理器的order是2147483645，值越大，优先级越低
+         *
+         * @return
+         */
         @Override
         public int getOrder() {
-            return 2147483645-2;
+            return 2147483645 - 2;
         }
     }
 }
