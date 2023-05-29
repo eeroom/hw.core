@@ -1,5 +1,6 @@
 package io.github.eeroom.springcore;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.InitializingBean;
@@ -7,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.MergedBeanDefinitionPostProcessor;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -17,9 +20,11 @@ import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.context.annotation.CommonAnnotationBeanPostProcessor;
 import org.springframework.context.annotation.ContextAnnotationAutowireCandidateResolver;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.core.MethodParameter;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.core.env.StandardEnvironment;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
@@ -34,7 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ITCast05BeanFactory03 {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Throwable {
         var context = new GenericApplicationContext();
         context.registerBeanDefinition("lifeCycleBean", BeanDefinitionBuilder.genericBeanDefinition(LifeCycleBean.class)
                 .setScope(BeanDefinition.SCOPE_PROTOTYPE)
@@ -54,6 +59,35 @@ public class ITCast05BeanFactory03 {
         var lifeCycleBean = context.getBean("lifeCycleBean");
         context.close();
         System.out.println("lifeCycleBean:" + lifeCycleBean);
+
+
+        System.out.println("-----------AutowiredAnnotationBeanPostProcessor--原理----");
+        var beanFactory=new DefaultListableBeanFactory();
+        //支持@Value解析
+        beanFactory.setAutowireCandidateResolver(new ContextAnnotationAutowireCandidateResolver());
+        //支持${}占位符解析
+        beanFactory.addEmbeddedValueResolver(new StandardEnvironment()::resolvePlaceholders);
+        var autowiredAnnotationBeanPostProcessor=new AutowiredAnnotationBeanPostProcessor();
+        autowiredAnnotationBeanPostProcessor.setBeanFactory(beanFactory);
+        var lb=new LifeCycleBean();
+        var lstpp = BeanUtils.getPropertyDescriptors(LifeCycleBean.class);//可选，为空不影响依赖注入
+        autowiredAnnotationBeanPostProcessor.postProcessPropertyValues(null,lstpp,lb,"lb");
+
+        /**
+         * 注入的核心逻辑
+         * 根据@Autowire扫描对应的字段和方法
+         * doResolveDependency()获取被注入的字段值或者方法参数值
+         * 对要执行依赖注入的字段或者方法执行invoke
+         */
+        System.out.println("-----------AutowiredAnnotationBeanPostProcessor--注入的原理----");
+        var setHome= LifeCycleBean.class.getDeclaredMethod("setHome",String.class);
+        var setHomeParameter0=new MethodParameter(setHome,0);
+        var setHomeParameter0Dp=new DependencyDescriptor(setHomeParameter0,true);
+        var p0Value= beanFactory.doResolveDependency(setHomeParameter0Dp,null,null,null);
+        System.out.println("setHomeParameter0Value=" + p0Value);
+        setHome.invoke(new LifeCycleBean(),p0Value);
+
+
 
     }
 
