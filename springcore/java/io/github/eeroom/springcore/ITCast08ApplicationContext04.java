@@ -23,7 +23,7 @@ import org.springframework.util.StringValueResolver;
 
 import javax.annotation.PostConstruct;
 
-public class ITCast07ApplicationContext04 {
+public class ITCast08ApplicationContext04 {
     public static void main(String[] args) {
         /**
          * Aware接口
