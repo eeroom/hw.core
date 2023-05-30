@@ -32,6 +32,10 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 public class ITCast04BeanFactory02 {
+    /**
+     * bean的生命周期
+     * @param args
+     */
     public static void main(String[] args) {
         var lstpp = BeanUtils.getPropertyDescriptors(LifeCycleBean.class);
         var context = new AnnotationConfigApplicationContext();

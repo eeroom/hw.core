@@ -39,6 +39,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ITCast05BeanFactory03 {
+    /**
+     * bean的后处理器及其实现
+     * @param args
+     * @throws Throwable
+     */
     public static void main(String[] args) throws Throwable {
         var context = new GenericApplicationContext();
         context.registerBeanDefinition("lifeCycleBean", BeanDefinitionBuilder.genericBeanDefinition(LifeCycleBean.class)

@@ -35,6 +35,11 @@ import java.util.stream.Collectors;
 
 public class ITCast06ApplicationContext03 {
 
+    /**
+     * beanFactory后处理器及其实现原理
+     * @param args
+     * @throws Throwable
+     */
     public static void main(String[] args) throws Throwable {
         var context=new GenericApplicationContext();
         context.registerBeanDefinition(RootConfig3.class.getName(),
