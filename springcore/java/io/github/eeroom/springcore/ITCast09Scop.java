@@ -16,6 +16,10 @@ import java.util.UUID;
 
 public class ITCast09Scop {
 
+    /**
+     * Scop失效解决办法
+     * @param args
+     */
     public static void main(String[] args){
         var context=new AnnotationConfigApplicationContext();
         context.register(Bean1.class);
