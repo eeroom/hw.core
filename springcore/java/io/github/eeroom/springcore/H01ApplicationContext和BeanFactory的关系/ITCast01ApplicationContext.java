@@ -24,12 +24,11 @@ public class ITCast01ApplicationContext {
         /**
          * BeanFactory是ApplicationContext的父接口
          * BeanFactory是spring的核心容器，主要的ApplicationContext实现都【组合】了它的功能
-         * BeanFactory表面上是有getBean
-         * 实际上控制反转、基本的依赖注入、Bean的生命周期等各种功能，都有他的实现类提供
+         * BeanFactory表面上是有getBean，实际上控制反转、基本的依赖注入、Bean的生命周期等各种功能，都有他的实现类提供
          * 官方的实现：org.springframework.beans.factory.support.DefaultListableBeanFactory
          */
-        var beanFactory=org.springframework.beans.factory.BeanFactory.class;
-        var beanFactoryClass= org.springframework.beans.factory.support.DefaultListableBeanFactory.class;
+        var BeanFactory=org.springframework.beans.factory.BeanFactory.class;
+        var DefaultListableBeanFactory= org.springframework.beans.factory.support.DefaultListableBeanFactory.class;
 
         var context=new GenericApplicationContext();
         context.registerBeanDefinition("messageSource", BeanDefinitionBuilder
@@ -46,7 +45,7 @@ public class ITCast01ApplicationContext {
          * ContextClossedEvent：context.close()触发
          * RequestHandledEvent：DispatcherServlet执行完请求后触发，可以设置为不触发
          * 关键点：注册事件回调函数
-         * 支持可以自定义事件类型，然后 context.publishEvent() 执行注册的回调函数
+         * 支持可以自定义事件类型，然后 context.publishEvent() 回调事件的监听函数
          */
         context.addApplicationListener(new ApplicationListener<ContextRefreshedEvent>() {
             @Override
