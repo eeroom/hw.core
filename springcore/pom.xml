@@ -72,7 +72,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>io.github.eeroom.springcore.App</mainClass>
+              <mainClass>io.github.eeroom.springcore.基本使用.App</mainClass>
             </manifest>
           </archive>
         </configuration>

@@ -1,4 +1,4 @@
-package io.github.eeroom.springcore.mybatis.pojo;
+package io.github.eeroom.springcore.整合mybatis.pojo;
 
 public class Student {
     int id;

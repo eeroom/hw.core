@@ -1,4 +1,4 @@
-package io.github.eeroom.springcore;
+package io.github.eeroom.springcore.H08依赖注入失效和spring内置功能;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -18,7 +18,6 @@ import org.springframework.context.annotation.CommonAnnotationBeanPostProcessor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ConfigurationClassPostProcessor;
 import org.springframework.context.support.GenericApplicationContext;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringValueResolver;
 
 import javax.annotation.PostConstruct;

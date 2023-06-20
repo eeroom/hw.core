@@ -1,7 +1,5 @@
-package io.github.eeroom.springcore;
+package io.github.eeroom.springcore.H03常见的ApplicationContext实现和BeanDefinitionReader;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -10,14 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePropertySource;
-import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
-
-import java.util.ResourceBundle;
 
 public class ITCast03ApplicationContext02 {
     public static void main(String[] args) throws Throwable {

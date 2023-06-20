@@ -1,18 +1,15 @@
-package io.github.eeroom.springcore.mybatis;
+package io.github.eeroom.springcore.整合mybatis;
 
-import io.github.eeroom.springcore.mybatis.dao.hzoa.ITeacher;
-import io.github.eeroom.springcore.mybatis.dao.hzkd.IStudent;
+import io.github.eeroom.springcore.整合mybatis.dao.hzoa.ITeacher;
+import io.github.eeroom.springcore.整合mybatis.dao.hzkd.IStudent;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.mapper.MapperFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-
-import javax.sql.DataSource;
 
 public class App {
 

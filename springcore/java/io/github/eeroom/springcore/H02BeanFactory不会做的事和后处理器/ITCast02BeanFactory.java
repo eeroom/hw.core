@@ -1,4 +1,4 @@
-package io.github.eeroom.springcore;
+package io.github.eeroom.springcore.H02BeanFactory不会做的事和后处理器;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;

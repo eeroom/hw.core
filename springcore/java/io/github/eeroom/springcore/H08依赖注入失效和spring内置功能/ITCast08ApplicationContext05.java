@@ -1,4 +1,4 @@
-package io.github.eeroom.springcore;
+package io.github.eeroom.springcore.H08依赖注入失效和spring内置功能;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.util.Arrays;
 
 public class ITCast08ApplicationContext05 {
 

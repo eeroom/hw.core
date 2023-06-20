@@ -4,10 +4,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
          http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="bean1" class="io.github.eeroom.springcore.ITCast03ApplicationContext02.Bean1">
+    <bean id="bean1" class="io.github.eeroom.springcore.H03常见的ApplicationContext实现和BeanDefinitionReader.ITCast03ApplicationContext02.Bean1">
         <property name="name" value="张三"/>
         <property name="target" ref="bean2"/>
     </bean>
-    <bean id="bean2" class="io.github.eeroom.springcore.ITCast03ApplicationContext02.Bean2" />
+    <bean id="bean2" class="io.github.eeroom.springcore.H03常见的ApplicationContext实现和BeanDefinitionReader.ITCast03ApplicationContext02.Bean2" />
 </beans>
 

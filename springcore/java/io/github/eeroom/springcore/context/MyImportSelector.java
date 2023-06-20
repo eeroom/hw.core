@@ -1,7 +1,6 @@
 package io.github.eeroom.springcore.context;
 
-import io.github.eeroom.springcore.RootConfig2;
-import org.springframework.context.annotation.DeferredImportSelector;
+import io.github.eeroom.springcore.基本使用.RootConfig2;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;
 

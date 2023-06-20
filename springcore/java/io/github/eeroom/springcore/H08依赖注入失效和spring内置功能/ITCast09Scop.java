@@ -1,17 +1,11 @@
-package io.github.eeroom.springcore;
+package io.github.eeroom.springcore.H08依赖注入失效和spring内置功能;
 
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
-import org.springframework.context.support.GenericApplicationContext;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.UUID;
 
 public class ITCast09Scop {

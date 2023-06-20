@@ -1,4 +1,4 @@
-package io.github.eeroom.springcore;
+package io.github.eeroom.springcore.H04Bean生命周期;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;

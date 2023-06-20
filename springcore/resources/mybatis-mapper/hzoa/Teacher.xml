@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.github.eeroom.springcore.mybatis.dao.hzoa.ITeacher">
-    <select id="getAll" resultType="io.github.eeroom.springcore.mybatis.pojo.Teacher">
+<mapper namespace="io.github.eeroom.springcore.整合mybatis.dao.hzoa.ITeacher">
+    <select id="getAll" resultType="io.github.eeroom.springcore.整合mybatis.pojo.Teacher">
         select * from Teacher
     </select>
 </mapper>
