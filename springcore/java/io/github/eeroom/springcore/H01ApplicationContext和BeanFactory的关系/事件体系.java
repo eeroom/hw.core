@@ -21,7 +21,6 @@ public class 事件体系 {
     public static void main(String[] args) {
 
         var context = new AnnotationConfigApplicationContext();
-        context.register(Config.class);
         var bd = BeanDefinitionBuilder.genericBeanDefinition(Person.class)
                 .getBeanDefinition();
         context.registerBeanDefinition(Person.class.getName(), bd);
