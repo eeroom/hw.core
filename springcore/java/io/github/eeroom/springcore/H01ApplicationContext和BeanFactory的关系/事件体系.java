@@ -1,87 +1,66 @@
 package io.github.eeroom.springcore.H01ApplicationContext和BeanFactory的关系;
 
-import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ApplicationContextEvent;
-import org.springframework.context.event.ApplicationEventMulticaster;
 import org.springframework.context.event.EventListener;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
-import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 public class 事件体系 {
 
     public static void main(String[] args) {
-
         var context = new AnnotationConfigApplicationContext();
-        var bd = BeanDefinitionBuilder.genericBeanDefinition(Person.class)
-                .getBeanDefinition();
-        context.registerBeanDefinition(Person.class.getName(), bd);
-        context.registerBeanDefinition(Dog.class.getName(), BeanDefinitionBuilder.genericBeanDefinition(Dog.class).getBeanDefinition());
-        context.addApplicationListener(new ApplicationListener<PersonGoHomeEvent>() {
-            @Override
-            public void onApplicationEvent(PersonGoHomeEvent applicationEvent) {
-                System.out.println("addApplicationListener");
-                System.out.println(applicationEvent.getMsg());
-            }
+        context.registerBeanDefinition(Dog.class.getName(),
+                BeanDefinitionBuilder.genericBeanDefinition(Dog.class).getBeanDefinition());
+        /**
+         * 默认的时间发布器就是 SimpleApplicationEventMulticaster，但是没有使用线程池
+         * 预留了扩展点，优先获取并设置 beanName为 applicationEventMulticaster 的对象为事件发布器，参看refresh方法的源代码
+         * 为时间发布器设置一个线程池，则 变为异步回调事件监听函数
+         */
+        var executor=new ThreadPoolTaskExecutor();
+        executor.initialize();
+        context.registerBeanDefinition("applicationEventMulticaster2",
+                BeanDefinitionBuilder.genericBeanDefinition(SimpleApplicationEventMulticaster.class)
+                        .addPropertyValue("taskExecutor",executor)
+                        .setScope(BeanDefinition.SCOPE_SINGLETON)
+                        .getBeanDefinition());
+
+        context.addApplicationListener((MyEvent event)->{
+            System.out.println("执行通过addApplicationListener添加的事件监听函数，消息内容："+event.getMsg());
+        });
+        context.addApplicationListener((ApplicationContextEvent event)->{
+            System.out.println("事件内容："+event);
         });
         context.refresh();
-        var bean = context.getBean(Person.class);
-        bean.gohome();
-
-
-    }
-
-    @Configuration
-    static class Config {
-
-//        @Bean("ApplicationEventMulticaster")
-//        ApplicationEventMulticaster applicationEventMulticaster(){
-//            var pulisher=new SimpleApplicationEventMulticaster();
-//            pulisher.setTaskExecutor(new ex);
-//        }
+        /**
+         * 触发 MyEvent 时间
+         */
+        context.publishEvent(new MyEvent(context,"我出发了！"));
+        /**
+         * 会出发内置的一些事件
+         */
+        context.start();
+        context.stop();
+        context.close();
     }
 
     static class Dog {
 
         @EventListener
-        void say(PersonGoHomeEvent event) {
-            System.out.println("Dog::say");
-            System.out.println(event.getMsg());
+        void say(MyEvent event) {
+            System.out.println("执行通过注解添加的事件监听函数,消息内容："+event.getMsg());
         }
     }
 
-
-    static class Person implements ApplicationContextAware {
-
-        ApplicationContext applicationContext;
-
-        void gohome() {
-            System.out.println("执行Person::gohome");
-            var event = new PersonGoHomeEvent(this.applicationContext);
-            event.setMsg("主人回家了");
-            this.applicationContext.publishEvent(event);
-        }
-
-        @Override
-        public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-            this.applicationContext = applicationContext;
-        }
-
-    }
-
-    static class PersonGoHomeEvent extends ApplicationContextEvent {
+    static class MyEvent extends ApplicationContextEvent {
         String msg;
 
-        public PersonGoHomeEvent(ApplicationContext source) {
+        public MyEvent(ApplicationContext source,String msg) {
             super(source);
+            this.msg=msg;
         }
 
         public String getMsg() {
