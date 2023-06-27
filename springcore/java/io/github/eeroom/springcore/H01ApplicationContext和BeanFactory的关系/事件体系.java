@@ -17,7 +17,8 @@ public class 事件体系 {
                 BeanDefinitionBuilder.genericBeanDefinition(Dog.class).getBeanDefinition());
         /**
          * 默认的时间发布器就是 SimpleApplicationEventMulticaster，但是没有使用线程池
-         * 预留了扩展点，优先获取并设置 beanName为 applicationEventMulticaster 的对象为事件发布器，参看refresh方法的源代码
+         * 预留了扩展点，优先获取并设置 beanName为 applicationEventMulticaster 的对象为事件发布器
+         * 参看refresh方法中的 initApplicationEventMulticaster() 部分
          * 为时间发布器设置一个线程池，则 变为异步回调事件监听函数
          */
         var executor=new ThreadPoolTaskExecutor();

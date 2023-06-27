@@ -16,7 +16,7 @@ public class 国际化 {
         /**
          * 默认不支持从配置文件读取多语言信息
          * 预留扩展点，优先获取并设置 beanName为 messageSource 的对象处理多语言信息
-         * 参看refresh方法中的initMessageSource()部分
+         * 参看refresh方法中的 initMessageSource() 部分
          */
         var context=new AnnotationConfigApplicationContext();
         context.register(Config.class);
