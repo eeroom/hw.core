@@ -68,7 +68,7 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
 
     @Override
     protected FrameworkServlet createDispatcherServlet(WebApplicationContext context) {
-        return super.createDispatcherServlet(context);
+        return new MyDispatcherServlet(context);
     }
 
     @Override

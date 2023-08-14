@@ -1,6 +1,7 @@
 package io.github.eeroom.hzoa.hzkd;
 
-import io.github.eeroom.remoting.proxy.ApiMapping;
+
+import io.github.eeroom.hzoa.httpclient.ApiMapping;
 
 public interface IGuoneiKuaidiController {
     @ApiMapping(wrapperType = ApidataWrapper.class)

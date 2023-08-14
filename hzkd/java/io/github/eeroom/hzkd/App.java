@@ -1,6 +1,11 @@
 package io.github.eeroom.hzkd;
 
 import io.github.eeroom.hzkd.cors.AllowAnyOriginFilter;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.status.StatusLogger;
+import org.apache.logging.log4j.web.Log4jServletContextListener;
+import org.apache.logging.log4j.web.Log4jServletFilter;
+import org.apache.logging.log4j.web.WebLoggerContextUtils;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -9,6 +14,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.FrameworkServlet;
 
 import javax.servlet.*;
+import java.util.EnumSet;
 
 public class App extends  org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer implements ServletContextListener {
     @Override
@@ -90,6 +96,21 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
 //        //配置filter
 //        this.authenticationFilterDynamic.setInitParameter("a1",mapProperties.camundaJdbcDriver);
 //        this.authenticationFilterDynamic.addMappingForUrlPatterns(null,false,"/*");
+        var ll=333;
+        Logger LOGGER = StatusLogger.getLogger();
+        LOGGER.debug("Log4jServletContainerInitializer starting up Log4j in Servlet 3.0+ environment.");
+        FilterRegistration.Dynamic filter = servletContextEvent.getServletContext().addFilter("log4jServletFilter", Log4jServletFilter.class);
+        if (filter == null) {
+            LOGGER.warn("WARNING: In a Servlet 3.0+ application, you should not define a log4jServletFilter in web.xml. Log4j 2 normally does this for you automatically. Log4j 2 web auto-initialization has been canceled.");
+            return;
+        }
+
+//        Log4jWebLifeCycle initializer = WebLoggerContextUtils.getWebLifeCycle(servletContextEvent.getServletContext());
+//        initializer.start();
+//        initializer.setLoggerContext();
+        servletContextEvent.getServletContext().addListener(new Log4jServletContextListener());
+        filter.setAsyncSupported(true);
+        filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), false, new String[]{"/*"});
     }
 
     @Override
@@ -114,6 +135,7 @@ public class App extends  org.springframework.web.servlet.support.AbstractAnnota
 
         @Override
         public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+            System.setProperty("log4j.configurationFile","log4j2.xml");
             //基于springcontext的事件体系，在ContextRefreshedEvent事件的回调方法中，利用容器读取配置信息然后配置servlet的上传功能，配置filter的初始参数
             var contextRoot=(AnnotationConfigWebApplicationContext)contextRefreshedEvent.getApplicationContext();
             var mapProperties= contextRoot.getBean(AppConfig.class);

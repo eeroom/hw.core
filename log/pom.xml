@@ -6,7 +6,7 @@
 
   <groupId>io.github.eeroom</groupId>
   <artifactId>log</artifactId>
-  <version>1.0-Release</version>
+  <version>1.0-SNAPSHOT</version>
 
   <name>log</name>
   <!-- FIXME change it to the project's website -->
@@ -36,6 +36,46 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>io.github.eeroom.log.App</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <!-- maven-dependency-plugin插件在maven的根pom.xml配置文件中有，位于节点pluginManagement-->
+        <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <id>production</id>
+      <build>
+        <resources>
+          <!--          jar文件里面不包含application.yml这个文件，如果包含，这个文件的优先级会高于config文件夹中的配置文件-->
+          <resource>
+            <directory>${basedir}/resources</directory>
+            <excludes>
+              <exclude>log4j2.xml</exclude>
+            </excludes>
+          </resource>
+          <!--          把application.yml复制到config目录中，把配置文件从jar中剥离出来，方便上线后修改配置文件-->
+          <resource>
+            <directory>${basedir}/resources</directory>
+            <includes>
+              <include>log4j2.xml</include>
+            </includes>
+            <targetPath>${project.build.directory}</targetPath>
+          </resource>
+        </resources>
+      </build>
+    </profile>
+  </profiles>
 </project>

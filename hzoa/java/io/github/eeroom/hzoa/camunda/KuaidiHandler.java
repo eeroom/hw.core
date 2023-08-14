@@ -5,12 +5,12 @@ import io.github.eeroom.hzoa.MyDbContext;
 import io.github.eeroom.hzoa.MyObjectFacotry;
 import io.github.eeroom.hzoa.authen.CurrentUserInfo;
 import io.github.eeroom.hzoa.db.bizdataex;
+import io.github.eeroom.hzoa.httpclient.HttpChannelFactory;
 import io.github.eeroom.hzoa.hzkd.EntityByCreate;
 import io.github.eeroom.hzoa.hzkd.EntityByPaymoney;
 import io.github.eeroom.hzoa.hzkd.IGuoneiKuaidiController;
 import io.github.eeroom.hzoa.serialize.JsonConvert;
 import io.github.eeroom.nalu.Columns;
-import io.github.eeroom.remoting.proxy.HttpChannelFactory;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.springframework.stereotype.Component;
 

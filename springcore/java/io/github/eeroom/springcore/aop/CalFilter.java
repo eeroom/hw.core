@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class CalFilter {
 
-    @Around("execution (public * io.github.eeroom.springcontext.bean.Calculation.*(..))")
+    @Around("execution (public * io.github.eeroom.springcore.bean.Calculation.*(..))")
     public Object doHandler(ProceedingJoinPoint joinPoint) throws Throwable {
         System.out.println("spring-aop:执行方法前");
         var rt= joinPoint.proceed(joinPoint.getArgs());

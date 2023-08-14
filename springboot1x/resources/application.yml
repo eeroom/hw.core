@@ -1,0 +1,18 @@
+server:
+  port: 8061
+
+spring:
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite:D:/Code/db/zl001-sqlite.db
+    username: root
+    password: 123456
+
+mybatis:
+  mapper-locations: classpath:mybatis-mapper/*.xml
+
+logging:
+  file:
+    name: d:/logs/log.txt
+    max-size: 10MB
+    total-size-cap: 20GB
