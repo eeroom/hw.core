@@ -29,7 +29,7 @@
         <!--      做springmvc的web项目本身只需要这一个依赖-->
         <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
-        <version>4.3.25.RELEASE</version>
+        <version>4.3.23.RELEASE</version>
       </dependency>
       <dependency>
         <!--      servlet规范，这个依赖是写代码和编译时需要，程序运行时tomcat监听请求转发到其自带的javax.servlet-api，最终到我们的代码-->
