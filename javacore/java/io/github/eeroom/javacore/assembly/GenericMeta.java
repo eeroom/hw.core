@@ -3,14 +3,48 @@ package io.github.eeroom.javacore.assembly;
 import java.io.Console;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.stream.Stream;
 
 /**
  * 泛型，类型擦除
  * 某些场景需要获取泛型的类型元数据
  */
+
+
 public class GenericMeta {
+
+    static class Email{
+        String addr;
+        Email(String add){
+            this.addr=add;
+        }
+
+        @Override
+        public int hashCode() {
+            return this.addr.hashCode();
+        }
+
+    }
+
     public static void main(String[] args) throws  Throwable{
+        var vv= java.lang.Math.abs(Integer.MIN_VALUE);
+        var vv3=java.lang.Math.abs(Long.MIN_VALUE);
+        var vv2=java.lang.Math.abs(-30);
+
+        HashSet set=new HashSet();
+        var email=new Email("huawei.com");
+        set.add(email);
+        email.addr="silong.com";
+        var ff=set.contains(email);
+        var f3= set.remove(email);
+        var ll=set.size();
+
+        int ax= -1* Integer.MAX_VALUE;
+        int ax2=-1*-2;
+        String ss[]={"aa","bb","cc"};
+
+
         var dwgc= DataWrapper.class.getTypeParameters();
         var dwgci= (DataWrapper<String>)DataWrapper.class.getDeclaredConstructor().newInstance();
         Stream.of("").toArray(String[]::new);

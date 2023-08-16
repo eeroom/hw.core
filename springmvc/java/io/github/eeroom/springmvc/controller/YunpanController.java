@@ -7,6 +7,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -52,8 +54,9 @@ public class YunpanController implements ApplicationContextAware {
     /**
      * todo 分片上传文件
      */
-    public void upload(){
-
+    @RequestMapping("/uploadfile")
+    public void upload(HttpServletRequest request, HttpServletResponse response) throws Throwable{
+        response.getWriter().write("hell11111111111111111");
     }
 
     @Override

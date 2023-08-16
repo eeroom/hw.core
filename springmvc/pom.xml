@@ -79,7 +79,7 @@
         <artifactId>tomcat7-maven-plugin</artifactId>
         <configuration>
             <path>/springmvc</path>
-          <port>8083</port>
+          <port>8089</port>
            <url>http://localhost:8080/manager/text</url>
             <username>tomcat</username>
             <password>123456</password>
