@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.web.EmbeddedServletContainerAutoCo
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizerBeanPostProcessor;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.web.servlet.AbstractFilterRegistrationBean;
+//import org.springframework.boot.web.servlet.AbstractFilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.DeferredImportSelector;
@@ -37,7 +37,7 @@ public class App {
         //DispatcherServletRegistrationConfiguration关键的bean，这个bean
         var dsrc= ServletRegistrationBean.class;
         //AbstractFilterRegistrationBean
-        var s= AbstractFilterRegistrationBean.class;
+        //var s= AbstractFilterRegistrationBean.class;
 
         //这个配置类，利用import ImportBeanDefinitionRegistrar的约定，注册EmbeddedServletContainerCustomizerBeanPostProcessor；
         var servletContainerConfigClass= EmbeddedServletContainerAutoConfiguration.class;

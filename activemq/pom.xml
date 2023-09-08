@@ -47,7 +47,6 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <!--这里要替换成jar包main方法所在类 -->
                             <mainClass>io.github.eeroom.activemq.reciver.App</mainClass>
                         </manifest>
                     </archive>
