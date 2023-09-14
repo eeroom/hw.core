@@ -86,7 +86,7 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
     }
 
     @Bean
-    public org.thymeleaf.ITemplateEngine templateEngine(org.thymeleaf.templateresolver.ITemplateResolver templateResolver){
+    public org.thymeleaf.spring4.SpringTemplateEngine templateEngine(org.thymeleaf.templateresolver.ITemplateResolver templateResolver){
         var engine=new org.thymeleaf.spring4.SpringTemplateEngine();
         engine.setTemplateResolver(templateResolver);
         //支持layout
@@ -96,7 +96,7 @@ public class WebConfig extends org.springframework.web.servlet.config.annotation
     }
 
     @Bean
-    public org.springframework.web.servlet.ViewResolver viewResolver(org.thymeleaf.ITemplateEngine engine){
+    public org.springframework.web.servlet.ViewResolver viewResolver(org.thymeleaf.spring4.SpringTemplateEngine engine){
       var resolver=new org.thymeleaf.spring4.view.ThymeleafViewResolver();
       resolver.setTemplateEngine(engine);
       resolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
