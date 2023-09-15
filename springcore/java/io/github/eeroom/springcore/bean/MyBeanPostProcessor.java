@@ -25,7 +25,7 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
         if(!(bean instanceof Calculation))
             return bean;
         var obj=(Calculation)bean;
-        obj.url="sdffffffffff";
+        //obj.url="sdffffffffff";
         return obj;
     }
 }

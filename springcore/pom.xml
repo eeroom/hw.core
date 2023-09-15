@@ -12,7 +12,9 @@
     <name>springcore</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
-
+    <properties>
+        <profile.abc>abc-value</profile.abc>
+    </properties>
     <parent>
         <groupId>io.github.eeroom</groupId>
         <artifactId>sln</artifactId>

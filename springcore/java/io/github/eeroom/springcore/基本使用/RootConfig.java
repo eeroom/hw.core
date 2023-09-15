@@ -5,7 +5,7 @@ import io.github.eeroom.springcore.context.MyImportSelector;
 import org.springframework.context.annotation.*;
 
 @Configuration
-@ComponentScan
+@ComponentScan(basePackages = {"io.github.eeroom.springcore.基本使用","io.github.eeroom.springcore.bean"})
 @PropertySource(value = {"classpath:application.properties"})
 @EnableAspectJAutoProxy
 @Import({MyBeanPostProcessorRegistrar.class, MyImportSelector.class})
