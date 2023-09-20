@@ -24,88 +24,26 @@ execution实现了DelegateExecution接口
 
 ```
 ## maven插件
-1. maven-jar-plugin 关键点就是设定MAINFEST.MF文件里的一些值,比如运行的Main class、classpath路径等等,把普通jar做成可以直接运行的jar,最简配置如下
-    ```
-    <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>3.0.2</version>
-        <configuration>
-            <classesDirectory>target/classes/</classesDirectory>
-            <archive>
-                <manifest>
-                    <mainClass>这里要替换成jar包main方法所在类</mainClass>
-                    <!-- 打包时 MANIFEST.MF文件不记录的时间戳版本 -->
-                    <useUniqueVersions>false</useUniqueVersions>
-                    <addClasspath>true</addClasspath>
-                    <classpathPrefix>lib/</classpathPrefix>
-                </manifest>
-            </archive>
-        </configuration>
-    </plugin>
-    ```
-2. maven-dependency-plugin 编译完成后,把所有依赖的类库汇总到指定目录,类似于c#的默认编译配置
-    ```
-   前提是使用maven-compiler-plugin插件进行编译
-   <plugin>
-       <groupId>org.apache.maven.plugins</groupId>
-       <!-- maven-dependency-plugin插件在maven的根pom.xml配置文件中有，位于节点pluginManagement-->
-       <artifactId>maven-dependency-plugin</artifactId>
-       <executions>
-           <execution>
-               <id>copy-dependencies</id>
-               <phase>package</phase>
-               <goals>
-                   <goal>copy-dependencies</goal>
-               </goals>
-               <configuration>
-                   <type>jar</type>
-                   <includeTypes>jar</includeTypes>
-                   <outputDirectory>
-                       ${project.build.directory}/lib
-                   </outputDirectory>
-               </configuration>
-           </execution>
-       </executions>
-   </plugin>
-   ```
-3. maven-assembly-plugin 作用和maven-dependency-plugin一致,区别:依赖也被打包到目标jar里面,类似c#嵌入式资源文件的做法
-    ```
-   <plugin>
-       <!-- maven3.6本身的根配置文件pom.xml在pluginManagement节点已经配置了这个插件，版本较低且为beta版本-->
-       <groupId>org.apache.maven.plugins</groupId>
-       <artifactId>maven-assembly-plugin</artifactId>
-       <version>3.1.1</version>
-       <configuration>
-           <archive>
-               <manifest>
-                   <!--这里要替换成jar包main方法所在类 -->
-                   <mainClass>这里要替换成jar包main方法所在类</mainClass>
-               </manifest>
-               <manifestEntries>
-                   <Class-Path>.</Class-Path>
-               </manifestEntries>
-           </archive>
-           <descriptorRefs>
-               <descriptorRef>jar-with-dependencies</descriptorRef>
-           </descriptorRefs>
-       </configuration>
-       <executions>
-           <execution>
-               <id>make-assembly</id> <!-- this is used for inheritance merges -->
-               <phase>package</phase> <!-- 指定在打包节点执行jar包合并操作 -->
-               <goals>
-                   <goal>single</goal>
-               </goals>
-           </execution>
-       </executions>
-   </plugin>
-   ```
-4. maven打包实现配置文件外置
 ```
-等价于App.config或者Web.config方便程序部署后修改配置
-关键是配置build>resources>resource节点，对resource指定targetpath属性，就可以把resource中指定的文件在打包过程中放到指定目录
-spring boot程序会默认读取 congfig/application.yml>classpath:application.yml 的配置文件信息，所以把targetpath属性指定为${project.build.directory}/config即可
-最佳实践：在ideo里普通调试或运行场景必须配置文件打进jar文件里，否则程序跑不起来，原因未深究；利用profile，配置targetpath，然后只有正式发布等特定场景打的包实现外置配置文件
+maven-jar-plugin 把普通jar做成可以直接运行的jar
+    原理：打包过程中设定jar文件里的MAINFEST.MF文件中的Main class、classpath等属性的值
+    关键点：插件配置中设置main方法所在的类，参看slm项目中的pom.xml文件
+maven-dependency-plugin  处理依赖类库，效果类似于vs编译c#项目会把所有依赖都拷贝到Debug/bin目录中
+    原理：把所有依赖的类库复制到指定目录
+    关键点：插件配置中设置存放依赖的目录，参看slm项目中的pom.xml文件
+maven-assembly-plugin 处理依赖类库，效果类似于vs的嵌入式资源做法，把resx类别的配置文件打包到exe或dll中
+    原理：把所有依赖的类库打包到jar文件中
+    关键点：插件配置中设置main方法所在的类，参看slm项目中的pom.xml文件
+```
+## 外置配置文件
+```
+等价于.net中的App.config或者Web.config配置文件的做法
+方便程序部署后修改配置
+微服务部署的场景下，部署后再修改的配置通常走配置中心
+原理：spring boot程序会读取配置文件的优先级依次为： congfig/application.proerties ， classpath:application.proerties
+关键点：pom.xml文件的build>resources>resource节点，设置resource的targetpath元素值为：${project.build.directory}/config
+特别的：在ideo里普通调试或运行场景必须配置文件打进jar文件里，否则程序跑不起来，原因未深究
+    利用profile，配置targetpath，然后只有正式发布等特定场景打的包实现外置配置文件
 ```
 ## tomcat服务器
 ```
