@@ -45,6 +45,15 @@ maven-assembly-plugin 处理依赖类库，效果类似于vs的嵌入式资源�
 特别的：在ideo里普通调试或运行场景必须配置文件打进jar文件里，否则程序跑不起来，原因未深究
     利用profile，配置targetpath，然后只有正式发布等特定场景打的包实现外置配置文件
 ```
+
+## 多环境配置
+```
+原理：maven的resource插件会在编译打包的时候把application.properties文件中的引用替换成pom.xml中的实际值
+关键点：application.properties文件使用${属性名}引用pom.xml中的属性(properties>自定义属性)
+    pom.xml文件的build>resources>resource节点，设置resource的filtering元素值为：true
+    基于pom.xml的profile，为环境设置一个profile，然后设置该环境下的属性值
+```
+
 ## tomcat服务器
 ```
 发布程序到服务器
