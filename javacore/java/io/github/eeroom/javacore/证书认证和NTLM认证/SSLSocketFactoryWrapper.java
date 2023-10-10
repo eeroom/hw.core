@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.http;
+package io.github.eeroom.javacore.证书认证和NTLM认证;
 
 import javax.net.ssl.*;
 import java.io.File;

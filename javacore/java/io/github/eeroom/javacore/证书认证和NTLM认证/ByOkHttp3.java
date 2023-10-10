@@ -1,10 +1,10 @@
-package io.github.eeroom.javacore.http;
+package io.github.eeroom.javacore.证书认证和NTLM认证;
 
 import okhttp3.*;
 
 import java.util.Collections;
 
-public class OkHttp3
+public class ByOkHttp3
 {
     public static void main( String[] args ) throws Throwable {
         invokeWithX509();
