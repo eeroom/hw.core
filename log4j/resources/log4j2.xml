@@ -13,7 +13,7 @@
         </Appender>
 <!--        数据库记录日志的配置-->
         <Appender type="Jdbc" name="db" tableName="LogInfo">
-            <ConnectionFactory class="io.github.eeroom.log.log4j.ConnectionFactory" method="getConnection" />
+            <ConnectionFactory class="io.github.eeroom.log4j.ConnectionFactory" method="getConnection" />
             <Column name="Name" pattern="%sx{Name}" />
         </Appender>
 <!--        循环覆盖记录日志的配置，关键是按大小、按时间切割日志文件，控制文件个数，如果filePattern已gz结尾，则自动压缩，否则不压缩-->

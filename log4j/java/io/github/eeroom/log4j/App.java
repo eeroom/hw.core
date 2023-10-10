@@ -1,9 +1,6 @@
-package io.github.eeroom.log;
+package io.github.eeroom.log4j;
 
-import io.github.eeroom.log.log4j.Student;
 import org.apache.logging.log4j.Logger;
-
-import java.io.File;
 
 public class App {
     public static void main( String[] args )
