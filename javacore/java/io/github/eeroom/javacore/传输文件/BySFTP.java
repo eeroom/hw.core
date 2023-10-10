@@ -1,6 +1,6 @@
-package io.github.eeroom.javacore.ftp;
+package io.github.eeroom.javacore.传输文件;
 
-public class JSchChannelSftp {
+public class BySFTP {
 
     public static void main(String[] args) throws Throwable{
         var localfileFullPath="D:\\dotnet环境变量.pdf";
@@ -8,11 +8,11 @@ public class JSchChannelSftp {
         var remoteFileFullPath="我的文件/202106/dotnet环境变量3.pdf";
         com.jcraft.jsch.ChannelSftp sftpClient=null;
         try {
-            sftpClient= JSchChannelSftp.loginAndSoupportZh(ftpaddr,"root","123456");
+            sftpClient= BySFTP.loginAndSoupportZh(ftpaddr,"root","123456");
             var remoteFile=new java.io.File(remoteFileFullPath);
-            JSchChannelSftp.changeWorkDirectory(sftpClient,remoteFile.getParent());
-            JSchChannelSftp.upload(sftpClient,localfileFullPath,remoteFile.getName(),FtpTransferMode.已存在则忽略);
-            JSchChannelSftp.download(sftpClient,"d:/222.pdf",remoteFile.getName(),FtpTransferMode.已存在则忽略);
+            BySFTP.changeWorkDirectory(sftpClient,remoteFile.getParent());
+            BySFTP.upload(sftpClient,localfileFullPath,remoteFile.getName(), WriteMode.已存在则忽略);
+            BySFTP.download(sftpClient,"d:/222.pdf",remoteFile.getName(), WriteMode.已存在则忽略);
 
         }finally {
             if(sftpClient!=null && sftpClient.isConnected()){
@@ -76,7 +76,7 @@ public class JSchChannelSftp {
         }
     }
 
-    public static void upload(com.jcraft.jsch.ChannelSftp ftpClient, String localfileFullPath, String remoteFileName, FtpTransferMode mode) throws Throwable {
+    public static void upload(com.jcraft.jsch.ChannelSftp ftpClient, String localfileFullPath, String remoteFileName, WriteMode mode) throws Throwable {
         com.jcraft.jsch.SftpATTRS stat = null;
         try {
             stat = ftpClient.stat(remoteFileName);
@@ -85,20 +85,20 @@ public class JSchChannelSftp {
         if (stat != null) {
             if (!stat.isReg())
                 throw new RuntimeException("服务器目录中已经存在同名的文件夹或者符号链接或者设备:" + remoteFileName);
-            if (mode == FtpTransferMode.已存在则异常)
+            if (mode == WriteMode.已存在则异常)
                 throw new RuntimeException("服务器目录中已经存在同名的文件:" + remoteFileName);
-            else if (mode == FtpTransferMode.已存在则忽略)
+            else if (mode == WriteMode.已存在则忽略)
                 return;
         }
         try (var raf = new java.io.RandomAccessFile(localfileFullPath, "r"); var fs = new java.io.FileInputStream(raf.getFD())) {
-            if (mode == FtpTransferMode.续传 && stat != null)
+            if (mode == WriteMode.续传 && stat != null)
                 ftpClient.put(fs, remoteFileName, com.jcraft.jsch.ChannelSftp.RESUME);
             else
                 ftpClient.put(fs, remoteFileName, com.jcraft.jsch.ChannelSftp.OVERWRITE);
         }
     }
 
-    public static void download(com.jcraft.jsch.ChannelSftp ftpClient, String localfileFullPath, String remoteFileName, FtpTransferMode mode) throws Throwable {
+    public static void download(com.jcraft.jsch.ChannelSftp ftpClient, String localfileFullPath, String remoteFileName, WriteMode mode) throws Throwable {
         com.jcraft.jsch.SftpATTRS stat = null;
         try {
             stat = ftpClient.stat(remoteFileName);
@@ -112,15 +112,15 @@ public class JSchChannelSftp {
         if (file.exists()) {
             if (file.isDirectory())
                 throw new RuntimeException("本地磁盘已经存在同名的文件夹:" + remoteFileName);
-            if (mode == FtpTransferMode.已存在则异常)
+            if (mode == WriteMode.已存在则异常)
                 throw new RuntimeException("本地磁盘已经存在同名的文件:" + remoteFileName);
-            else if (mode == FtpTransferMode.已存在则忽略)
+            else if (mode == WriteMode.已存在则忽略)
                 return;
         } else {
             file.createNewFile();
         }
         try (var raf = new java.io.RandomAccessFile(file, "rw"); var fs = new java.io.FileOutputStream(raf.getFD())) {
-            if (mode == FtpTransferMode.续传 && file.length() > 0)
+            if (mode == WriteMode.续传 && file.length() > 0)
                 ftpClient.get(remoteFileName, localfileFullPath, null, com.jcraft.jsch.ChannelSftp.RESUME);
             else
                 ftpClient.get(remoteFileName, localfileFullPath, null, com.jcraft.jsch.ChannelSftp.OVERWRITE);
