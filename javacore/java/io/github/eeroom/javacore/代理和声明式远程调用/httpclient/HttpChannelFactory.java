@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.proxy.httpclient;
+package io.github.eeroom.javacore.代理和声明式远程调用.httpclient;
 
 import io.github.eeroom.javacore.序列化.JacksonObjectMapper;
 
