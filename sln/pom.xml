@@ -18,7 +18,7 @@
         <module>../springboot1x</module>
         <module>../springcore</module>
         <module>../springmvc</module>
-        <module>../tcpproxy</module>
+        <module>../proxytcp</module>
         <module>../springboot2xcore</module>
     </modules>
 

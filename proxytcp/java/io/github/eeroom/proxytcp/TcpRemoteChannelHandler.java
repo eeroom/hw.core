@@ -1,4 +1,4 @@
-package io.github.eeroom.tcpproxy;
+package io.github.eeroom.proxytcp;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;

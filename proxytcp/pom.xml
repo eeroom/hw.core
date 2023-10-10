@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.eeroom</groupId>
-    <artifactId>tcpproxy</artifactId>
+    <artifactId>proxytcp</artifactId>
     <version>1.0-SNAPSHOT</version>
     <parent>
         <groupId>io.github.eeroom</groupId>
@@ -13,9 +13,6 @@
         <version>1.0-SNAPSHOT</version>
         <relativePath>../sln/pom.xml</relativePath>
     </parent>
-    <name>tcpproxy</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -40,7 +37,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>io.github.eeroom.tcpproxy.App</mainClass>
+                            <mainClass>io.github.eeroom.proxytcp.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

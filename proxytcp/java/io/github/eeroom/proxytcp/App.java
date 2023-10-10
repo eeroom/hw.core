@@ -1,4 +1,4 @@
-package io.github.eeroom.tcpproxy;
+package io.github.eeroom.proxytcp;
 
 import io.netty.channel.ChannelOption;
 import io.netty.channel.WriteBufferWaterMark;
