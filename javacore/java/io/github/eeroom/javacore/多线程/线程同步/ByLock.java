@@ -1,20 +1,20 @@
-package io.github.eeroom.javacore.thread;
+package io.github.eeroom.javacore.多线程.线程同步;
 
 import java.util.HashMap;
 
 /**
  *
  */
-public class App {
+public class ByLock {
     public static void main(String[] args) {
         var dict=new HashMap<Integer,Runnable>();
-        dict.put(0,App::studentDemo);
-        dict.put(1,App::studentDemoV2);
-        dict.put(2,App::studentDemoV3);
-        dict.put(3,App::studentDemoV4);
-        dict.put(4,App::breadDemo);
-        dict.put(5,App::breadDemoV2);
-        dict.put(6,App::breadDemoV3);
+        dict.put(0, ByLock::studentDemo);
+        dict.put(1, ByLock::studentDemoV2);
+        dict.put(2, ByLock::studentDemoV3);
+        dict.put(3, ByLock::studentDemoV4);
+        dict.put(4, ByLock::breadDemo);
+        dict.put(5, ByLock::breadDemoV2);
+        dict.put(6, ByLock::breadDemoV3);
         dict.get(5).run();
     }
 

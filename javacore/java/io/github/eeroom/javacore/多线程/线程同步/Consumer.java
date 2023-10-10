@@ -1,8 +1,8 @@
-package io.github.eeroom.javacore.thread;
+package io.github.eeroom.javacore.多线程.线程同步;
 
-public class Producer implements Runnable {
+public class Consumer implements Runnable {
     Runnable handler;
-    public Producer(Runnable handler){
+    public Consumer(Runnable handler){
         this.handler=handler;
     }
     @Override
