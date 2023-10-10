@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.http;
+package io.github.eeroom.javacore.传输文件;
 
 import com.obs.services.ObsClient;
 import com.obs.services.ObsConfiguration;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-public class HwObsClient {
+public class ByHwOBS {
 
     static  String ak="";
     static  String sk="";
