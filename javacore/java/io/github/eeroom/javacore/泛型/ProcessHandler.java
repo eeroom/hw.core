@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.generic;
+package io.github.eeroom.javacore.泛型;
 
 public class ProcessHandler<T> {
 
