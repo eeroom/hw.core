@@ -1,6 +1,6 @@
 package io.github.eeroom.javacore.proxy.httpclient;
 
-import io.github.eeroom.javacore.text.JacksonObjectMapper;
+import io.github.eeroom.javacore.序列化.JacksonObjectMapper;
 
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationHandler;

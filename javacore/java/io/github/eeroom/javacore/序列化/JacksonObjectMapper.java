@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.text;
+package io.github.eeroom.javacore.序列化;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
