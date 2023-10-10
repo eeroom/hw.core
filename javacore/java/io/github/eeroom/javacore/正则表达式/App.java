@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.序列化;
+package io.github.eeroom.javacore.正则表达式;
 
 public class App {
     public void regexMatch(){
