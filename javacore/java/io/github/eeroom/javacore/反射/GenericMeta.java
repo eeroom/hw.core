@@ -1,8 +1,5 @@
-package io.github.eeroom.javacore.assembly;
+package io.github.eeroom.javacore.反射;
 
-import java.io.Console;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.stream.Stream;
 

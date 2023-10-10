@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.assembly;
+package io.github.eeroom.javacore.反射;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
