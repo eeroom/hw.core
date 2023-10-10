@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.jni;
+package io.github.eeroom.javacore.本地代码调用;
 
 public class App {
     public static void main( String[] args )
