@@ -1,9 +1,6 @@
-package io.github.eeroom.javacore.axis2;
+package io.github.eeroom.javacore.webservice客户端;
 
-import org.apache.axiom.soap.SOAP11Constants;
-import org.apache.axis2.Constants;
-
-public class App {
+public class ByAxis2 {
     public static void main(String[] args) throws Throwable {
         helloworld();
 

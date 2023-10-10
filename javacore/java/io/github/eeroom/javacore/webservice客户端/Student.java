@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.axis;
+package io.github.eeroom.javacore.webservice客户端;
 
 import java.io.Serializable;
 

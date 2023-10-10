@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.http;
+package io.github.eeroom.javacore.webservice客户端;
 
 import java.io.File;
 import java.io.InputStreamReader;
@@ -7,7 +7,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
-public class JDKHttpURLConnection {
+public class ByJDKHttpURLConnection {
     public static void main(String[] args) throws Throwable{
         doPost();
 

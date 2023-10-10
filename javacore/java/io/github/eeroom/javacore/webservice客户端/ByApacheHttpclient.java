@@ -1,11 +1,11 @@
-package io.github.eeroom.javacore.http;
+package io.github.eeroom.javacore.webservice客户端;
 
 import org.apache.http.protocol.HTTP;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
-public class ApacheHttpclient {
+public class ByApacheHttpclient {
     public static void main(String[] args) throws Throwable {
         doPost();
 

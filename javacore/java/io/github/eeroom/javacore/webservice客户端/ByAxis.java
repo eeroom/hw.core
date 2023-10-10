@@ -1,4 +1,4 @@
-package io.github.eeroom.javacore.axis;
+package io.github.eeroom.javacore.webservice客户端;
 
 import org.apache.axis.AxisEngine;
 import org.apache.axis.constants.Style;
@@ -10,7 +10,7 @@ import org.apache.axis.soap.SOAPConstants;
 import javax.xml.namespace.QName;
 
 
-public class App {
+public class ByAxis {
     public static void main(String[] args) throws Throwable {
         //invokeHelloWorld(44);
         //invokeGetStudent(11);
