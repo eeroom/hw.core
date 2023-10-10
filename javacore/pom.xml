@@ -18,7 +18,9 @@
         <version>1.0-SNAPSHOT</version>
         <relativePath>../sln/pom.xml</relativePath>
     </parent>
-
+    <properties>
+        <wch.name>tom</wch.name>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -105,6 +107,25 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <!--    maven项目默认的路径是/src/main/resources,现在改成/src/resources，所有需要修改pom的配置文件-->
+                <directory>${basedir}/resources</directory>
+                <excludes>
+                    <exclude>*.dll</exclude>
+                </excludes>
+                <!-- 这个配置true,打包配置文件的时候，会把${属性名}的引用替换为pom文件中同名的属性的值，但是仅对文本类型的文件，如果是其他类型文件，需要排除-->
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>${basedir}/resources</directory>
+                <includes>
+                    <include>*.dll</include>
+                </includes>
+                <!-- 这个配置true,打包配置文件的时候，会把${属性名}的引用替换为pom文件中同名的属性的值，但是仅对文本类型的文件，如果是其他类型文件，需要排除-->
+                <filtering>false</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
