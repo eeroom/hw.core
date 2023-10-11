@@ -47,7 +47,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>io.github.eeroom.activemq.reciver.App</mainClass>
+                            <mainClass>io.github.eeroom.activemq.接收.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

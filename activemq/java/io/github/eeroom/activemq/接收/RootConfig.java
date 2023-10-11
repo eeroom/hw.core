@@ -1,4 +1,4 @@
-package io.github.eeroom.activemq.reciver;
+package io.github.eeroom.activemq.接收;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;

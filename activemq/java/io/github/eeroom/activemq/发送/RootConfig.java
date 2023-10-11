@@ -1,4 +1,4 @@
-package io.github.eeroom.activemq.sender;
+package io.github.eeroom.activemq.发送;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
