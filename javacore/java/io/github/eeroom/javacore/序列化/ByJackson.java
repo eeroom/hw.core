@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class JacksonObjectMapper {
+public class ByJackson {
 
     public static void main(String[] args){
        var lststudent=new ArrayList<Student>();

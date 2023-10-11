@@ -1,6 +1,6 @@
 package io.github.eeroom.javacore.代理和声明式远程调用.httpclient;
 
-import io.github.eeroom.javacore.序列化.JacksonObjectMapper;
+import io.github.eeroom.javacore.序列化.ByJackson;
 
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationHandler;
@@ -55,7 +55,7 @@ public class HttpChannelFactory {
                 var value=this.parseResponse(sb.toString(),method,apimapping);
                 return value;
             }catch (Throwable ex){
-                throw new RuntimeException(String.format("调用api发送异常，url:%s,参数：%s",url,new JacksonObjectMapper().serializeObject(objects)));
+                throw new RuntimeException(String.format("调用api发送异常，url:%s,参数：%s",url,new ByJackson().serializeObject(objects)));
             }
         }
 
@@ -65,9 +65,9 @@ public class HttpChannelFactory {
                     if(apimapping.wrapperType().equals(void.class) && method.getReturnType().equals(void.class))
                         return null;
                     else if(apimapping.wrapperType().equals(void.class) && !method.getReturnType().equals(void.class))
-                        return new JacksonObjectMapper().deSerializeObject(resvalue,method.getReturnType());
+                        return new ByJackson().deSerializeObject(resvalue,method.getReturnType());
                     else
-                        return ((IUnWrapper)new JacksonObjectMapper().deSerializeObject(resvalue,apimapping.wrapperType())).unwrapper(method.getReturnType());
+                        return ((IUnWrapper)new ByJackson().deSerializeObject(resvalue,apimapping.wrapperType())).unwrapper(method.getReturnType());
                 default:
                     throw new RuntimeException("parseResponse代码还未完成");
             }
@@ -79,7 +79,7 @@ public class HttpChannelFactory {
                 return "".getBytes(StandardCharsets.UTF_8);
             switch (apimapping.consumes()){
                 case Json:
-                    return new JacksonObjectMapper().serializeObject(objects[0]).getBytes(StandardCharsets.UTF_8);
+                    return new ByJackson().serializeObject(objects[0]).getBytes(StandardCharsets.UTF_8);
                 default:
                     throw new RuntimeException("parsePayload代码还未完成");
             }
