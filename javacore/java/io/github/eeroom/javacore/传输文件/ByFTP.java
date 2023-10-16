@@ -7,7 +7,8 @@ import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.*;
 import java.net.URI;
-import java.util.Arrays;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
 /**
@@ -16,16 +17,72 @@ import java.util.stream.Collectors;
 public class ByFTP {
 
     public static void main(String[] args) throws Throwable{
-        var localfileFullPath="D:\\dotnet环境变量.pdf";
-        var ftpaddr="ftp://192.168.56.1:21";
-        var remoteFileFullPath="我的文件/202106/dotnet环境变量3.pdf";
+
+        listFiles();
+//        upload();
+//        download();
+    }
+
+    static void listFiles() throws Throwable {
+        var ftpaddr="ftp://192.168.1.2:21";
+        var remoteFileFullPath="nuget";
+
+        var dictFtpfile=new HashMap<String, ArrayList<FTPFile>>();
+        var lstDir=new LinkedList<String>();
+        lstDir.add(remoteFileFullPath);
+        String dirPath=null;
+        while ((dirPath=lstDir.poll())!=null){
+            var ftpClient= ByFTP.loginAndSoupportZh(ftpaddr,"Deroom","BT151");
+            ByFTP.changeWorkDirectory(ftpClient,dirPath);
+            var lst=ftpClient.listFiles();
+            var lstFile=new ArrayList<FTPFile>();
+            for(var file:lst){
+                if(file.isFile())
+                    lstFile.add(file);
+                else if(file.isDirectory()){
+                    var fileName=file.getName();
+                    if(".".equals(fileName) || "..".equals(fileName))
+                        continue;
+                    lstDir.add(dirPath+"/"+file.getName());
+                }
+            }
+            if(lstFile.size()>0)
+                dictFtpfile.put(dirPath,lstFile);
+            ftpClient.disconnect();
+        }
+        for(var dir:dictFtpfile.keySet()){
+            for(var file:dictFtpfile.get(dir)){
+                System.out.format("目录：%s,文件名称：%s\r\n",dir,file.getName());
+            }
+        }
+    }
+
+    static void upload() throws Throwable{
+        var localfileFullPath="D:\\QQ影音(v1.2.5).ipa";
+        var ftpaddr="ftp://192.168.1.2:21";
+        var remoteFileFullPath="nuget/dir1/dir2/QQ影音(v1.2.5).ipa";
         FTPClient ftpClient=null;
         try{
             ftpClient= ByFTP.loginAndSoupportZh(ftpaddr,"Deroom","BT151");
             var remoteFile=new File(remoteFileFullPath);
             ByFTP.changeWorkDirectory(ftpClient,remoteFile.getParent());
             ByFTP.upload(ftpClient,localfileFullPath,remoteFile.getName(), WriteMode.已存在则忽略);
-            ByFTP.download(ftpClient,"d:/333.pdf",remoteFile.getName(), WriteMode.已存在则忽略);
+        }finally {
+            if (ftpClient!=null && ftpClient.isConnected())
+                ftpClient.disconnect();
+        }
+    }
+
+    static void download() throws Throwable{
+        var localfileFullPath="D:\\QQ影音(v1.2.5).ipa222";
+        var ftpaddr="ftp://192.168.1.2:21";
+        var remoteFileFullPath="nuget/dir1/dir2/QQ影音(v1.2.5).ipa";
+        FTPClient ftpClient=null;
+        try{
+            ftpClient= ByFTP.loginAndSoupportZh(ftpaddr,"Deroom","BT151");
+            var remoteFile=new File(remoteFileFullPath);
+            ByFTP.changeWorkDirectory(ftpClient,remoteFile.getParent());
+            ByFTP.download(ftpClient,localfileFullPath,remoteFile.getName(), WriteMode.已存在则忽略);
         }finally {
             if (ftpClient!=null && ftpClient.isConnected())
                 ftpClient.disconnect();
