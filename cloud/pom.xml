@@ -6,6 +6,7 @@
   <modules>
     <module>../cloud-eureka</module>
     <module>../cloud-oa</module>
+    <module>../cloud-kd</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>
