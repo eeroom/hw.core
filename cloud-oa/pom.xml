@@ -52,7 +52,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>io.github.eeroom.javacore.正则表达式.App</mainClass>
+              <mainClass>io.github.eeroom.cloudoa.App</mainClass>
             </manifest>
           </archive>
         </configuration>
