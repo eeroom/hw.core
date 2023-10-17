@@ -5,6 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <modules>
     <module>../cloud-eureka</module>
+    <module>../cloud-oa</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>
