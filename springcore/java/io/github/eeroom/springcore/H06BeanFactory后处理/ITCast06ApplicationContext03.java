@@ -1,7 +1,7 @@
 package io.github.eeroom.springcore.H06BeanFactory后处理;
 
 import io.github.eeroom.springcore.基本使用.RootConfig;
-import io.github.eeroom.springcore.context.MyImportSelector;
+import io.github.eeroom.springcore.基本使用.context.MyImportSelector;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;

@@ -1,4 +1,4 @@
-package io.github.eeroom.springcore.aop;
+package io.github.eeroom.springcore.基本使用.aop;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class CalFilter {
 
-    @Around("execution (public * io.github.eeroom.springcore.bean.Calculation.*(..))")
+    @Around("execution (public * io.github.eeroom.springcore.基本使用.bean.Calculation.*(..))")
     public Object doHandler(ProceedingJoinPoint joinPoint) throws Throwable {
         System.out.println("spring-aop:执行方法前");
         var rt= joinPoint.proceed(joinPoint.getArgs());

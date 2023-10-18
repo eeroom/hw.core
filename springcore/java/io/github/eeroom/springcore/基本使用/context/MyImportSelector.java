@@ -1,4 +1,4 @@
-package io.github.eeroom.springcore.context;
+package io.github.eeroom.springcore.基本使用.context;
 
 import io.github.eeroom.springcore.基本使用.RootConfig2;
 import org.springframework.context.annotation.ImportSelector;

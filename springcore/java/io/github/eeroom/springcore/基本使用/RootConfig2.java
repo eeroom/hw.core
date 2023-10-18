@@ -1,6 +1,6 @@
 package io.github.eeroom.springcore.基本使用;
 
-import io.github.eeroom.springcore.context.MyEvent;
+import io.github.eeroom.springcore.基本使用.context.MyEvent;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;

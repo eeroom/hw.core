@@ -1,14 +1,7 @@
-package io.github.eeroom.springcore.bean;
+package io.github.eeroom.springcore.基本使用.bean;
 
-import io.github.eeroom.springcore.bean.Calculation;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ResourceLoaderAware;
-import org.springframework.core.io.ResourceLoader;
 
 /**
  * 这个特殊的bean,所以本身仍然是bean,所以可以按照普通的自动扫包进行注册

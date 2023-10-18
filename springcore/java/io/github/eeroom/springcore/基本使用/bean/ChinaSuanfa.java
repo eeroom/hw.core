@@ -1,4 +1,4 @@
-package io.github.eeroom.springcore.bean;
+package io.github.eeroom.springcore.基本使用.bean;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
