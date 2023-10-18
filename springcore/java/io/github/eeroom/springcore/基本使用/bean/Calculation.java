@@ -17,16 +17,23 @@ public class Calculation {
     @Value("${mqs.url}")
     String url;
 
-    ISuanfa sf;
-
-    //构造函数注入
     @Autowired
-    public Calculation(ISuanfa sf){
-        this.sf=sf;
-    }
+    ISuanfa taskService4Target;
+
+    @Autowired
+    ISuanfa taskService4Self;
+
+    @Autowired
+    ISuanfa chinasuangfa;
+    //构造函数注入
+
 
     public void  Handler(){
         System.out.println("配置文件获取的mqs.url="+this.url);
-        this.sf.Hit(1,10);
+        var rt= this.chinasuangfa.Hit(1,10);
+        var rt2=this.taskService4Self.Hit(1,1);
+        var rt3=this.taskService4Target.Hit(1,1);
+        int aa=5;
+
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 /**
  * 基于自动扫包注册bean
  */
-@Component
+@Component("chinasuangfa")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ChinaSuanfa implements ISuanfa {
     @Autowired
