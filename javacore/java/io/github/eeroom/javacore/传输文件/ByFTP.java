@@ -17,22 +17,23 @@ import java.util.stream.Collectors;
 public class ByFTP {
 
     public static void main(String[] args) throws Throwable{
-
         listFiles();
 //        upload();
 //        download();
     }
 
     static void listFiles() throws Throwable {
-        var ftpaddr="ftp://192.168.1.2:21";
+        var ftpaddr="ftp://192.168.1.2";
         var remoteFileFullPath="nuget";
 
         var dictFtpfile=new HashMap<String, ArrayList<FTPFile>>();
         var lstDir=new LinkedList<String>();
         lstDir.add(remoteFileFullPath);
         String dirPath=null;
+        var ftpClient= ByFTP.loginAndSoupportZh(ftpaddr,"Deroom","BT151");
         while ((dirPath=lstDir.poll())!=null){
-            var ftpClient= ByFTP.loginAndSoupportZh(ftpaddr,"Deroom","BT151");
+            ftpClient.disconnect();
+            ByFTP.loginAndSoupportZh(ftpaddr,"Deroom","BT151",ftpClient);
             ByFTP.changeWorkDirectory(ftpClient,dirPath);
             var lst=ftpClient.listFiles();
             var lstFile=new ArrayList<FTPFile>();
@@ -48,8 +49,8 @@ public class ByFTP {
             }
             if(lstFile.size()>0)
                 dictFtpfile.put(dirPath,lstFile);
-            ftpClient.disconnect();
         }
+        ftpClient.disconnect();
         for(var dir:dictFtpfile.keySet()){
             for(var file:dictFtpfile.get(dir)){
                 System.out.format("目录：%s,文件名称：%s\r\n",dir,file.getName());
@@ -59,7 +60,7 @@ public class ByFTP {
 
     static void upload() throws Throwable{
         var localfileFullPath="D:\\QQ影音(v1.2.5).ipa";
-        var ftpaddr="ftp://192.168.1.2:21";
+        var ftpaddr="ftp://192.168.1.2";
         var remoteFileFullPath="nuget/dir1/dir2/QQ影音(v1.2.5).ipa";
         FTPClient ftpClient=null;
         try{
@@ -98,12 +99,18 @@ public class ByFTP {
      * @throws Throwable
      */
     public static FTPClient loginAndSoupportZh(String ftpaddr,String userName,String pwd) throws Throwable {
-        FTPClient ftpClient=new FTPClient();
+        return loginAndSoupportZh(ftpaddr,userName,pwd,new FTPClient());
+    }
+
+    public static FTPClient loginAndSoupportZh(String ftpaddr,String userName,String pwd,FTPClient ftpClient) throws Throwable {
         ftpClient.setDataTimeout(15*1000);//超时时间为10s
         ftpClient.setBufferSize(2048*1024);
         ftpClient.setSendBufferSize(2048*1024);
         URI targetFtp=URI.create(ftpaddr);
-        ftpClient.connect(targetFtp.getHost(),targetFtp.getPort());
+        var port=targetFtp.getPort();
+        if(port<0)
+            port=21;
+        ftpClient.connect(targetFtp.getHost(),port);
         if(!ftpClient.login(userName,pwd)){
             throw new RuntimeException("login faild;replycode:"+ftpClient.getReplyCode());
         }
