@@ -1,14 +1,17 @@
 package io.github.eeroom.javacore.代理和声明式远程调用.httpclient;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.github.eeroom.javacore.序列化.ByJackson;
 
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class HttpChannelFactory {
@@ -52,23 +55,29 @@ public class HttpChannelFactory {
                 while ((datalength=reader.read(buffer,0,bufferSize))>0){
                     sb.append(buffer,0,datalength);
                 }
+                if(httpcnn.getResponseCode()!=200)
+                    throw new RuntimeException(String.format("api服务端异常，httpcode:%d,msg:%s",httpcnn.getResponseCode(),sb.toString()));
                 var value=this.parseResponse(sb.toString(),method,apimapping);
                 return value;
             }catch (Throwable ex){
-                throw new RuntimeException(String.format("调用api发送异常，url:%s,参数：%s",url,new ByJackson().serializeObject(objects)));
+                throw new RuntimeException(String.format("调用api发送异常，url:%s,参数：%s",url,ByJackson.serializeObject(objects)));
             }
         }
 
         private Object parseResponse(String resvalue, Method method, ApiMapping apimapping) {
             switch (apimapping.produces()){
                 case Json:
-                    if(apimapping.wrapperType().equals(void.class) && method.getReturnType().equals(void.class))
+                    if(method.getReturnType().equals(void.class))
                         return null;
-                    else if(apimapping.wrapperType().equals(void.class) && !method.getReturnType().equals(void.class))
-                        return new ByJackson().deSerializeObject(resvalue,method.getReturnType());
-                    else
-                        return ((IUnWrapper)new ByJackson().deSerializeObject(resvalue,apimapping.wrapperType())).unwrapper(method.getReturnType());
+                    return ByJackson.deSerializeObject(resvalue, new TypeReference<List<Object>>() {
+                        @Override
+                        public Type getType() {
+                            return method.getGenericReturnType();
+                        }
+                    });
                 default:
+                    if(method.getReturnType().equals(String.class))
+                        return resvalue;
                     throw new RuntimeException("parseResponse代码还未完成");
             }
         }
@@ -79,7 +88,7 @@ public class HttpChannelFactory {
                 return "".getBytes(StandardCharsets.UTF_8);
             switch (apimapping.consumes()){
                 case Json:
-                    return new ByJackson().serializeObject(objects[0]).getBytes(StandardCharsets.UTF_8);
+                    return ByJackson.serializeObject(objects[0]).getBytes(StandardCharsets.UTF_8);
                 default:
                     throw new RuntimeException("parsePayload代码还未完成");
             }

@@ -32,16 +32,11 @@ public @interface ApiMapping {
             return MediaType.Json;
         }
 
-        @Override
-        public Class<?> wrapperType() {
-            return void.class;
-        }
     };
     public String action() default "__";
     public HttpMetod method() default HttpMetod.POST;
     public MediaType consumes() default MediaType.Json;
     public MediaType produces() default MediaType.Json;
-    public Class<?> wrapperType() default void.class;
 
     public static enum HttpMetod{
         GET,
