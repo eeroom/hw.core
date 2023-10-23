@@ -3,6 +3,7 @@ package io.github.eeroom.javacore.代理和声明式远程调用.httpclient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.github.eeroom.javacore.序列化.ByJackson;
 
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -12,6 +13,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class HttpChannelFactory {
@@ -27,6 +30,10 @@ public class HttpChannelFactory {
         var factory=new HttpChannelFactory(baseurl,meta[0]);
        var proxyEntity= (T)java.lang.reflect.Proxy.newProxyInstance(HttpChannelFactory.class.getClassLoader(),meta,factory.myInvocationHandler);
        return proxyEntity;
+    }
+
+    interface Supplier<T>{
+        T get() throws Throwable;
     }
 
     class  MyInvocationHandler implements InvocationHandler {
@@ -51,17 +58,17 @@ public class HttpChannelFactory {
             var sb=new StringBuilder();
             int bufferSize=8192,datalength=0;
             var buffer=new char[bufferSize];
-            try (var reader=new InputStreamReader(httpcnn.getInputStream(),StandardCharsets.UTF_8)){
+            Supplier<InputStream> getstream=httpcnn.getResponseCode()==200?httpcnn::getInputStream:httpcnn::getErrorStream;
+            try (var reader=new InputStreamReader(getstream.get(),StandardCharsets.UTF_8)){
                 while ((datalength=reader.read(buffer,0,bufferSize))>0){
                     sb.append(buffer,0,datalength);
                 }
-                if(httpcnn.getResponseCode()!=200)
-                    throw new RuntimeException(String.format("api服务端异常，httpcode:%d,msg:%s",httpcnn.getResponseCode(),sb.toString()));
-                var value=this.parseResponse(sb.toString(),method,apimapping);
-                return value;
-            }catch (Throwable ex){
-                throw new RuntimeException(String.format("调用api发送异常，url:%s,参数：%s",url,ByJackson.serializeObject(objects)));
             }
+            if(httpcnn.getResponseCode()!=200)
+                throw new RuntimeException(String.format("api服务端异常，httpcode:%d,msg:%s",httpcnn.getResponseCode(),sb.toString()));
+            var value=this.parseResponse(sb.toString(),method,apimapping);
+            return value;
+
         }
 
         private Object parseResponse(String resvalue, Method method, ApiMapping apimapping) {
