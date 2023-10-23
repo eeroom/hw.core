@@ -64,6 +64,27 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <!--仅*.txt,*.properties是资源文件，并且进行替换-->
+                <directory>${basedir}/resources</directory>
+                <includes>
+                    <include>*.txt</include>
+                    <include>*.properties</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <!--除了*.txt,*.properties都是资源文件，不进行替换-->
+                <!--如果文件同时在includ和exclud指定的范围内，则以exclud所在的resource的规则为准-->
+                <directory>${basedir}/resources</directory>
+                <excludes>
+                    <exclude>*.txt</exclude>
+                    <exclude>*.properties</exclude>
+                </excludes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <!--        这个类似于iisexpress，便于开发调试。同时也支持把程序推到其他的tomcat服务器上（需要双方做好认证校验之类的）-->
