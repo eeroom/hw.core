@@ -65,7 +65,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>io.github.eeroom.springboot1x.App</mainClass>
+                            <mainClass>io.github.eeroom.springboot1x.基本使用.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

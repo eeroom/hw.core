@@ -1,4 +1,4 @@
-package io.github.eeroom.springboot1x.pojo;
+package io.github.eeroom.springboot1x.基本使用.pojo;
 
 public class Student {
     int id;

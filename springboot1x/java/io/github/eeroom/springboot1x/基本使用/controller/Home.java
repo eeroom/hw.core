@@ -1,8 +1,7 @@
-package io.github.eeroom.springboot1x.controller;
+package io.github.eeroom.springboot1x.基本使用.controller;
 
-import io.github.eeroom.springboot1x.dao.IStudent;
-import io.github.eeroom.springboot1x.pojo.Student;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.github.eeroom.springboot1x.基本使用.dao.IStudent;
+import io.github.eeroom.springboot1x.基本使用.pojo.Student;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

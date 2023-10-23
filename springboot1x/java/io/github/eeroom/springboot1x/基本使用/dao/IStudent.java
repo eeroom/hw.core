@@ -1,6 +1,6 @@
-package io.github.eeroom.springboot1x.dao;
+package io.github.eeroom.springboot1x.基本使用.dao;
 
-import io.github.eeroom.springboot1x.pojo.Student;
+import io.github.eeroom.springboot1x.基本使用.pojo.Student;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

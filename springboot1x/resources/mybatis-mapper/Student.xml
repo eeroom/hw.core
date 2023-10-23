@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.github.eeroom.springboot1x.dao.IStudent">
-    <select id="getAll" resultType="io.github.eeroom.springboot1x.pojo.Student">
+<mapper namespace="io.github.eeroom.springboot1x.基本使用.dao.IStudent">
+    <select id="getAll" resultType="io.github.eeroom.springboot1x.基本使用.pojo.Student">
         select * from Student
     </select>
 </mapper>
