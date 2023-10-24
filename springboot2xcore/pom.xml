@@ -46,7 +46,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>io.github.eeroom.springboot2xcore.App</mainClass>
+                            <mainClass>io.github.eeroom.springboot2xcore.启动参数和配置文件.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
