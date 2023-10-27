@@ -86,33 +86,7 @@ public class ITCast01ApplicationContext {
          */
         System.out.println("hi:"+context.getMessage("hi",null, Locale.CHINA));
         System.out.println("hi:"+context.getMessage("hi",null, Locale.ENGLISH));
-        /**
-         * 2、根据通配符获取资源
-         * 关键点：通配符，本质就是目标文件的路径
-         * classpath:application.properties 仅在当前项目的jar包中找
-         * classpath*:*.properties 在所有加载的jar包中找
-         * file:d:/abc.properties 在指定的磁盘路径找
-         */
-        var appResource= context.getResource("classpath:application.properties");
-        var lstResource= context.getResources("classpath*:META-INF/spring.factories");
-        var lstResource2= context.getResources("classpath*:*.properties");
-        /**
-         * 4、环境变量增强
-         * 整合如下3类的变量值：
-         * 系统环境变量
-         * jvm参数
-         * 自定义的配置文件数据： context.getEnvironment().getPropertySources().addLast(new ResourcePropertySource("classpath:application.properties"))
-         */
-        System.out.println("java_home:"+context.getEnvironment().getProperty("java_home"));
-        System.out.println("java.vm.version(context.getEnvironment().getProperty):"+context.getEnvironment().getProperty("java.vm.version"));
-        System.out.println("java.vm.version(System.getProperty):"+System.getProperty("java.vm.version"));
-        context.getEnvironment().getPropertySources().addLast(new ResourcePropertySource("classpath:application.properties"));
-        System.out.println("mqs.url(context.getEnvironment().getProperty):"+context.getEnvironment().getProperty("mqs.url"));
-        /**
-         * ResourcePropertySource,本质就是解析特定格式的解析器，和web.config的Appsetting类似
-         */
-        var resourcePropertySource= new ResourcePropertySource("classpath:application.properties");
-        System.out.println("mqs.url(resourcePropertySource.getProperty):"+resourcePropertySource.getProperty("mqs.url"));
+
         context.stop();
         context.start();
         context.close();
