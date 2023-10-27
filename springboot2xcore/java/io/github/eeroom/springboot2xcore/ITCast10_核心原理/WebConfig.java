@@ -1,4 +1,4 @@
-package io.github.eeroom.springboot2xcore.核心原理;
+package io.github.eeroom.springboot2xcore.ITCast10_核心原理;
 
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.WebProperties;
