@@ -1,6 +1,6 @@
-package io.github.eeroom.springboot2xcore;
+package io.github.eeroom.springboot2xcore.ITCast08_bean生命周期.controller;
 
-import io.github.eeroom.springboot2xcore.ITCast08Scop;
+import io.github.eeroom.springboot2xcore.ITCast08_bean生命周期.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,26 +9,26 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-public class HomeController {
+public class Home {
     @Lazy
     @Autowired
-    ITCast08Scop.BeanForProperty beanForProperty;
+    BeanForProperty beanForProperty;
 
     @Lazy
     @Autowired
-    ITCast08Scop.BeanForSingleton beanForSingleton;
+    BeanForSingleton beanForSingleton;
 
     @Lazy
     @Autowired
-    ITCast08Scop.BeanForRequest beanForRequest;
+    BeanForRequest beanForRequest;
 
     @Lazy
     @Autowired
-    ITCast08Scop.BeanForSession beanForSession;
+    BeanForSession beanForSession;
 
     @Lazy
     @Autowired
-    ITCast08Scop.BeanForApplication beanForApplication;
+    BeanForApplication beanForApplication;
 
     @RequestMapping(path = "home/say")
     public void say(HttpServletResponse httpServletResponse) throws Throwable{
