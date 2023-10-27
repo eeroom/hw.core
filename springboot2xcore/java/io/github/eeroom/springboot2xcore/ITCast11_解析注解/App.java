@@ -1,34 +1,16 @@
-package io.github.eeroom.springboot2xcore;
+package io.github.eeroom.springboot2xcore.ITCast11_解析注解;
 
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.WebProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
+
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.annotation.*;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
-import javax.annotation.Resource;
 import java.lang.annotation.Annotation;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.reflect.AnnotatedElement;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.logging.LogManager;
-import java.util.stream.Collectors;
 
-public class ITCast11Anotation {
+public class App {
 
     public static void main(String[] args){
-
         /**
          * jdk提供的元注解  @Retention(RetentionPolicy.RUNTIME) @Inherited 等
          * A注解标注在B注解上，则认为A是B的元注解
@@ -99,55 +81,5 @@ public class ITCast11Anotation {
                 return msg;
             throw new RuntimeException(throwable);
         }
-    }
-
-    @FunctionalInterface
-    static interface MyAction<T>{
-        T invoke() throws Throwable;
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Component("元注解标注")
-    static  @interface  Card{
-        String value() default "";
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Card
-    static @interface  EnableDrive{
-        @AliasFor(annotation = Card.class,attribute = "value")
-        String value();
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Inherited
-    static @interface TestInherited{
-        String value() default "";
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Inherited
-    static @interface TestInheritedForSuperInterface{
-        String value() default "";
-    }
-
-    @Component("标注在父类")
-    @TestInherited("标注在父类且具有@Inherited元注解")
-    @Scope(value = "标注在父类")
-    static class Animal{
-
-    }
-
-
-    @TestInheritedForSuperInterface("标注在父接口且具有@Inherited元注解")
-    @Component("标注在父接口")
-    static interface IPerson {
-
-    }
-
-    @Component("直接标注")
-    @EnableDrive("传参给Card")
-    static class Person extends Animal implements IPerson{
-
     }
 }
