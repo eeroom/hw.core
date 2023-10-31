@@ -1,11 +1,15 @@
-package io.github.eeroom.springcore.H01ApplicationContext和BeanFactory的关系;
+package io.github.eeroom.springcore.ITCast01_资源和环境变量增强;
 
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.io.support.ResourcePropertySource;
 
-public class 资源和环境变量增强 {
+public class App {
 
     public static void main(String[] args) throws Throwable{
+        String aa=null;
+        String bb="/a";
+        String cc="";
+        String dd=bb+aa+cc;
         /**
          * 根据通配符获取资源
          * 关键点：通配符，本质就是目标文件的路径
