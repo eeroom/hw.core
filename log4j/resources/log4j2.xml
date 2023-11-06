@@ -7,17 +7,17 @@
         </Root>
     </Loggers>
     <Appenders>
-        <Appender type="Console" name="STDOUT">
+        <Appender name="STDOUT" type="Console" >
             <Layout type="PatternLayout" pattern="%n年龄：%sx{Age} %n姓名：%sx{Name}">
             </Layout>
         </Appender>
 <!--        数据库记录日志的配置-->
-        <Appender type="Jdbc" name="db" tableName="LogInfo">
+        <Appender  name="db"  type="Jdbc" tableName="LogInfo">
             <ConnectionFactory class="io.github.eeroom.log4j.ConnectionFactory" method="getConnection" />
             <Column name="Name" pattern="%sx{Name}" />
         </Appender>
 <!--        循环覆盖记录日志的配置，关键是按大小、按时间切割日志文件，控制文件个数，如果filePattern已gz结尾，则自动压缩，否则不压缩-->
-        <Appender type="RollingFile" name="localFile" fileName="logs/log.txt" filePattern="logs/log-%d{yyyy-MM-dd-HHmm}-%i.txt.gz">
+        <Appender name="localFile" type="RollingFile"  fileName="logs/log.txt" filePattern="logs/log-%d{yyyy-MM-dd-HHmm}-%i.txt.gz">
             <Layout type="PatternLayout" pattern="%n年龄：%sx{Age} %n姓姓名姓名姓名姓名姓名姓名姓名姓名姓名姓名名：%sx{Name}">
             </Layout>
             <Policies>
