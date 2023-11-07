@@ -8,7 +8,6 @@ import org.apache.commons.net.ftp.FTPReply;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
 /**
@@ -67,7 +66,7 @@ public class ByFTP {
             ftpClient= ByFTP.loginAndSoupportZh(ftpaddr,"Deroom","BT151");
             var remoteFile=new File(remoteFileFullPath);
             ByFTP.changeWorkDirectory(ftpClient,remoteFile.getParent());
-            ByFTP.upload(ftpClient,localfileFullPath,remoteFile.getName(), WriteMode.已存在则忽略);
+            ByFTP.upload(ftpClient,localfileFullPath,remoteFile.getName(), TransferRule.已存在则忽略);
         }finally {
             if (ftpClient!=null && ftpClient.isConnected())
                 ftpClient.disconnect();
@@ -83,7 +82,7 @@ public class ByFTP {
             ftpClient= ByFTP.loginAndSoupportZh(ftpaddr,"Deroom","BT151");
             var remoteFile=new File(remoteFileFullPath);
             ByFTP.changeWorkDirectory(ftpClient,remoteFile.getParent());
-            ByFTP.download(ftpClient,localfileFullPath,remoteFile.getName(), WriteMode.已存在则忽略);
+            ByFTP.download(ftpClient,localfileFullPath,remoteFile.getName(), TransferRule.已存在则忽略);
         }finally {
             if (ftpClient!=null && ftpClient.isConnected())
                 ftpClient.disconnect();
@@ -160,19 +159,19 @@ public class ByFTP {
         }
     }
 
-    public static void upload(FTPClient ftpClient, String localfileFullPath, String remoteFileName, WriteMode mode) throws Throwable {
+    public static void upload(FTPClient ftpClient, String localfileFullPath, String remoteFileName, TransferRule mode) throws Throwable {
         var remoteFileNameBy8859=new String(remoteFileName.getBytes(ftpClient.getControlEncoding()),FTP.DEFAULT_CONTROL_ENCODING);
         var lstfile= Arrays.stream(ftpClient.listFiles()).filter(x->x.getName().equals(remoteFileName)).collect(Collectors.toList()).toArray(FTPFile[]::new);
         if(lstfile.length>0){
             if(lstfile[0].isDirectory())
                 throw new RuntimeException("服务器目录中已经存在同名的文件夹:"+remoteFileName);
-            if(mode== WriteMode.已存在则异常)
+            if(mode== TransferRule.已存在则异常)
                 throw new RuntimeException("服务器目录中已经存在同名的文件:"+remoteFileName);
-            else if(mode== WriteMode.已存在则忽略)
+            else if(mode== TransferRule.已存在则忽略)
                 return;
         }
         try (var raf=new RandomAccessFile(localfileFullPath,"r");var fs=new FileInputStream(raf.getFD())){
-            if(mode== WriteMode.续传 && lstfile.length>0){
+            if(mode== TransferRule.续传 && lstfile.length>0){
                 var offset=lstfile[0].getSize();
                 raf.seek(offset);
                 ftpClient.setRestartOffset(offset);
@@ -189,7 +188,7 @@ public class ByFTP {
         }
     }
 
-    public static  void download(FTPClient ftpClient, String localfileFullPath, String remoteFileName, WriteMode mode) throws Throwable{
+    public static  void download(FTPClient ftpClient, String localfileFullPath, String remoteFileName, TransferRule mode) throws Throwable{
         var remoteFileNameBy8859=new String(remoteFileName.getBytes(ftpClient.getControlEncoding()),FTP.DEFAULT_CONTROL_ENCODING);
         var lstremoteFile= ftpClient.listFiles(remoteFileNameBy8859);
         if(lstremoteFile.length<1)
@@ -198,15 +197,15 @@ public class ByFTP {
         if(file.exists()){
             if(file.isDirectory())
                 throw new RuntimeException("本地磁盘已经存在同名的文件夹:"+remoteFileName);
-            if(mode== WriteMode.已存在则异常)
+            if(mode== TransferRule.已存在则异常)
                 throw new RuntimeException("本地磁盘已经存在同名的文件:"+remoteFileName);
-            else if(mode== WriteMode.已存在则忽略)
+            else if(mode== TransferRule.已存在则忽略)
                 return;
         }else{
             file.createNewFile();
         }
         try (var raf=new RandomAccessFile(file,"rw");var fs=new FileOutputStream(raf.getFD())){
-            if(mode== WriteMode.续传){
+            if(mode== TransferRule.续传){
                 var offset=file.length();
                 raf.seek(offset);
                 ftpClient.setRestartOffset(offset);
