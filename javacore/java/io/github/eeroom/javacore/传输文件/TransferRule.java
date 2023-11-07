@@ -5,8 +5,8 @@ public enum TransferRule {
     覆盖(1),
     已存在则忽略(2),
     已存在则异常(3);
-    int mode;
-    TransferRule(int mode){
-        this.mode=mode;
+    int rule;
+    TransferRule(int rule){
+        this.rule=rule;
     }
 }
