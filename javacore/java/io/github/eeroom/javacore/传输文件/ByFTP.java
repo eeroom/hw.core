@@ -1,9 +1,6 @@
 package io.github.eeroom.javacore.传输文件;
 
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
-import org.apache.commons.net.ftp.FTPReply;
+import org.apache.commons.net.ftp.*;
 
 import java.io.*;
 import java.net.URI;
@@ -29,10 +26,9 @@ public class ByFTP {
         var lstDir=new LinkedList<String>();
         lstDir.add(remoteFileFullPath);
         String dirPath=null;
-        var ftpClient= ByFTP.loginAndSoupportZh(ftpaddr,"Deroom","BT151");
-        while ((dirPath=lstDir.poll())!=null){
-            ftpClient.disconnect();
-            ByFTP.loginAndSoupportZh(ftpaddr,"Deroom","BT151",ftpClient);
+        var ftpClient= new FTPClient();
+        do {
+            ByFTP.loginAndSoupportZh(ftpClient,ftpaddr,"Deroom","BT151");
             ByFTP.changeWorkDirectory(ftpClient,dirPath);
             var lst=ftpClient.listFiles();
             var lstFile=new ArrayList<FTPFile>();
@@ -48,22 +44,24 @@ public class ByFTP {
             }
             if(lstFile.size()>0)
                 dictFtpfile.put(dirPath,lstFile);
-        }
-        ftpClient.disconnect();
+            ftpClient.disconnect();
+        }while ((dirPath=lstDir.poll())!=null);
+
         for(var dir:dictFtpfile.keySet()){
             for(var file:dictFtpfile.get(dir)){
                 System.out.format("目录：%s,文件名称：%s\r\n",dir,file.getName());
             }
         }
+
     }
 
     static void upload() throws Throwable{
         var localfileFullPath="D:\\QQ影音(v1.2.5).ipa";
         var ftpaddr="ftp://192.168.1.2";
         var remoteFileFullPath="nuget/dir1/dir2/QQ影音(v1.2.5).ipa";
-        FTPClient ftpClient=null;
+        FTPClient ftpClient=new FTPClient();
         try{
-            ftpClient= ByFTP.loginAndSoupportZh(ftpaddr,"Deroom","BT151");
+            ftpClient= ByFTP.loginAndSoupportZh(ftpClient,ftpaddr,"Deroom","BT151");
             var remoteFile=new File(remoteFileFullPath);
             ByFTP.changeWorkDirectory(ftpClient,remoteFile.getParent());
             ByFTP.upload(ftpClient,localfileFullPath,remoteFile.getName(), TransferRule.已存在则忽略);
@@ -77,9 +75,9 @@ public class ByFTP {
         var localfileFullPath="D:\\QQ影音(v1.2.5).ipa222";
         var ftpaddr="ftp://192.168.1.2:21";
         var remoteFileFullPath="nuget/dir1/dir2/QQ影音(v1.2.5).ipa";
-        FTPClient ftpClient=null;
+        FTPClient ftpClient=new FTPClient();
         try{
-            ftpClient= ByFTP.loginAndSoupportZh(ftpaddr,"Deroom","BT151");
+            ByFTP.loginAndSoupportZh(ftpClient,ftpaddr,"Deroom","BT151");
             var remoteFile=new File(remoteFileFullPath);
             ByFTP.changeWorkDirectory(ftpClient,remoteFile.getParent());
             ByFTP.download(ftpClient,localfileFullPath,remoteFile.getName(), TransferRule.已存在则忽略);
@@ -91,17 +89,14 @@ public class ByFTP {
 
     /**
      *
+     * @param ftpClient
      * @param ftpaddr eg. ftp://a.b.c:21
      * @param userName
      * @param pwd
      * @return
      * @throws Throwable
      */
-    public static FTPClient loginAndSoupportZh(String ftpaddr,String userName,String pwd) throws Throwable {
-        return loginAndSoupportZh(ftpaddr,userName,pwd,new FTPClient());
-    }
-
-    public static FTPClient loginAndSoupportZh(String ftpaddr,String userName,String pwd,FTPClient ftpClient) throws Throwable {
+    public static FTPClient loginAndSoupportZh(FTPClient ftpClient,String ftpaddr,String userName,String pwd) throws Throwable {
         ftpClient.setDataTimeout(15*1000);//超时时间为10s
         ftpClient.setBufferSize(2048*1024);
         ftpClient.setSendBufferSize(2048*1024);
