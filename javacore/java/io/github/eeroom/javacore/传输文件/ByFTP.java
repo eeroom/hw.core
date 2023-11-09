@@ -1,10 +1,14 @@
 package io.github.eeroom.javacore.传输文件;
 
+import org.apache.commons.io.input.buffer.CircularByteBuffer;
 import org.apache.commons.net.ftp.*;
 
 import java.io.*;
 import java.net.URI;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.ToLongBiFunction;
@@ -16,8 +20,8 @@ import java.util.stream.Collectors;
 public class ByFTP {
 
     public static void main(String[] args) throws Throwable{
-        listFiles();
-//        upload();
+        //listFiles();
+       upload();
 //        download();
     }
 
@@ -59,15 +63,17 @@ public class ByFTP {
     }
 
     static void upload() throws Throwable{
-        var localfileFullPath="D:\\QQ影音(v1.2.5).ipa";
+        var localfileFullPath="D:\\Downloads\\CentOS-6.10-x86_64-minimal.iso";
         var ftpaddr="ftp://192.168.1.2";
-        var remoteFileFullPath="nuget/dir1/dir2/QQ影音(v1.2.5).ipa";
+        var remoteFileFullPath="nuget/dir1/dir2/QQ影音(v1.2.5).ip2a273";
         FTPClient ftpClient=new FTPClient();
         try{
             ftpClient= ByFTP.loginAndSoupportZh(ftpClient,ftpaddr,"Deroom","BT151");
             var remoteFile=new File(remoteFileFullPath);
             ByFTP.changeWorkDirectory(ftpClient,remoteFile.getParent());
-            ByFTP.upload(ftpClient,localfileFullPath,remoteFile.getName(), TransferRule.已存在则忽略);
+            ByFTP.upload(ftpClient,localfileFullPath,remoteFile.getName(), TransferRule.已存在则忽略,10*1024*1024,(total,sended)->{
+                //System.out.println(MessageFormat.format("总共：{0}，已发送：{1}",total,sended));
+            });
         }finally {
             if (ftpClient!=null && ftpClient.isConnected())
                 ftpClient.disconnect();
@@ -75,7 +81,7 @@ public class ByFTP {
     }
 
     static void download() throws Throwable{
-        var localfileFullPath="D:\\QQ影音(v1.2.5).ipa222";
+        var localfileFullPath="D:\\QQ影音(v1.2.5).ipa2322";
         var ftpaddr="ftp://192.168.1.2:21";
         var remoteFileFullPath="nuget/dir1/dir2/QQ影音(v1.2.5).ipa";
         FTPClient ftpClient=new FTPClient();
@@ -240,6 +246,126 @@ public class ByFTP {
                 }
             }
         }
+    }
+
+    public static void upload(FTPClient ftpClient, String localfileFullPath, String remoteFileName, TransferRule transferRule, int maxspeed,BiConsumer<Long,Long> onSendingData) throws Throwable {
+        var remoteFileNameBy8859=new String(remoteFileName.getBytes(ftpClient.getControlEncoding()),FTP.DEFAULT_CONTROL_ENCODING);
+        var lstfile= Arrays.stream(ftpClient.listFiles()).filter(x->x.getName().equals(remoteFileName)).collect(Collectors.toList()).toArray(FTPFile[]::new);
+        if(lstfile.length>0){
+            if(lstfile[0].isDirectory())
+                throw new RuntimeException("服务器目录中已经存在同名的文件夹:"+remoteFileName);
+            if(transferRule== TransferRule.已存在则异常)
+                throw new RuntimeException("服务器目录中已经存在同名的文件:"+remoteFileName);
+            else if(transferRule== TransferRule.已存在则忽略)
+                return;
+        }
+        try (var raf=new RandomAccessFile(localfileFullPath,"r");var fs=new FileInputStream(raf.getFD())){
+            long offset=0;
+            if(transferRule== TransferRule.续传 && lstfile.length>0){
+                offset=lstfile[0].getSize();
+                raf.seek(offset);
+                ftpClient.setRestartOffset(offset);
+            }
+            try {
+                ftpClient.enterLocalPassiveMode();//被动模式，21控制，
+                try (var ostream= ftpClient.storeFileStream(remoteFileNameBy8859))
+                {
+                    int bufferSize=getBufferSize4Speed(fs,ostream,maxspeed,offset,100,3);
+                    int length=0;
+                    byte[] buffer=new byte[bufferSize];
+                    long total=raf.length();
+                    long sended=raf.getFilePointer();
+                    while ((length=fs.read(buffer,0,bufferSize))>0){
+                        ostream.write(buffer,0,length);
+                        sended+=length;
+                        onSendingData.accept(total,sended);
+                    }
+                }
+            }catch (Throwable throwable){
+                ftpClient.enterLocalActiveMode();
+                try (var ostream= ftpClient.storeFileStream(remoteFileNameBy8859))
+                {
+                    int bufferSize=getBufferSize4Speed(fs,ostream,maxspeed,offset,100,3);
+                    int length=0;
+                    byte[] buffer=new byte[bufferSize];
+                    long total=raf.length();
+                    long sended=raf.getFilePointer();
+                    while ((length=fs.read(buffer,0,bufferSize))>0){
+                        ostream.write(buffer,0,length);
+                        sended+=length;
+                        onSendingData.accept(total,sended);
+                    }
+                }catch (Throwable exception){
+                    throw new RuntimeException("storeFile faild;replycode:"+ftpClient.getReplyCode(),exception);
+                }
+            }
+        }
+    }
+
+    /**
+     * 原理：传输速度和bufferSize正相关，通过不断调整得到和目标速度匹配的bufferSize
+     * 实际速度受多种因素影响，没有必要一直去调整bufferSize，只要一个相对匹配的值就可以
+     * @param fs
+     * @param ostream
+     * @param targetSpeed 目标速度
+     * @param offset 文件已经
+     * @param caiyangSize
+     * @param lingmidu
+     * @return
+     * @throws Throwable
+     */
+    static int getBufferSize4Speed(FileInputStream fs,OutputStream ostream,long targetSpeed ,long offset,int caiyangSize,int lingmidu) throws Throwable{
+        int bufferSize=8192;
+        int length=0;
+        byte[] buffer=new byte[bufferSize];
+        long sended=offset;
+        int caiyangIndex=0;
+        long preTime=new Date().getTime();
+        long preSended=sended;
+        int oktimes=0;
+        long wuchaMax=50*1024;//速度最大误差 50KB/s
+        while ((length=fs.read(buffer,0,bufferSize))>0){
+            ostream.write(buffer,0,length);
+            sended+=length;
+            caiyangIndex++;
+            if(caiyangIndex>caiyangSize){
+                caiyangIndex=0;
+                long nowTime=new Date().getTime();
+                long timeSpan=nowTime-preTime;
+                preTime=nowTime;
+                if(timeSpan<=0)
+                    timeSpan=1;
+                long sendedSpan=sended-preSended;
+                preSended=sended;
+                long speed=1000*sendedSpan/timeSpan; //单位：字节/s
+                System.out.println("当前buffer："+bufferSize);
+                long speed4KB=speed/1024;
+                System.out.println("当前速度："+speed4KB+"KB");
+                //不可能精确，波动范围内不干预
+                long chazhi= Math.abs(targetSpeed-speed);
+                if(chazhi<wuchaMax){
+                    oktimes++;
+                    if(oktimes>lingmidu)
+                        return bufferSize;
+                }else {
+                    oktimes--;
+                    if(oktimes>0)
+                        continue;
+                    oktimes=0;
+                    if(speed<targetSpeed)
+                        bufferSize+=bufferSize/2;
+                    else
+                        bufferSize-=bufferSize/2;
+                    if(bufferSize<1)
+                        return 1;
+                    if(bufferSize>8192*200)
+                        return bufferSize;
+                    if(bufferSize>buffer.length)
+                        buffer=new byte[bufferSize];
+                }
+            }
+        }
+        return  bufferSize;
     }
 
     public static  void download(FTPClient ftpClient, String localfileFullPath, String remoteFileName, TransferRule mode) throws Throwable{
