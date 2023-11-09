@@ -32,6 +32,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -46,7 +52,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>io.github.eeroom.springboot2xcore.启动参数和配置文件.App</mainClass>
+                            <mainClass>io.github.eeroom.springboot2xcore.ITCast08_bean生命周期.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
