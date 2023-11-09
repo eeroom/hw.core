@@ -5,6 +5,9 @@ import org.apache.commons.net.ftp.*;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.ToLongBiFunction;
 import java.util.stream.Collectors;
 
 /**
@@ -179,6 +182,62 @@ public class ByFTP {
                 ftpClient.enterLocalActiveMode();
                 if(!ftpClient.storeFile(remoteFileNameBy8859,fs))
                     throw new RuntimeException("storeFile faild;replycode:"+ftpClient.getReplyCode(),throwable);
+            }
+        }
+    }
+
+    public static void upload(FTPClient ftpClient, String localfileFullPath, String remoteFileName, TransferRule mode, BiConsumer<Long,Long> onSendingData) throws Throwable {
+        var remoteFileNameBy8859=new String(remoteFileName.getBytes(ftpClient.getControlEncoding()),FTP.DEFAULT_CONTROL_ENCODING);
+        var lstfile= Arrays.stream(ftpClient.listFiles()).filter(x->x.getName().equals(remoteFileName)).collect(Collectors.toList()).toArray(FTPFile[]::new);
+        if(lstfile.length>0){
+            if(lstfile[0].isDirectory())
+                throw new RuntimeException("服务器目录中已经存在同名的文件夹:"+remoteFileName);
+            if(mode== TransferRule.已存在则异常)
+                throw new RuntimeException("服务器目录中已经存在同名的文件:"+remoteFileName);
+            else if(mode== TransferRule.已存在则忽略)
+                return;
+        }
+        try (var raf=new RandomAccessFile(localfileFullPath,"r");var fs=new FileInputStream(raf.getFD())){
+            long offset=0;
+            if(mode== TransferRule.续传 && lstfile.length>0){
+                offset=lstfile[0].getSize();
+                raf.seek(offset);
+                ftpClient.setRestartOffset(offset);
+            }
+            try {
+                ftpClient.enterLocalPassiveMode();//被动模式，21控制，
+                try (var ostream= ftpClient.storeFileStream(remoteFileNameBy8859))
+                {
+                    int bufferSize=8192;
+                    int length=0;
+                    byte[] buffer=new byte[bufferSize];
+                    long total=raf.length();
+                    long sended=offset;
+                    while ((length=fs.read(buffer,0,bufferSize))>0){
+                        ostream.write(buffer,0,length);
+                        sended+=length;
+                        onSendingData.accept(total,sended);
+                    }
+                }catch (Throwable throwable){
+                    throw new RuntimeException("storeFile faild;replycode:"+ftpClient.getReplyCode(),throwable);
+                }
+            }catch (Throwable throwable){
+                ftpClient.enterLocalActiveMode();
+                try (var ostream= ftpClient.storeFileStream(remoteFileNameBy8859))
+                {
+                    int bufferSize=8192;
+                    int length=0;
+                    byte[] buffer=new byte[bufferSize];
+                    long total=raf.length();
+                    long sended=offset;
+                    while ((length=fs.read(buffer,0,bufferSize))>0){
+                        ostream.write(buffer,0,length);
+                        sended+=length;
+                        onSendingData.accept(total,sended);
+                    }
+                }catch (Throwable exception){
+                    throw new RuntimeException("storeFile faild;replycode:"+ftpClient.getReplyCode(),exception);
+                }
             }
         }
     }
