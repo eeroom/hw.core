@@ -1,11 +1,6 @@
 package io.github.eeroom.springcore.mybatis独立使用;
 
-import org.apache.ibatis.binding.MapperProxyFactory;
-import org.mybatis.spring.mapper.MapperFactoryBean;
-import org.springframework.core.io.DefaultResourceLoader;
-
 import java.text.MessageFormat;
-import java.util.Arrays;
 
 public class App {
 
@@ -45,7 +40,7 @@ public class App {
                 .build();
         var configuration=new org.apache.ibatis.session.Configuration(env);
 
-        var mapperFilePath="mybatis独立使用/mapper/student.xml";
+        var mapperFilePath= "mybatis独立使用/mapper/student2.xml";
         var mapperStream=org.apache.ibatis.io.Resources.getResourceAsStream(mapperFilePath);
         var xmlMapperBuilder = new org.apache.ibatis.builder.xml.XMLMapperBuilder(mapperStream, configuration, mapperFilePath, configuration.getSqlFragments());
         xmlMapperBuilder.parse();
