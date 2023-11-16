@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.eeroom.springcore.mybatis整合springcore.IDaoStudent">
+    <select id="getAll" resultType="io.github.eeroom.springcore.mybatis独立使用.Student">
+        select * from Student
+    </select>
+</mapper>
