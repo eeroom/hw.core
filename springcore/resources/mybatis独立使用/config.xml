@@ -3,8 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <environments default="development">
-        <environment id="development">
+    <environments default="hz-kd">
+        <environment id="hz-kd">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
                 <property name="driver" value="org.sqlite.JDBC"/>
@@ -13,8 +13,18 @@
                 <property name="password" value=""/>
             </dataSource>
         </environment>
+        <environment id="hz-oa">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="org.sqlite.JDBC"/>
+                <property name="url" value="jdbc:sqlite:D:/Code/db/springcore-hzoa.db"/>
+                <property name="username" value=""/>
+                <property name="password" value=""/>
+            </dataSource>
+        </environment>
     </environments>
     <mappers>
         <mapper resource="mybatis独立使用/mapper/student.xml"/>
+        <mapper resource="mybatis独立使用/mapper/Teacher.xml"/>
     </mappers>
 </configuration>
