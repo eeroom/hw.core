@@ -1,5 +1,7 @@
 package io.github.eeroom.springcore.mybatis独立使用;
 
+import org.apache.ibatis.binding.MapperProxyFactory;
+
 import java.text.MessageFormat;
 
 public class App {
@@ -58,6 +60,13 @@ public class App {
             var iDaoStudent= session.getMapper(IDaoStudent.class);
             var lstStudent2= iDaoStudent.getAll();
             lstStudent2.forEach(x->System.out.println(MessageFormat.format("lstStudent2,name:{0}",x.getName())));
+
+            //方式3，方式2的内部简化形式
+            //xmlMapperBuilder.parse();方法内部的this.bindMapperForNamespace();会增加 接口对应的mapper，mapper实际上就是一个MapperProxy的实例
+            var mapperProxyFactory= new MapperProxyFactory<IDaoStudent>(IDaoStudent.class);
+            var mapperProxy =mapperProxyFactory.newInstance(session);
+            var lstStudent3= mapperProxy.getAll();
+            lstStudent3.forEach(x->System.out.println(MessageFormat.format("lstStudent3,name:{0}",x.getName())));
         }
     }
 
