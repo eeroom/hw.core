@@ -1,6 +1,6 @@
-package io.github.eeroom.springcore.整合mybatis.dao.hzoa;
+package io.github.eeroom.springcore.mybatis整合springmybatis.dao.hzoa;
 
-import io.github.eeroom.springcore.整合mybatis.pojo.Teacher;
+import io.github.eeroom.springcore.mybatis整合springmybatis.Teacher;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

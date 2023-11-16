@@ -1,6 +1,6 @@
-package io.github.eeroom.springcore.整合mybatis.pojo;
+package io.github.eeroom.springcore.mybatis整合springmybatis;
 
-public class Student {
+public class Teacher {
     int id;
     int age;
 
@@ -30,13 +30,4 @@ public class Student {
 
     String name;
 
-    public Student getChirld() {
-        return chirld;
-    }
-
-    public void setChirld(Student chirld) {
-        this.chirld = chirld;
-    }
-
-    Student chirld;
 }
