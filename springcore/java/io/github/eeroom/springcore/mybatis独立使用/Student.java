@@ -1,4 +1,4 @@
-package io.github.eeroom.springcore.mybatis独立使用4xmlconfig;
+package io.github.eeroom.springcore.mybatis独立使用;
 
 public class Student {
     int id;

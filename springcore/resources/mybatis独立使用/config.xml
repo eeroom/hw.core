@@ -15,6 +15,6 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="mybatis独立使用4xmlconfig/mapper/student.xml"/>
+        <mapper resource="mybatis独立使用/mapper/student.xml"/>
     </mappers>
 </configuration>
