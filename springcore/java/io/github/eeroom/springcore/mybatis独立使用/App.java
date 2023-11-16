@@ -40,7 +40,7 @@ public class App {
                 .build();
         var configuration=new org.apache.ibatis.session.Configuration(env);
 
-        var mapperFilePath= "mybatis独立使用/mapper/student2.xml";
+        var mapperFilePath= "mybatis独立使用/mapper/Student.xml";
         var mapperStream=org.apache.ibatis.io.Resources.getResourceAsStream(mapperFilePath);
         var xmlMapperBuilder = new org.apache.ibatis.builder.xml.XMLMapperBuilder(mapperStream, configuration, mapperFilePath, configuration.getSqlFragments());
         xmlMapperBuilder.parse();
