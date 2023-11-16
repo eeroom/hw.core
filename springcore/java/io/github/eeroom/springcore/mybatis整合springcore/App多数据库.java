@@ -4,7 +4,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import java.text.MessageFormat;
 
-public class App {
+public class App多数据库 {
 
     public static void main(String[] args){
         var context= new AnnotationConfigApplicationContext();
