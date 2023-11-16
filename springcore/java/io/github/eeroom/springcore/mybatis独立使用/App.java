@@ -15,7 +15,8 @@ public class App {
     }
 
     static void byXml() throws Throwable {
-        var configStream = org.apache.ibatis.io.Resources.getResourceAsStream("mybatis独立使用/config.xml");
+        var configFilePath="mybatis独立使用/config.xml";
+        var configStream = org.apache.ibatis.io.Resources.getResourceAsStream(configFilePath);
         var sessionFactoryBuilder=new org.apache.ibatis.session.SqlSessionFactoryBuilder();
         var sqlSessionFactory=sessionFactoryBuilder.build(configStream);
         try (var session = sqlSessionFactory.openSession()) {
@@ -62,7 +63,6 @@ public class App {
             var iDaoStudent= session.getMapper(IDaoStudent.class);
             var lstStudent2= iDaoStudent.getAll();
             lstStudent2.forEach(x->System.out.println(MessageFormat.format("lstStudent2,name:{0}",x.getName())));
-
         }
     }
 
