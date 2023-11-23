@@ -1,4 +1,4 @@
-package io.github.eerom.cloudgateway;
+package io.github.eeroom.cloudgateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

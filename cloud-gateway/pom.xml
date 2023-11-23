@@ -44,7 +44,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>io.github.eeroom.cloudoa.App</mainClass>
+              <mainClass>io.github.eeroom.cloudgateway.App</mainClass>
             </manifest>
           </archive>
         </configuration>
