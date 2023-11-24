@@ -8,6 +8,7 @@
     <module>../cloud-oa</module>
     <module>../cloud-kd</module>
     <module>../cloud-gateway</module>
+    <module>../cloud-config</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>
