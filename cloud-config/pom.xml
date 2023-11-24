@@ -46,7 +46,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>io.github.eeroom.cloudkd.App</mainClass>
+              <mainClass>io.github.eeroom.cloudconfig.App</mainClass>
             </manifest>
           </archive>
         </configuration>
