@@ -10,8 +10,16 @@ public class Home {
     @Value("${server.port}")
     int port;
 
+    @Value(("${my.name}"))
+    String myname;
+
     @GetMapping("home/say")
     public String say(){
         return "kd server port:"+this.port;
+    }
+
+    @GetMapping("home/config")
+    public String config(){
+        return myname;
     }
 }
