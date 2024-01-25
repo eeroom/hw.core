@@ -98,33 +98,6 @@ public class YunpanController implements ApplicationContextAware {
         response.flushBuffer();
     }
 
-    private static void addFilesToZip(ZipOutputStream zos, File fileToAdd, String parentPath) throws IOException {
-        if (parentPath == null || parentPath.isEmpty()) {
-            parentPath = "";
-        } else {
-            parentPath += "/";
-        }
-
-        for (File file : fileToAdd.listFiles()) {
-            if (file.isDirectory()) {
-                addFilesToZip(zos, file, parentPath + file.getName());
-            } else {
-                byte[] buffer = new byte[1024];
-
-                FileInputStream fis = new FileInputStream(file);
-                zos.putNextEntry(new ZipEntry(parentPath + file.getName()));
-
-                int length;
-                while ((length = fis.read(buffer)) > 0) {
-                    zos.write(buffer, 0, length);
-                }
-
-                zos.closeEntry();
-                fis.close();
-            }
-        }
-    }
-
     /**
      * todo 分片上传文件
      */
